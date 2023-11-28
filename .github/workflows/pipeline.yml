@@ -13,6 +13,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+          registry-url: https://registry.npmjs.org/
       - run: npm install
       - run: npm run build
 
@@ -22,13 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./packages/vite-awesome-svg-loader/dist
+        working-directory: packages/vite-awesome-svg-loader/dist
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          registry-url: https://registry.npmjs.org/
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
@@ -39,9 +35,6 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
