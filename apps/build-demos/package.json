@@ -1,0 +1,11 @@
+{
+  "name": "build-demos",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node ./src/build.mjs"
+  },
+  "dependencies": {
+    "vue-demo": "*"
+  }
+}

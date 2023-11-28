@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "declaration": true,
+    "declarationMap": false,
+    "strictNullChecks": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true
+  }
+}

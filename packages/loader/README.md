@@ -1,0 +1,3 @@
+# `svg-loader`
+
+Loader itself

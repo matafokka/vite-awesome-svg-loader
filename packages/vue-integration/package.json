@@ -1,0 +1,20 @@
+{
+  "name": "vue-integration",
+  "version": "0.0.0",
+  "private": true,
+  "files": ["dist"],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "run-p type-check \"build-only {@}\" --",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false"
+  },
+  "dependencies": {
+    "integration-utils": "*"
+  },
+  "devDependencies": {
+    "@babel/types": "^7.23.0"
+  }
+}

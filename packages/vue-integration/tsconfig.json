@@ -1,0 +1,15 @@
+{
+  "extends": ["../../tsconfig.json"],
+  "compilerOptions": {
+     "target": "ESNext",
+     "module": "ESNext",
+     "moduleResolution": "Node",
+     "isolatedModules": true,
+     "lib": ["ESNext", "DOM"],
+     "skipLibCheck": true,
+     "noEmit": true,
+     "resolveJsonModule": true,
+     "allowSyntheticDefaultImports": true
+  },
+  "include": ["src", "demo", "tests", "../../modules.d.ts"]
+}

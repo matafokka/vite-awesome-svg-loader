@@ -1,0 +1,11 @@
+{
+  "name": "integration-utils",
+  "version": "0.0.0",
+  "private": true,
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "npx tsup ./src/index.ts --format esm,cjs  --minify --sourcemap && tsc --emitDeclarationOnly --declaration"
+  }
+}
