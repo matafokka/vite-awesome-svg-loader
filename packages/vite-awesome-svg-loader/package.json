@@ -19,7 +19,7 @@
     "svg-sprite",
     "svg-sprites"
   ],
-  "version": "1.0.1",
+  "version": "1.0.2",
   "homepage": "https://github.com/matafokka/vite-awesome-svg-loader",
   "repository": "https://github.com/matafokka/vite-awesome-svg-loader",
   "private": true,
