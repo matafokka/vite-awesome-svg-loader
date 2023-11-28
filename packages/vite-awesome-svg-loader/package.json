@@ -22,6 +22,7 @@
   "version": "1.0.2",
   "homepage": "https://github.com/matafokka/vite-awesome-svg-loader",
   "repository": "https://github.com/matafokka/vite-awesome-svg-loader",
+  "license": "LGPL-2.1-or-later",
   "private": true,
   "main": "dist/index.js",
   "module": "dist/index.mjs",
