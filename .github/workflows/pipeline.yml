@@ -37,6 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     steps:
+      - run: tree -L 3
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
