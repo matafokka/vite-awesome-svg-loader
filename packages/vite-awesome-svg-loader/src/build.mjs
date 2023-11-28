@@ -48,3 +48,17 @@ for (const entry of packagesContent) {
 
   await fse.writeFile(path.join(distDir, "package.json"), JSON.stringify(packageJson, undefined, 2));
 })();
+
+// Copy README.md
+
+(async () => {
+  let content = (await fse.readFile(path.join(packagesDir, "..", "README.md"))).toString();
+
+  // Resolve relative URL
+  content = content.replaceAll(
+    /(\]\((?!(http:\/\/)|(https:\/\/)))/g,
+    "](https://github.com/matafokka/vite-awesome-svg-loader/tree/main/",
+  );
+
+  await fse.writeFile(path.join(distDir, "README.md"), content);
+})();
