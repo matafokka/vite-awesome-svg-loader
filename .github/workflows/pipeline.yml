@@ -18,6 +18,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: npm install
       - run: npm run build
+      - run: pwd
+      - run: tree -L 4
 
   # https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
   publish-npm:
