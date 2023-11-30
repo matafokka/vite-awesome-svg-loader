@@ -3,14 +3,15 @@
 A Vite plugin that:
 
 1. Can import SVGs as:
-   1. Source code (default import type): `import imageSrc from "./path/to/image.svg"`.
-   1. URL: `import imageUrl from "./path/to/image.svg?url"`.
-   1. Source code data URI: `import imageSrcDataUri from "./path/to/image.svg?source-data-uri"`.
-   1. Source code Base64: `import imageBase64 from "./path/to/image.svg?base64"`.
-   1. Source code Base64 data URI: `import imageBase64DataUri from "./path/to/image.svg?base64-data-uri"`.
-1. Can preserve line width (make icons and line art have same line width when scaling): `import imageSrc from "./path/to/image.svg?preserve-line-width"`.
-1. Can replace colors with `currentColor`: `import imageSrc from "./path/to/image.svg?set-current-color"`.
+   1. Source code (default import type).
+   1. URL to a static asset.
+   1. Source code [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
+   1. Source code base64.
+   1. Source code base64 [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
+1. Can preserve line width, i.e. make icons and line art have same line width when scaling.
+1. Can replace colors with `currentColor`.
 1. Will minimize your SVGs using [SVGO](https://github.com/svg/svgo).
+1. Allows you to create SVG sprites using provided integrations.
 
 `vite-awesome-svg-loader` is framework-agnostic. All integrations are done in form of subpath imports (for example, `vite-awesome-svg-loader/vue-integration`). This means that you'll get only what you need in your app bundle. This also means that you can develop your own integration using `vite-awesome-svg-loader/integration-utils` import.
 
@@ -21,7 +22,7 @@ A Vite plugin that:
 ## Usage
 
 1. Grab this plugin from NPM: `npm i vite-awesome-svg-loader`.
-2. Add it to `vite.config.js` or `vite.config.ts` (whatever you prefer):
+2. Add it to `vite.config.js` or `vite.config.ts` (whatever you use):
 
 ```ts
 import { defineConfig } from "vite";
@@ -76,7 +77,7 @@ import imageCurColorSrc from "./path/to/image.svg?set-current-color";
 import transformedImageUrl from "./path/to/image.svg?url&preserve-line-width&set-current-color";
 ```
 
-5. Optional, but highly recommended. Configure loader:
+5. Optional, but highly recommended. Configure loader, so you can import SVGs without URL parameters:
 
 ```ts
 viteAwesomeSvgLoader({
@@ -104,7 +105,7 @@ viteAwesomeSvgLoader({
 }),
 ```
 
-6. Optional. Use provided integrations to reuse SVG symbols (i.e. create sprite sheets) or build your own.
+6. Optional. Use integrations to create sprite sheets. Or [write your own integration](#custom-integration).
 
 ## Integrations
 
@@ -252,10 +253,6 @@ Same as above. If your loader is different, and you want it to get roasted, or i
 ### Project's future
 
 Integrations with vanilla JS (including support for outputting whole SVG source code) and React are planned for the near future.
-
-If you want to add a new integration or implement vanilla JS or React integration, please, create an issue to let other people know that the task is taken.
-
-Then create a PR or update your issue with the source code, if you don't want to deal with this project's development process.
 
 ### How can I help?
 
