@@ -95,9 +95,9 @@ export function onSrcUpdate(prevSrc: string | undefined, src: string) {
 
 /**
  * Should be called whenever component is unmounted
- * @param symbolOrId Symbol or ID of a symbol
+ * @param symbolOrId Symbol or ID of a symbol. If nullish value is provided, won't do anything.
  */
-export function onUnmount(symbolOrId: SVGSymbolElement | string) {
+export function onUnmount(symbolOrId: SVGSymbolElement | string | null | undefined) {
   if (typeof window === "undefined") {
     return;
   }
