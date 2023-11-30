@@ -556,8 +556,6 @@
         {{ origMusicIconBase64 }}
       </span>
     </p>
-
-    <ImageSizeAdjustment />
   </article>
 </template>
 
@@ -639,7 +637,6 @@ import { SvgIcon, SvgImage } from "vite-awesome-svg-loader/vue-integration";
 // Page setup
 
 import NamedIcon from "@/NamedIcon.vue";
-import ImageSizeAdjustment from "@/ImageSizeAdjustment.vue";
 import { ref } from "vue";
 
 const reusedImagesCount = ref(3);
