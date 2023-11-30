@@ -1,6 +1,6 @@
 {
   "name": "vite-awesome-svg-loader",
-  "description": "A Vite plugin that loads your SVGs in different formats (source code, base64, data URI), provides useful transformations (preserve line width, replace colors with currentColor), provides integrations for frontend apps (reusable SVG symbols, i.e. sprites; basic icon component) and optimizes SVGs with SVGO",
+  "description": "Imports SVGs as source code, base64 and data URI. Preserves stroke width, replaces colors with currentColor. Optimizes SVGs with SVGO. Creates SVG sprites.",
   "keywords": [
     "svg",
     "vite",
