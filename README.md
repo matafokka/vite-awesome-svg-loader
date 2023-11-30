@@ -181,7 +181,7 @@ Let's see how we can load SVGs, and what tradeoffs do they have:
       1. Simplicity.
       1. Great performance thanks to instancing.
    2. Disadvantages:
-      1. Lack of any customization, good only for static images. You can't modify external assets using JS or CSS. The only thing you can do is filters. **\*Note:** don't try to implement icons this way. Browsers implement filters incorrectly, it's impossible to write 100% correct color to filter conversion function. This discrepancies are often way off the desired result. If you try to fix them, you'll lose all performance benefits. Trust me, I've tried implementing such system, wasted a lot of time and horribly failed.\*
+      1. Lack of any customization, good only for static images. You can't modify external assets using JS or CSS. The only thing you can do is filters. ***Note:** don't try to implement icons this way. Browsers implement filters incorrectly, it's impossible to write 100% correct color to filter conversion function. This discrepancies are often way off the desired result. If you try to fix them, you'll lose all performance benefits. Trust me, I've tried implementing such system, wasted a lot of time and horribly failed.*
 1. Symbols: put all images into a single `<svg>` node and wrap each image with a `<symbol>` element.
    1. Advantages:
       1. Performance is way better than when using whole SVG each time.
