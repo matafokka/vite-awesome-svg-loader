@@ -91,12 +91,6 @@ This project tries to keep the source code clean and readable. Please, try to do
 1. Run `npm i` command.
 1. Copy assets, markup and styles from any existing demo. Make sure that there's two directories with the images: `import-demo` and `config-demo`. Path to these directories should follow framework's guidelines.
 1. Implement the rest of your demo.
-1. Optional, but recommended. Test your demo in a real environment:
-   1. Copy demo and `packages/vite-awesome-svg-loader/dist` directories outside of the project.
-   1. Copy global dependencies to the `package.json` of the demo.
-   1. Copy `packages/ui/styles.scss` to the demo and import it in `main.ts` file.
-   1. Use [npm link](https://docs.npmjs.com/cli/v9/commands/npm-link) to install `vite-awesome-svg-loader` build in the demo.
-   1. Test your demo.
 1. Submit a PR.
 
 # Loader development
