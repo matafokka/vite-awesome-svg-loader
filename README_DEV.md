@@ -70,28 +70,28 @@ This project tries to keep the source code clean and readable. Please, try to do
 # Integrations development
 
 1. Create an issue to notify the community that you'll be working on your integration.
-1. Add `build:*` and `dev:*` commands for your integration and demo to the root `package.json`.
-1. Open `packages/vite-awesome-svg-loader/package.json`.
-1. Add your integration to the `exports` and `typesVersions["*"]` fields. Basically copy already existing entry and change directory name. Unfortunately, we can't point to another `package.json` and shouldn't dynamically create a package.
-1. Create an integration package using `npx turbo generate workspace` command.
-1. Open `package.json` file inside your integration directory.
-1. Add `"integration-utils": "*"` dependency.
-1. Run `npm i` command.
-1. Develop your integration. Use `integration-utils` to simplify the development. [More info](packages/integration-utils/README.md).
-1. Create a demo for your integration using `npx turbo generate workspace` command.
-1. Open `package.json` file inside your integration demo directory.
-1. Add following dependencies:
-   ```json
-   "dependencies": {
-     "vite-awesome-svg-loader": "*",
-     "ui": "*"
-   }
-   ```
-1. Run `build:packages` command to build final loader bundle.
-1. Run `npm i` command.
-1. Copy assets, markup and styles from any existing demo. Make sure that there's two directories with the images: `import-demo` and `config-demo`. Path to these directories should follow framework's guidelines.
-1. Implement the rest of your demo.
-1. Submit a PR.
+1. Create integration and demo packages using `npx turbo generate workspace` command.
+1. Develop integration:
+   1. Open `package.json` file inside your integration directory.
+   1. Add `"integration-utils": "*"` dependency.
+   1. Develop your integration. Use `integration-utils` to simplify the development. [More info](packages/integration-utils/README.md).
+1. Update `vite-awesome-svg-loader` package with your integration:
+   1. Open `packages/vite-awesome-svg-loader/package.json`.
+   1. Add your integration to the `exports` and `typesVersions["*"]` fields. Basically copy already existing entry and change directory name. Unfortunately, we can't point to another `package.json` and shouldn't dynamically create a package.
+1. Develop a demo for your integration:
+   1. Open `package.json` file in your integration demo directory.
+   1. Add following dependencies (don't forget to add your integration as well):
+      ```json
+      "dependencies": {
+        "vite-awesome-svg-loader": "*",
+        "ui": "*"
+      }
+      ```
+    1. Run `npm build:packages` command to build integrations.
+    1. Copy assets, markup and styles from any existing demo. Make sure that there's two directories with the images: `import-demo` and `config-demo`. Path to these directories should follow framework's guidelines.
+    1. Implement your demo.
+1. Add `build:*` and `dev:*` commands for your integration demo to the root `package.json`.
+1. Submit a PR with your integration.
 
 # Loader development
 
