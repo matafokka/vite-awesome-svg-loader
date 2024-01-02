@@ -27,14 +27,14 @@ const src = ref(""); // SVG source code
 
 // Make it reactive
 
-const onSrcChange = async (name: string) => {
+const onNameChange = async (name: string) => {
   // Fetch SVG source code.
   // This may throw an error because icon might not be found, or user has been disconnected.
   // You may need to handle this case, for example, don't show an image.
   // Also, while loading, you may want to use some kind of animation.
   const code = (await icons[`/src/assets/import-demo/icons/${name}.svg`]()).default;
 
-  // Verify that name hasn't changed. If it did, set its source code. Otherwise other onSrcChange()
+  // Verify that name hasn't changed. If it did, set its source code. Otherwise other onNameChange()
   // call will handle the changes.
   if (name === props.name) {
     src.value = code;
@@ -42,9 +42,9 @@ const onSrcChange = async (name: string) => {
 }
 
 // Fetch new icon whenever name changes
-watch(() => props.name, () => onSrcChange(props.name));
+watch(() => props.name, () => onNameChange(props.name));
 
 // Fetch initial icon.
 // If you'll provide a loading fallback, you may replace this with watch(..., { immediate: true })
-await onSrcChange(props.name);
+await onNameChange(props.name);
 </script>
