@@ -550,7 +550,7 @@
     <h3>Base64, original file</h3>
 
     <p class="mono">
-      <span v-show="false">There's base64 data that's replaced with this text for assistive technologies.</span>
+      <span class="hidden">There's base64 data that's replaced with this text for assistive technologies.</span>
 
       <span aria-hidden="true">
         {{ origMusicIconBase64 }}
