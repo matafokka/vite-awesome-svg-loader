@@ -78,6 +78,7 @@ This project tries to keep the source code clean and readable. Please, try to do
    1. Open `package.json` file inside your integration directory.
    1. Add `"integration-utils": "*"` dependency.
    1. Develop your integration. Use `integration-utils` to simplify the development. [More info](packages/integration-utils/README.md).
+   1. Optional: generate docs. Do this if it doesn't require maintenance, or you feel like actual docs site is needed. Docs should be generated in the `<your-integration-root>/docs` directory. This directory will be copied to the demo bundle automatically.
 1. Update `vite-awesome-svg-loader` package with your integration:
    1. Open `packages/vite-awesome-svg-loader/package.json`.
    1. Add your integration to the `exports` and `typesVersions["*"]` fields. Basically copy already existing entry and change directory name. Unfortunately, we can't point to another `package.json` and shouldn't dynamically create a package.
