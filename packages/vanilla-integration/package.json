@@ -7,9 +7,12 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "vite build"
+    "build": "vite build && typedoc src/index.ts --out ./docs --name \"Vanilla Integration\" --readme README_DOCS.md"
   },
   "dependencies": {
     "integration-utils": "*"
+  },
+  "devDependencies": {
+    "typedoc": "0.25.6"
   }
 }
