@@ -17,6 +17,7 @@ A Vite plugin that:
 
 ## Examples and demos
 
+- Vanilla JS: [source](apps/vanilla-demo/README.md), [demo](https://matafokka.github.io/vite-awesome-svg-loader/vanilla-demo).
 - Vue 3: [source](apps/vue-demo/README.md), [demo](https://matafokka.github.io/vite-awesome-svg-loader/vue-demo).
 
 ## Usage
@@ -111,6 +112,36 @@ viteAwesomeSvgLoader({
 
 All integrations work only on client side. However, they won't break SSR.
 
+### Vanilla JS
+
+**Warning**: do NOT use this package to create custom integrations, use `vite-awesome-svg-loader/integration-utils` instead.
+
+1. Import classes:
+
+```ts
+import {
+  SvgImage, // Basically implements SVG sprites
+  SvgIcon, // Basic SVG icon that uses SvgImage class internally
+} from "vite-awesome-svg-loader/vanilla-integration";
+```
+
+2. Import images:
+
+```ts
+import imageSrc from "@/path/to/image.svg";
+```
+
+3. Use classes:
+
+```ts
+new SvgImage(imageSrc, "#my-container"); // Create an image and mount it to the element with "my-container" id.
+
+new SvgIcon(imageSrc, "#my-container") // Create an icon and mount it to the element with "my-container" id.
+  .setSize("24px") // Set 24px size
+  .setColor("red") // Set red color
+  .setColorTransition("0.3s ease-out"); // Set color transition
+```
+
 ### Vue 3
 
 1. Import components:
@@ -149,9 +180,11 @@ See full example: [source](apps/vue-demo/README.md), [demo](https://matafokka.gi
 
 ### Custom integration
 
-1. Import helper functions:
+1. Import helper functions and styles:
 
 ```ts
+import "integration-utils/styles.css";
+
 // There function will run only on client side. However, they won't break SSR.
 
 import {
@@ -182,7 +215,7 @@ Let's see how we can load SVGs, and what tradeoffs do they have:
       1. Simplicity.
       1. Great performance thanks to instancing.
    2. Disadvantages:
-      1. Lack of any customization, good only for static images. You can't modify external assets using JS or CSS. The only thing you can do is filters. ***Note:** don't try to implement icons this way. Browsers implement filters incorrectly, it's impossible to write 100% correct color to filter conversion function. This discrepancies are often way off the desired result. If you try to fix them, you'll lose all performance benefits. Trust me, I've tried implementing such system, wasted a lot of time and horribly failed.*
+      1. Lack of any customization, good only for static images. You can't modify external assets using JS or CSS. The only thing you can do is filters. _**Note:** don't try to implement icons this way. Browsers implement filters incorrectly, it's impossible to write 100% correct color to filter conversion function. This discrepancies are often way off the desired result. If you try to fix them, you'll lose all performance benefits. Trust me, I've tried implementing such system, wasted a lot of time and horribly failed._
 1. Symbols: put all images into a single `<svg>` node and wrap each image with a `<symbol>` element.
    1. Advantages:
       1. Performance is way better than when using whole SVG each time.

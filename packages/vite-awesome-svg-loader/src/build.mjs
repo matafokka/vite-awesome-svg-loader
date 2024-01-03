@@ -17,6 +17,7 @@ const packagesContent = fse.readdirSync(packagesDir);
 
 const IGNORE_DIRS_LIST = {
   "ui": true,
+  "types": true,
   "vite-awesome-svg-loader": true, // Don't copy build script
   "loader": true, // This is copied separately
 };

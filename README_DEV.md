@@ -10,7 +10,8 @@ This project uses [Turborepo](https://turbo.build/) to separate loader, integrat
 - `packages` - loader itself and integrations
   - `integration-utils` - utility functions and constants for integrations. Bundled with the loader to allow users to write their own integrations. [More info](packages/integration-utils/README.md).
   - `loader` - loader source code.
-  - `ui` - common styles for the demos. They're not important for the demonstration purposes hence separated from them.
+  - `ui` - common scripts and styles for the demos. They're not important for the demonstration purposes hence separated from them.
+  - `types` - types for the integrations
   - `*-integration` - specific framework integration.
   - `vite-awesome-svg-loader` - final loader bundle. All demos should use this package to make demos have same source code as would final user, and to make tests closer to the final result.
 - `modules.d.ts` - types for untyped external modules.
@@ -68,6 +69,8 @@ Prettier should be used to format the code. Styles that are left for the user to
 This project tries to keep the source code clean and readable. Please, try to do so as well, i.e. don't stack `if`s too many times, don't use bit shifts unnecessarily, etc.
 
 # Integrations development
+
+**Warning**: do NOT use `vanilla-integration` package do develop custom integrations. Use `integration-utils` package and your framework's capabilities instead.
 
 1. Create an issue to notify the community that you'll be working on your integration.
 1. Create integration and demo packages using `npx turbo generate workspace` command.

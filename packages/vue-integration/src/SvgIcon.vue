@@ -1,6 +1,6 @@
 <template>
   <span
-    class="icon"
+    class="awesome-svg-loader-icon icon"
     :style="iconStyle"
   >
     <SvgImage
@@ -13,7 +13,7 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 import SvgImage from "./SvgImage.vue";
-import { SvgIconProps } from "./types";
+import { SvgIconProps } from "types";
 
 const props = defineProps<SvgIconProps>();
 
@@ -35,18 +35,3 @@ const iconStyle = computed(() => {
   return style;
 });
 </script>
-
-<style lang="scss" scoped>
-.icon {
-  display: inline-block;
-  color: var(--icon-color);
-}
-
-:deep(svg) {
-  vertical-align: top;
-}
-
-:deep(use) {
-  transition: color var(--icon-transition);
-}
-</style>

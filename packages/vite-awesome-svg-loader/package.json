@@ -44,10 +44,19 @@
       "require": "./dist/integration-utils/index.js",
       "types": "./dist/integration-utils/index.d.ts"
     },
+    "./integration-utils/styles.css": {
+      "import": "./dist/integration-utils/styles.css",
+      "require": "./dist/integration-utils/styles.css"
+    },
     "./vue-integration": {
       "import": "./dist/vue-integration/index.mjs",
       "require": "./dist/vue-integration/index.js",
       "types": "./dist/vue-integration/index.d.ts"
+    },
+    "./vanilla-integration": {
+      "import": "./dist/vanilla-integration/index.mjs",
+      "require": "./dist/vanilla-integration/index.js",
+      "types": "./dist/vanilla-integration/index.d.ts"
     }
   },
   "typesVersions": {
@@ -57,6 +66,9 @@
       ],
       "./vue-integration": [
         "./dist/vue-integration/index.d.ts"
+      ],
+      "./vanilla-integration": [
+        "./dist/vanilla-integration/index.d.ts"
       ]
     }
   },
@@ -66,6 +78,7 @@
   "dependencies": {
     "loader": "*",
     "integration-utils": "*",
-    "vue-integration": "*"
+    "vue-integration": "*",
+    "vanilla-integration": "*"
   }
 }

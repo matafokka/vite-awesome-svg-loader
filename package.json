@@ -5,8 +5,10 @@
     "build:packages": "turbo run build --filter ./packages/*",
     "build:apps": "turbo run build --filter ./apps/*",
     "build:vue": "turbo run build --filter ./apps/vue-demo",
+    "build:vanilla": "turbo run build --filter ./apps/vanilla-demo",
     "dev": "turbo run dev",
     "dev:vue": "turbo run dev --filter ./apps/vue-demo",
+    "dev:vanilla": "turbo run dev --filter ./apps/vanilla-demo",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md,vue}\""
   },

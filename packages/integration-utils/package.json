@@ -5,7 +5,25 @@
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./styles.css": {
+      "import": "./dist/styles.css",
+      "require": "./dist/styles.css"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/index.d.ts"
+      ]
+    }
+  },
   "scripts": {
-    "build": "npx tsup ./src/index.ts --format esm,cjs  --minify --sourcemap && tsc --emitDeclarationOnly --declaration"
+    "build": "npx tsup ./src/index.ts --format esm,cjs  --minify --sourcemap && tsc --emitDeclarationOnly --declaration && node src/build.mjs"
   }
 }

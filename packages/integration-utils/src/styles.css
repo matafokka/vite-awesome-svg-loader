@@ -1,0 +1,12 @@
+.awesome-svg-loader-icon {
+  display: inline-block;
+  color: var(--icon-color);
+}
+
+.awesome-svg-loader-icon svg {
+  vertical-align: top;
+}
+
+.awesome-svg-loader-icon use {
+  transition: color var(--icon-transition);
+}

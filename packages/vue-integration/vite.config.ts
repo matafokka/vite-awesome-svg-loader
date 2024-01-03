@@ -6,7 +6,14 @@ import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 import dts from "vite-plugin-dts";
 
 export default defineConfig({
-  plugins: [vue(), cssInjectedByJsPlugin(), dts({ rollupTypes: true })],
+  plugins: [
+    vue(),
+    cssInjectedByJsPlugin(),
+    dts({
+      rollupTypes: true,
+      bundledPackages: ["types"],
+    }),
+  ],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
