@@ -17,7 +17,7 @@ A Vite plugin that:
 
 ## Examples and demos
 
-- Vanilla JS: [source](apps/vanilla-demo/README.md), [demo](https://matafokka.github.io/vite-awesome-svg-loader/vanilla-demo).
+- Vanilla JS: [source](apps/vanilla-demo/README.md), [demo](https://matafokka.github.io/vite-awesome-svg-loader/vanilla-demo), [docs](https://matafokka.github.io/vite-awesome-svg-loader/vanilla-integration-docs).
 - Vue 3: [source](apps/vue-demo/README.md), [demo](https://matafokka.github.io/vite-awesome-svg-loader/vue-demo).
 
 ## Usage
@@ -115,6 +115,8 @@ All integrations work only on client side. However, they won't break SSR.
 ### Vanilla JS
 
 **Warning**: do NOT use this package to create custom integrations, use `vite-awesome-svg-loader/integration-utils` instead.
+
+Make sure to check the [docs](https://matafokka.github.io/vite-awesome-svg-loader/vanilla-integration-docs).
 
 1. Import classes:
 
