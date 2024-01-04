@@ -1,4 +1,4 @@
-# `vanilla-demo`
+# Vanilla JS demo
 
 Welcome to the `vite-awesome-svg-loader` vanilla JS demo!
 

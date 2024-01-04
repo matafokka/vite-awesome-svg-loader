@@ -1,4 +1,4 @@
-# `Vue demo`
+# Vue demo
 
 Welcome to the `vite-awesome-svg-loader` Vue demo!
 
