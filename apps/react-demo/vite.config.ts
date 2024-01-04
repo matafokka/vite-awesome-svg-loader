@@ -8,6 +8,7 @@ import { viteAwesomeSvgLoader } from "vite-awesome-svg-loader";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "./", // You don't need to change this, we need it for our deployment workflow
   plugins: [
     react(),
 
