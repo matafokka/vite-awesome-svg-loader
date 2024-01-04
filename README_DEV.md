@@ -95,6 +95,7 @@ This project tries to keep the source code clean and readable. Please, try to do
     1. Copy assets, markup and styles from any existing demo. Make sure that there's two directories with the images: `import-demo` and `config-demo`. Path to these directories should follow framework's guidelines.
     1. Implement your demo.
 1. Add `build:*` and `dev:*` commands for your integration demo to the root `package.json`.
+1. Update `README.md` with links to your demo and a short example. Pick text for an existing integration and use it as an example.
 1. Submit a PR with your integration.
 
 # Loader development
