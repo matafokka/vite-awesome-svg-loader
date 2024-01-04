@@ -209,12 +209,12 @@ initIcons(
 
 initIcons(
   [
-    new SvgIcon(preWidthReplaceColorMusicIconSrc).setColor("#00988a"),
-    new SvgIcon(preWidthReplaceColorStarIconSrc).setColor("orange"),
-    new SvgIcon(preWidthReplaceColorVideoIconSrc).setColor("hotpink"),
-    new SvgIcon(preWidthReplaceColorGhostImageSrc).setColor("purple"),
-    new SvgIcon(preWidthReplaceColorSunImageSrc).setColor("green"),
-    new SvgIcon(preWidthReplaceColorDiamondImageSrc).setColor("coral"),
+    new SvgIcon(preWidthReplaceColorMusicIconSrc),
+    new SvgIcon(preWidthReplaceColorStarIconSrc),
+    new SvgIcon(preWidthReplaceColorVideoIconSrc),
+    new SvgIcon(preWidthReplaceColorGhostImageSrc),
+    new SvgIcon(preWidthReplaceColorSunImageSrc),
+    new SvgIcon(preWidthReplaceColorDiamondImageSrc),
   ],
   document.getElementById("svg-icons-animated-color")!,
 );
