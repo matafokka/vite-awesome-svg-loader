@@ -4,17 +4,17 @@ import "./styles.scss";
 import origMusicIconUrl from "@/assets/import-demo/icons/music.svg?url";
 import origStarIconUrl from "@/assets/import-demo/icons/star.svg?url";
 import origVideoIconUrl from "@/assets/import-demo/icons/video.svg?url";
-import origGhostImageUrl from "@/assets/import-demo/icons/video.svg?url";
-import origSunImageUrl from "@/assets/import-demo/icons/video.svg?url";
-import origDiamondImageUrl from "@/assets/import-demo/icons/video.svg?url";
+import origGhostImageUrl from "@/assets/import-demo/lineart/ghost.svg?url";
+import origSunImageUrl from "@/assets/import-demo/lineart/sun.svg?url";
+import origDiamondImageUrl from "@/assets/import-demo/lineart/diamond.svg?url";
 
 // Import original images as URLs and preserve line width
 import preWidthMusicIconUrl from "@/assets/import-demo/icons/music.svg?url&preserve-line-width";
 import preWidthStarIconUrl from "@/assets/import-demo/icons/star.svg?url&preserve-line-width";
 import preWidthVideoIconUrl from "@/assets/import-demo/icons/video.svg?url&preserve-line-width";
-import preWidthGhostImageUrl from "@/assets/import-demo/icons/video.svg?url&preserve-line-width";
-import preWidthSunImageUrl from "@/assets/import-demo/icons/video.svg?url&preserve-line-width";
-import preWidthDiamondImageUrl from "@/assets/import-demo/icons/video.svg?url&preserve-line-width";
+import preWidthGhostImageUrl from "@/assets/import-demo/lineart/ghost.svg?url&preserve-line-width";
+import preWidthSunImageUrl from "@/assets/import-demo/lineart/sun.svg?url&preserve-line-width";
+import preWidthDiamondImageUrl from "@/assets/import-demo/lineart/diamond.svg?url&preserve-line-width";
 
 // Import original images as sources
 import origMusicIconSrc from "@/assets/import-demo/icons/music.svg";
