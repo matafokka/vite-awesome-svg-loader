@@ -6,6 +6,8 @@
     "build": "node ./src/build.mjs"
   },
   "dependencies": {
+    "react-demo": "*",
+    "vanilla-demo": "*",
     "vue-demo": "*"
   }
 }
