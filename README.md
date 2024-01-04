@@ -19,6 +19,7 @@ A Vite plugin that:
 
 - Vanilla JS: [source](apps/vanilla-demo/README.md), [demo](https://matafokka.github.io/vite-awesome-svg-loader/vanilla-demo), [docs](https://matafokka.github.io/vite-awesome-svg-loader/vanilla-integration-docs).
 - Vue 3: [source](apps/vue-demo/README.md), [demo](https://matafokka.github.io/vite-awesome-svg-loader/vue-demo).
+- React: [source](apps/react-demo/README.md), [demo](https://matafokka.github.io/vite-awesome-svg-loader/react-demo).
 
 ## Usage
 
@@ -144,6 +145,8 @@ new SvgIcon(imageSrc, "#my-container") // Create an icon and mount it to the ele
   .setColorTransition("0.3s ease-out"); // Set color transition
 ```
 
+See full example: [source](apps/vanilla-demo/README.md), [demo](https://matafokka.github.io/vite-awesome-svg-loader/vanilla-demo).
+
 ### Vue 3
 
 1. Import components:
@@ -179,6 +182,44 @@ import imageSrc from "@/path/to/image.svg";
 ```
 
 See full example: [source](apps/vue-demo/README.md), [demo](https://matafokka.github.io/vite-awesome-svg-loader/vue-demo).
+
+### React
+
+
+1. Import components:
+
+```ts
+import {
+  SvgImage, // Basically implements SVG sprites
+  SvgIcon, // Basic SVG icon that uses SvgImage component internally
+} from "vite-awesome-svg-loader/react-integration";
+```
+
+2. Import images:
+
+```ts
+import imageSrc from "@/path/to/image.svg";
+```
+3. Use components:
+
+```tsx
+export function MyComponent() {
+  return (
+    <div class="main">
+      <SvgImage src={imageSrc} />
+
+      <SvgIcon
+        src={imageSrc}
+        size="24px"
+        color="red"
+        colorTransition="0.3s ease-out"
+      />
+    </div>
+  )
+}
+```
+
+See full example: [source](apps/react-demo/README.md), [demo](https://matafokka.github.io/vite-awesome-svg-loader/react-demo).
 
 ### Custom integration
 
@@ -284,10 +325,6 @@ Implements a portion `vite-awesome-svg-loader` functionality.
 **Other loaders and plugins**
 
 Same as above. If your loader is different, and you want it to get roasted, or if it kills `vite-awesome-svg-loader`, please, let the community know by creating an issue :p
-
-### Project's future
-
-Integrations with vanilla JS (including support for outputting whole SVG source code) and React are planned for the near future.
 
 ### How can I help?
 

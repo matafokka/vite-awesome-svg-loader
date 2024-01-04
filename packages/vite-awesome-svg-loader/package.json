@@ -9,6 +9,8 @@
     "vite-loader",
     "vite-plugin",
     "vue",
+    "react",
+    "vanilla",
     "sprite",
     "sprite-sheet",
     "svg-sprite",
@@ -25,7 +27,7 @@
     "vite-awesome-svg-loader",
     "svgo"
   ],
-  "version": "1.1.0",
+  "version": "1.2.0",
   "homepage": "https://github.com/matafokka/vite-awesome-svg-loader",
   "repository": "https://github.com/matafokka/vite-awesome-svg-loader",
   "license": "LGPL-2.1-or-later",
@@ -57,6 +59,11 @@
       "import": "./dist/vanilla-integration/index.mjs",
       "require": "./dist/vanilla-integration/index.js",
       "types": "./dist/vanilla-integration/index.d.ts"
+    },
+    "./react-integration": {
+      "import": "./dist/react-integration/index.mjs",
+      "require": "./dist/react-integration/index.js",
+      "types": "./dist/react-integration/index.d.ts"
     }
   },
   "typesVersions": {
@@ -69,6 +76,9 @@
       ],
       "./vanilla-integration": [
         "./dist/vanilla-integration/index.d.ts"
+      ],
+      "./react-integration": [
+        "./dist/react-integration/index.d.ts"
       ]
     }
   },
@@ -79,6 +89,7 @@
     "loader": "*",
     "integration-utils": "*",
     "vue-integration": "*",
-    "vanilla-integration": "*"
+    "vanilla-integration": "*",
+    "react-integration": "*"
   }
 }
