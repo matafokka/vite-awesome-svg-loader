@@ -211,6 +211,7 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
   let isBuildMode = false;
   let root = "";
   let base = "";
+  let oldViteRoot = "";
 
   return {
     name: "vite-awesome-svg-loader",
@@ -223,6 +224,7 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
     configResolved(config) {
       root = normalizeBaseDir(config.root);
       base = normalizeBaseDir(config.base);
+      oldViteRoot = root[1] === ":" ? root.substring(2) : root;
     },
 
     configureServer(server) {
@@ -236,6 +238,18 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
     resolveId(source, importer) {
       if (source.indexOf(".svg") === -1) {
         return null;
+      }
+
+      // Resolve ID to an absolute path
+
+      // Vite 2.0.0-ish compatibility. It can pass following strings:
+      // 1. /@fs/<rest of the path from root>
+      // 1. /<fs root, i.e. slash or Windows drive letter (C:, D:, etc)>/<rest of the path>
+      // 1. /<relative path>
+      // Newer versions pass either absolute path (with a drive letter on Windows) or relative path.
+
+      if (source.startsWith(oldViteRoot)) {
+        return root + source.substring(oldViteRoot.length);
       }
 
       if (!source.startsWith(".")) {
