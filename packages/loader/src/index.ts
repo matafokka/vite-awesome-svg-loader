@@ -216,9 +216,8 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
     name: "vite-awesome-svg-loader",
     enforce: "pre",
 
-    apply(config: UserConfig, { command }: ConfigEnv) {
+    config(config: UserConfig, { command }: ConfigEnv) {
       isBuildMode = command === "build";
-      return true;
     },
 
     configResolved(config) {
