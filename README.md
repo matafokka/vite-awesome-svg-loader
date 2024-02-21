@@ -77,6 +77,9 @@ import imageCurColorSrc from "./path/to/image.svg?set-current-color";
 // It is recommended to configure paths to avoid putting @ts-ignore for every import and writing long URLs.
 // @ts-ignore
 import transformedImageUrl from "./path/to/image.svg?url&preserve-line-width&set-current-color";
+
+// explicitly disable any parameter by setting it to false. This takes precedence over config.
+import initialLineWidthImageUrl from "./path/to/image.svg?url&preserve-line-width=false";
 ```
 
 5. Optional, but highly recommended. Configure loader, so you can import SVGs without URL parameters:

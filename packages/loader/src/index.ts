@@ -163,7 +163,7 @@ function normalizeBaseDir(dir: string) {
  * import imageBase64 from "./path/to/image.svg?base64-data-uri&preserve-line-width&set-current-color";
  * ```
  *
- * You can explicitly disable any parameter by setting it to `false` (case-insensitive):
+ * You can explicitly disable any parameter by setting it to `false` (case-insensitive, takes precedence over config):
  *
  * ```ts
  * import imageUrl from "./path/to/image.svg?url&preserve-line-width=false";
@@ -404,7 +404,11 @@ function toBase64(str: string) {
 }
 
 function shouldDoThing(relPathWithSlash: string, queryValue: string | undefined, list: (string | RegExp)[]) {
-  if ((queryValue || "false").toLocaleLowerCase() !== "false") {
+  if (queryValue?.toLocaleLowerCase() === "false") {
+    return false;
+  }
+
+  if (queryValue) {
     return true;
   }
 
