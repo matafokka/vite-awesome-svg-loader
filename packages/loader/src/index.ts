@@ -324,6 +324,7 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
 
       const fullPath = root + relPathWithSlash;
       let code = fs.readFileSync(fullPath).toString();
+      let isFillSetOnRoot = false;
 
       code = optimize(code, {
         multipass: true,
@@ -347,7 +348,7 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
                     }
 
                     if (shouldSetCurrentColor) {
-                      setCurrentColor(node);
+                      isFillSetOnRoot = setCurrentColor(node, isFillSetOnRoot);
                     }
                   },
                 },
@@ -458,6 +459,24 @@ function preserveLineWidth(node: XastElement, path: string) {
   }
 }
 
+/**
+ * Defines a list of elements which should have `fill` property to be forcefully replaced with `currentColor`.
+ *
+ * Fill color of these elements defaults to black, if `fill` property is not defined.
+ */
+const ELEMENTS_TO_FORCE_SET_FILL_OF: Record<string, true> = {
+  circle: true,
+  ellipse: true,
+  path: true,
+  polygon: true,
+  polyline: true,
+  rect: true,
+  text: true,
+  textPath: true,
+  tref: true,
+  tspan: true,
+};
+
 const COLOR_ATTRS_TO_REPLACE: Record<string, true> = {
   "fill": true,
   "stroke": true,
@@ -470,7 +489,13 @@ const IGNORE_COLORS: Record<string, true> = {
   currentColor: true,
 };
 
-function setCurrentColor(node: XastElement) {
+/**
+ * Sets current color of a given node
+ * @param node
+ * @param isFillSetOnRoot
+ * @returns New value of `isFillSetOnRoot`.
+ */
+function setCurrentColor(node: XastElement, isFillSetOnRoot: boolean) {
   if (node.name === "style") {
     // @ts-ignore
     const newCss = setCurrentColorCss(node.children[0]?.value, false);
@@ -487,6 +512,24 @@ function setCurrentColor(node: XastElement) {
     }
   }
 
+  const isRoot = node.name === "svg";
+  const fillAttr = node.attributes.fill;
+
+  // If fill is set on <svg>, it'll override default fill of all underlying elements. If that's the case,
+  // we shouldn't forcefully replace fill color of elements that are filled by default but don't have a color set
+  if (isRoot && fillAttr) {
+    isFillSetOnRoot = true;
+  }
+
+  // Forcefully replace fill color unless we have what's described above
+  if (
+    ((isRoot && isFillSetOnRoot) || (!isRoot && !isFillSetOnRoot && ELEMENTS_TO_FORCE_SET_FILL_OF[node.name])) &&
+    !IGNORE_COLORS[fillAttr]
+  ) {
+    node.attributes.fill = "currentColor";
+  }
+
+  // Replace rest of the colors
   for (const color in COLOR_ATTRS_TO_REPLACE) {
     const attrsColor = node.attributes[color];
 
@@ -494,6 +537,8 @@ function setCurrentColor(node: XastElement) {
       node.attributes[color] = "currentColor";
     }
   }
+
+  return isFillSetOnRoot;
 }
 
 function setCurrentColorCss(css: any, isInline = false) {
