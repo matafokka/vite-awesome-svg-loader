@@ -98,7 +98,7 @@ export function onSrcUpdate(prevSrc: string | undefined, src: string) {
  * @param symbolOrId Symbol or ID of a symbol. If nullish value is provided, won't do anything.
  */
 export function onUnmount(symbolOrId: SVGSymbolElement | string | null | undefined) {
-  if (typeof window === "undefined") {
+  if (!symbolOrId || typeof window === "undefined") {
     return;
   }
 
