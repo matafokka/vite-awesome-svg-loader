@@ -5,7 +5,8 @@ import { onSrcUpdate as onSrcUpdateRaw, onUnmount as onUnmountRaw } from "integr
 export interface SvgImageProps extends React.SVGAttributes<SVGElement>, SvgImagePropsRaw {}
 
 export function SvgImage({ src, useElAttrs, ...attrs }: SvgImageProps) {
-  const [id, setId] = useState("");
+  let actualId = "";
+  const [id, setId] = useState(actualId);
   const [svgAttrs, setSvgAttrs] = useState<React.SVGAttributes<SVGElement>>({});
   let prevSrc = "";
 
@@ -14,6 +15,7 @@ export function SvgImage({ src, useElAttrs, ...attrs }: SvgImageProps) {
 
     if (res.id) {
       setId(res.id);
+      actualId = res.id;
     }
 
     if (res.attrs) {
@@ -28,8 +30,8 @@ export function SvgImage({ src, useElAttrs, ...attrs }: SvgImageProps) {
 
   // When component will be unmounted
   useEffect(() => {
-    return () => onUnmountRaw(id);
-  }, [src]);
+    return () => onUnmountRaw(actualId);
+  }, []);
 
   return (
     <svg {...{ alt: "", ...attrs, ...svgAttrs }}>
