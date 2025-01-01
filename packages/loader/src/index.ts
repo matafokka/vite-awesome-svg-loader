@@ -289,7 +289,7 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
 
       for (const pair of queryKVPairs) {
         const [key, value] = pair.split("=");
-        query[key.toLocaleLowerCase()] = value || "1";
+        query[key.toLowerCase()] = value || "1";
       }
 
       if (shouldDoThing(relPathWithSlash, query["skip-awesome-svg-loader"], mergedOptions.skipFilesList)) {
@@ -405,7 +405,7 @@ function toBase64(str: string) {
 }
 
 function shouldDoThing(relPathWithSlash: string, queryValue: string | undefined, list: (string | RegExp)[]) {
-  if (queryValue?.toLocaleLowerCase() === "false") {
+  if (queryValue?.toLowerCase() === "false") {
     return false;
   }
 
