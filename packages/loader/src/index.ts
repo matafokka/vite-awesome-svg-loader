@@ -149,8 +149,11 @@ function normalizeBaseDir(dir: string) {
  *    1. Source code data URI: `import imageSrcDataUri from "./path/to/image.svg?source-data-uri"`.
  *    1. Source code Base64: `import imageBase64 from "./path/to/image.svg?base64"`.
  *    1. Source code Base64 data URI: `import imageBase64DataUri from "./path/to/image.svg?base64-data-uri"`.
- * 1. Can preserve line width (make icons and line art have same line width when scaling): `import imageSrc from "./path/to/image.svg?preserve-line-width"`. See also: {@link SvgLoaderOptions.preserveLineWidthList}.
- * 1. Can replace colors with `currentColor`: `import imageSrc from "./path/to/image.svg?set-current-color"`. See also: {@link SvgLoaderOptions.setCurrentColorList}.
+ * 1. Can preserve line width (make icons and line art have same line width when scaling):
+ * `import imageSrc from "./path/to/image.svg?preserve-line-width"`.
+ * See also: {@link SvgLoaderOptions.preserveLineWidthList}.
+ * 1. Can replace colors with `currentColor`: `import imageSrc from "./path/to/image.svg?set-current-color"`.
+ * See also: {@link SvgLoaderOptions.setCurrentColorList}.
  * 1. Will minimize your SVGs using [SVGO](https://github.com/svg/svgo).
  *
  * Parameters can be chained with an `&` symbol like in a normal URL:
@@ -181,7 +184,8 @@ function normalizeBaseDir(dir: string) {
  * import image from "./path/to/image.svg?skip-awesome-svg-loader";
  * ```
  *
- * You can set filenames and regexes in {@link SvgLoaderOptions}, so you don't have to write such long urls for every import.
+ * You can set filenames and regexes in {@link SvgLoaderOptions}, so you don't have to write such long urls for every
+ * import.
  *
  * @param options Plugin options
  */
@@ -292,11 +296,11 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
         query[key.toLowerCase()] = value || "1";
       }
 
-      if (shouldDoThing(relPathWithSlash, query["skip-awesome-svg-loader"], mergedOptions.skipFilesList)) {
+      if (matchesQueryOrList(relPathWithSlash, query["skip-awesome-svg-loader"], mergedOptions.skipFilesList)) {
         return null;
       }
 
-      const shouldSkipTransforms = shouldDoThing(
+      const shouldSkipTransforms = matchesQueryOrList(
         relPathWithSlash,
         query["skip-transforms"],
         mergedOptions.skipTransformsList,
@@ -304,11 +308,11 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
 
       const shouldPreserveLineWidth =
         !shouldSkipTransforms &&
-        shouldDoThing(relPathWithSlash, query["preserve-line-width"], mergedOptions.preserveLineWidthList);
+        matchesQueryOrList(relPathWithSlash, query["preserve-line-width"], mergedOptions.preserveLineWidthList);
 
       const shouldSetCurrentColor =
         !shouldSkipTransforms &&
-        shouldDoThing(relPathWithSlash, query["set-current-color"], mergedOptions.setCurrentColorList);
+        matchesQueryOrList(relPathWithSlash, query["set-current-color"], mergedOptions.setCurrentColorList);
 
       // Make a short sorted string from params to guarantee unique file name for the same file
       let joinedParamsStr = "";
@@ -368,17 +372,13 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
 
       switch (importType) {
         case "source":
-          return "export default `" + code.replaceAll("`", "\\`") + "`;";
+          return "export default `" + escapeBackticks(code) + "`;";
         case "source-data-uri":
-          return "export default `data:image/svg+xml," + encodeURIComponent(code.replaceAll("`", "\\`")) + "`;";
+          return "export default `data:image/svg+xml," + encodeURIComponent(code) + "`;";
         case "base64":
-          return "export default `" + toBase64(code).replaceAll("`", "\\`") + "`;";
+          return "export default `" + escapeBackticks(toBase64(code)) + "`;";
         case "base64-data-uri":
-          return (
-            "export default `data:image/svg+xml;base64," +
-            encodeURIComponent(toBase64(code)).replaceAll("`", "\\`") +
-            "`;"
-          );
+          return "export default `data:image/svg+xml;base64," + encodeURIComponent(toBase64(code)) + "`;";
       }
 
       if (!isBuildMode) {
@@ -404,7 +404,21 @@ function toBase64(str: string) {
   return btoa(binString);
 }
 
-function shouldDoThing(relPathWithSlash: string, queryValue: string | undefined, list: (string | RegExp)[]) {
+/**
+ * Escapes backticks in a string with a slash: \\\`
+ */
+function escapeBackticks(str: string) {
+  return str.replaceAll("`", "\\`");
+}
+
+/**
+ * Checks if given relative path or filename matches query value or a list
+ * @param relPathWithSlash Relative path with leading slash
+ * @param queryValue Value of a query param to check. If value exists and not equals to `false` (case-insensitive),
+ * function returns `true`.
+ * @param list List of matchers to check path and filename against.
+ */
+function matchesQueryOrList(relPathWithSlash: string, queryValue: string | undefined, list: (string | RegExp)[]) {
   if (queryValue?.toLowerCase() === "false") {
     return false;
   }
@@ -414,10 +428,11 @@ function shouldDoThing(relPathWithSlash: string, queryValue: string | undefined,
   }
 
   const filename = path.basename(relPathWithSlash);
+  const toMatch = [filename, relPathWithSlash];
 
-  for (const entry of list) {
-    for (const name of [filename, relPathWithSlash]) {
-      if (name === entry || (entry instanceof RegExp && entry.exec(name))) {
+  for (const matcher of list) {
+    for (const entry of toMatch) {
+      if (entry === matcher || (matcher instanceof RegExp && matcher.exec(entry))) {
         return true;
       }
     }
@@ -491,8 +506,6 @@ const IGNORE_COLORS: Record<string, true> = {
 
 /**
  * Sets current color of a given node
- * @param node
- * @param isFillSetOnRoot
  * @returns New value of `isFillSetOnRoot`.
  */
 function setCurrentColor(node: XastElement, isFillSetOnRoot: boolean) {
