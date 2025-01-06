@@ -9,7 +9,7 @@ export function SvgImage({ src, useElAttrs, ...attrs }: SvgImageProps) {
   const prevSrc = useRef("");
 
   const [id, setId] = useState(actualId.current);
-  const [svgAttrs, setSvgAttrs] = useState<React.SVGAttributes<SVGElement>>({});
+  const [svgAttrs, setSvgAttrs] = useState<SVGAttributes<SVGElement>>({});
 
   const onSrcUpdate = () => {
     const res = onSrcUpdateRaw(prevSrc.current, src);
