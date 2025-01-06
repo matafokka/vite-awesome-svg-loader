@@ -2,7 +2,10 @@ import type { ConfigEnv, Plugin, UserConfig } from "vite";
 import fs from "fs-extra";
 import path from "path";
 import { optimize } from "svgo";
-import { XastElement } from "svgo/lib/types";
+import { XastChild, XastElement } from "svgo/lib/types";
+// TODO: Update import when SVGO 4.x.x will be released, it should export utility functions
+// @ts-expect-error
+import { matches as matchesSelector, querySelectorAll } from "svgo/lib/xast.js";
 import * as csstree from "css-tree";
 import MurmurHash3 from "imurmurhash";
 
@@ -60,6 +63,21 @@ export interface SvgLoaderOptions {
   preserveLineWidthList: (string | RegExp)[];
 
   /**
+   * A list of files or directories to disable preserving line width of. Overrides {@link preserveLineWidthList}.
+   */
+  skipPreserveLineWidthList: (string | RegExp)[];
+
+  /**
+   * A list of CSS selectors to disable {@link preserveLineWidthList} for. Use it to leave specific elements stroke
+   * width as-is.
+   *
+   * Can be a list of selectors or selectors-per-files specifiers.
+   *
+   * Unlike {@link skipSetCurrentColorSelectors} and {@link skipTransformsSelectors}, doesn't impact build performance.
+   */
+  skipPreserveLineWidthSelectors: (string | SelectorsPerFiles)[];
+
+  /**
    * A list of files or directories to replace fill, stroke and `<stop>` colors to `currentColor` of, i.e.:
    *
    * 1. `fill`, `stroke` and `stop-color` attributes and CSS identifiers will be replaced with `currentColor`.
@@ -78,6 +96,41 @@ export interface SvgLoaderOptions {
   setCurrentColorList: (string | RegExp)[];
 
   /**
+   * A list of files or directories to disable setting current color of. Overrides {@link setCurrentColorList}.
+   */
+  skipSetCurrentColorList: (string | RegExp)[];
+
+  /**
+   * A list of CSS selectors to disable {@link setCurrentColorList} for. Use it to leave specific elements colors as-is.
+   *
+   * Can be a list of selectors or selectors-per-files specifiers.
+   *
+   * **You probably don't need this option.**
+   *
+   * For example, if you're creating multi-colored icons, consider following:
+   *
+   * 1. Using SVG-symbols
+   * 1. Add data-attributes for different colors: `data-color-primary`, `data-color-secondary` or whatever fits your
+   * needs.
+   * 1. Colorize icon with CSS:
+   *
+   * ```css
+   * svg *[data-color-primary] {
+   *   color: var(--icon-color-primary);
+   * }
+   *
+   * svg *[data-color-secondary] {
+   *   color: var(--icon-color-secondary);
+   * }
+   * ```
+   *
+   * This way you'll get full extensibility.
+   *
+   * **Heavy usage may significantly slow down build time.** Limit selectors to specific files to improve performance.
+   */
+  skipSetCurrentColorSelectors: (string | SelectorsPerFiles)[];
+
+  /**
    * A list of files to skip while transforming.
    *
    * For example, if you add a directory to {@link preserveLineWidthList} and add a file in that directory to this list,
@@ -86,6 +139,18 @@ export interface SvgLoaderOptions {
    * SVGO is still applied to the added files.
    */
   skipTransformsList: (string | RegExp)[];
+
+  /**
+   * A list of CSS selectors to disable all transforms for. Use it to leave specific elements as-is.
+   *
+   * Can be a list of selectors or selectors-per-files specifiers.
+   *
+   * You probably don't need this option. Try rethinking how you manage your assets (see example at
+   * {@link skipSetCurrentColorSelectors}). This option is for some very obscure edge cases only.
+   *
+   * **Heavy usage may significantly slow down build time.** Limit selectors to specific files to improve performance.
+   */
+  skipTransformsSelectors: (string | SelectorsPerFiles)[];
 
   /**
    * A list of files to skip loading of. Useful for passing original files to another loader.
@@ -121,11 +186,31 @@ export interface SvgLoaderOptions {
   defaultImport: ImportType;
 }
 
+/**
+ * CSS selector per file or files
+ */
+export interface SelectorsPerFiles {
+  /**
+   * List of filenames and/or paths matchers
+   */
+  files: (string | RegExp)[];
+
+  /**
+   * List of selectors
+   */
+  selectors: string[];
+}
+
 const DEFAULT_OPTIONS: SvgLoaderOptions = {
   tempDir: ".temp",
   preserveLineWidthList: [],
+  skipPreserveLineWidthList: [],
+  skipPreserveLineWidthSelectors: [],
   setCurrentColorList: [],
+  skipSetCurrentColorList: [],
+  skipSetCurrentColorSelectors: [],
   skipTransformsList: [],
+  skipTransformsSelectors: [],
   skipFilesList: [],
   defaultImport: "source",
 };
@@ -276,6 +361,8 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
         return null;
       }
 
+      // Normalize file path
+
       let relPathWithSlash = id.substring(0, indexOfSvg + ext.length).replaceAll("\\", "/");
 
       if (relPathWithSlash.startsWith(root)) {
@@ -285,6 +372,8 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
       if (!relPathWithSlash.startsWith("/")) {
         relPathWithSlash = "/" + relPathWithSlash;
       }
+
+      // Parse query
 
       const queryStr = id.split("?", 2)[1] || "";
       const queryKVPairs = queryStr.split("&");
@@ -300,6 +389,8 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
         return null;
       }
 
+      // Resolve transform configuration
+
       const shouldSkipTransforms = matchesQueryOrList(
         relPathWithSlash,
         query["skip-transforms"],
@@ -308,14 +399,33 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
 
       const shouldPreserveLineWidth =
         !shouldSkipTransforms &&
-        matchesQueryOrList(relPathWithSlash, query["preserve-line-width"], mergedOptions.preserveLineWidthList);
+        matchesQueryOrList(relPathWithSlash, query["preserve-line-width"], mergedOptions.preserveLineWidthList) &&
+        !matchesQueryOrList(relPathWithSlash, undefined, mergedOptions.skipPreserveLineWidthList);
 
       const shouldSetCurrentColor =
         !shouldSkipTransforms &&
-        matchesQueryOrList(relPathWithSlash, query["set-current-color"], mergedOptions.setCurrentColorList);
+        matchesQueryOrList(relPathWithSlash, query["set-current-color"], mergedOptions.setCurrentColorList) &&
+        !matchesQueryOrList(relPathWithSlash, undefined, mergedOptions.skipSetCurrentColorList);
+
+      const skipPreserveLineWidthSelectors = selectorsToList(
+        relPathWithSlash,
+        mergedOptions.skipPreserveLineWidthSelectors,
+      );
+
+      const skipSetCurrentColorSelectors = selectorsToList(
+        relPathWithSlash,
+        mergedOptions.skipSetCurrentColorSelectors,
+      );
+
+      const skipTransformsSelectors = selectorsToList(relPathWithSlash, mergedOptions.skipTransformsSelectors);
+
+      // We'll fill it later
+      const nodesWithOrigColors: XastChild[] = [];
 
       // Make a short sorted string from params to guarantee unique file name for the same file
+
       let joinedParamsStr = "";
+
       for (const param of [shouldSkipTransforms, shouldPreserveLineWidth, shouldSetCurrentColor]) {
         joinedParamsStr += param ? "1" : "0";
       }
@@ -345,14 +455,27 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
             name: "awesome-svg-loader",
             fn: () => {
               return {
+                root: {
+                  enter: (root) => {
+                    for (const selectors of [skipSetCurrentColorSelectors, skipTransformsSelectors]) {
+                      for (const selector of selectors) {
+                        nodesWithOrigColors.push(...querySelectorAll(root, selector));
+                      }
+                    }
+                  },
+                },
                 element: {
                   enter: (node) => {
-                    if (shouldPreserveLineWidth) {
+                    if (matchesSelectors(node, skipTransformsSelectors)) {
+                      return;
+                    }
+
+                    if (shouldPreserveLineWidth && !matchesSelectors(node, skipPreserveLineWidthSelectors)) {
                       preserveLineWidth(node, fullPath);
                     }
 
-                    if (shouldSetCurrentColor) {
-                      isFillSetOnRoot = setCurrentColor(node, isFillSetOnRoot);
+                    if (shouldSetCurrentColor && !matchesSelectors(node, skipSetCurrentColorSelectors)) {
+                      isFillSetOnRoot = setCurrentColor(node, isFillSetOnRoot, nodesWithOrigColors);
                     }
                   },
                 },
@@ -412,13 +535,13 @@ function escapeBackticks(str: string) {
 }
 
 /**
- * Checks if given relative path or filename matches query value or a list
+ * Checks if given relative path or filename matches query value or a list of matchers
  * @param relPathWithSlash Relative path with leading slash
  * @param queryValue Value of a query param to check. If value exists and not equals to `false` (case-insensitive),
  * function returns `true`.
- * @param list List of matchers to check path and filename against.
+ * @param matchers List of matchers to check path and filename against
  */
-function matchesQueryOrList(relPathWithSlash: string, queryValue: string | undefined, list: (string | RegExp)[]) {
+function matchesQueryOrList(relPathWithSlash: string, queryValue: string | undefined, matchers: (string | RegExp)[]) {
   if (queryValue?.toLowerCase() === "false") {
     return false;
   }
@@ -427,14 +550,58 @@ function matchesQueryOrList(relPathWithSlash: string, queryValue: string | undef
     return true;
   }
 
+  return matchesPath(relPathWithSlash, matchers);
+}
+
+/**
+ * Checks if given relative path or filename matches a list of matchers
+ * @param relPathWithSlash Relative path with leading slash
+ * @param matchers List of matchers to check path and filename against
+ */
+function matchesPath(relPathWithSlash: string, matchers: (string | RegExp)[]) {
   const filename = path.basename(relPathWithSlash);
   const toMatch = [filename, relPathWithSlash];
 
-  for (const matcher of list) {
+  for (const matcher of matchers) {
     for (const entry of toMatch) {
       if (entry === matcher || (matcher instanceof RegExp && matcher.exec(entry))) {
         return true;
       }
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Converts CSS selectors to a list
+ * @param relPathWithSlash Relative path with leading slash
+ * @param selectors Selectors
+ */
+function selectorsToList(relPathWithSlash: string, selectors: (string | SelectorsPerFiles)[]) {
+  const resolvedSelectors: string[] = [];
+
+  for (const selector of selectors) {
+    if (typeof selector === "string") {
+      resolvedSelectors.push(selector);
+      continue;
+    }
+
+    if (matchesPath(relPathWithSlash, selector.files)) {
+      resolvedSelectors.push(...selector.selectors);
+    }
+  }
+
+  return resolvedSelectors;
+}
+
+/**
+ * Checks if a node matches at least one CSS selector in a list
+ */
+function matchesSelectors(node: XastChild, selectors: string[]) {
+  for (const selector of selectors) {
+    if (matchesSelector(node, selector)) {
+      return true;
     }
   }
 
@@ -508,17 +675,16 @@ const IGNORE_COLORS: Record<string, true> = {
  * Sets current color of a given node
  * @returns New value of `isFillSetOnRoot`.
  */
-function setCurrentColor(node: XastElement, isFillSetOnRoot: boolean) {
+function setCurrentColor(node: XastElement, isFillSetOnRoot: boolean, nodesWithOrigColors: XastChild[]) {
   if (node.name === "style") {
-    // @ts-ignore
-    const newCss = setCurrentColorCss(node.children[0]?.value, false);
+    const firstChild: any = node.children[0];
+    const newCss = setCurrentColorCss(firstChild?.value, nodesWithOrigColors, false);
 
     if (newCss) {
-      // @ts-ignore
-      node.children[0].value = newCss;
+      firstChild.value = newCss;
     }
   } else {
-    const newCss = setCurrentColorCss(node.attributes.style, true);
+    const newCss = setCurrentColorCss(node.attributes.style, nodesWithOrigColors, true);
 
     if (newCss) {
       node.attributes.style = newCss;
@@ -554,7 +720,7 @@ function setCurrentColor(node: XastElement, isFillSetOnRoot: boolean) {
   return isFillSetOnRoot;
 }
 
-function setCurrentColorCss(css: any, isInline = false) {
+function setCurrentColorCss(css: any, nodesWithOrigColors: XastChild[], isInline = false) {
   if (!css || typeof css !== "string") {
     return "";
   }
@@ -566,23 +732,103 @@ function setCurrentColorCss(css: any, isInline = false) {
     context = "block";
   }
 
+  // For original colors preservation
+  const shouldPreserveColors = !isInline && nodesWithOrigColors.length;
+  let origColorSelectors: string[] = [];
+  let currentColorSelectors: string[] = [];
+  let didSplitSelectors = false;
+
   const ast = csstree.parse(css, { context });
 
-  csstree.walk(ast, {
-    visit: "Declaration",
-    enter: (node) => {
-      if (!COLOR_ATTRS_TO_REPLACE[node.property]) {
+  csstree.walk(ast, function (node) {
+    // Skip rules with original colors
+    if ((node as any).__SKIP_SVG_LOADER__ || (this.rule as any)?.__SKIP_SVG_LOADER__) {
+      return;
+    }
+
+    // If need to preserve colors
+    if (shouldPreserveColors) {
+      // Reset lists if it's new rule
+      if (node.type === "SelectorList") {
+        origColorSelectors = [];
+        currentColorSelectors = [];
+        didSplitSelectors = false;
         return;
       }
 
-      // @ts-ignore
-      const identifier = node.value?.children?.first;
-      const color = identifier?.value || identifier?.name;
+      // Classify selectors
+      if (node.type === "Selector") {
+        const selector = csstree.generate(node);
+        let isOrigColor = false;
 
-      if (color && !IGNORE_COLORS[color]) {
-        node.value = csstree.parse("currentColor", { context: "value" }) as csstree.Value;
+        for (const svgNode of nodesWithOrigColors) {
+          if (matchesSelector(svgNode, selector)) {
+            isOrigColor = true;
+            (node as any).__ORIG_COLOR__ = true;
+            break;
+          }
+        }
+
+        (isOrigColor ? origColorSelectors : currentColorSelectors).push(selector);
+        return;
       }
-    },
+    }
+
+    // Check if there's a declaration with a color, and if this color should be replaced
+
+    if (node.type !== "Declaration" || !COLOR_ATTRS_TO_REPLACE[node.property]) {
+      return;
+    }
+
+    // @ts-ignore
+    const identifier = node.value?.children?.first;
+    const color = identifier?.value || identifier?.name;
+
+    if (!color || IGNORE_COLORS[color]) {
+      return;
+    }
+
+    // Create new rule with original colors and remove such selectors from the current rule.
+    // We'll replace color in the current rule.
+
+    if (shouldPreserveColors && !didSplitSelectors && this.rule?.prelude.type === "SelectorList") {
+      // Split selectors and create a new rule
+
+      const origColorsRule = csstree.clone(this.rule) as csstree.Rule;
+      (origColorsRule as any).__SKIP_SVG_LOADER__ = true;
+      const origColorsSelectors = new csstree.List<csstree.CssNode>();
+      const selectors = this.rule.prelude.children;
+
+      selectors.forEach((node, listItem) => {
+        if ((node as any).__ORIG_COLOR__) {
+          selectors.remove(listItem);
+          origColorsSelectors.push(node);
+        }
+      });
+
+      (origColorsRule.prelude as csstree.SelectorList).children = origColorsSelectors;
+
+      // Parent can be either at-rule or stylesheet
+      const parent = this.atrule?.block?.children || this.stylesheet?.children;
+
+      // Find current rule in parent. FFS, why there's no indices?
+      let insertBefore: csstree.ListItem<csstree.CssNode> | undefined;
+
+      parent?.some((rule, listItem) => {
+        if (rule === this.rule) {
+          insertBefore = listItem;
+          return true;
+        }
+
+        return false;
+      });
+
+      insertBefore ? parent?.insertData(origColorsRule, insertBefore) : parent?.push(origColorsRule);
+      didSplitSelectors = true;
+    }
+
+    // Replace color
+    node.value = csstree.parse("currentColor", { context: "value" }) as csstree.Value;
   });
 
   return csstree.generate(ast);

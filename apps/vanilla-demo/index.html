@@ -20,17 +20,24 @@
           <h1>Vanilla JS awesome SVG loader demo</h1>
 
           <p>
-            This project demonstrates <span class="mono">vite-awesome-svg-loader</span> capabilities, and how it works
-            with different SVG images.
+            This project demonstrates
+
+            <a
+              href="https://github.com/matafokka/vite-awesome-svg-loader"
+              class="mono"
+              >vite-awesome-svg-loader</a
+            >
+
+            capabilities, and how it works with different SVG images.
           </p>
 
-          <p>As an example, actual icons, oversize lineart and actual lineart images are present.</p>
+          <p>As an example, actual icons and line art images are present.</p>
 
-          <h2>Basic functionality and configuration via import URL</h2>
+          <h2>Import images via URL and render with regular <span class="mono">&lt;img&gt;</span> tag</h2>
 
           <p>
-            Imports used in this section can be configured using regexes in plugin config. Later we'll demonstrate how
-            this configuration works.
+            Imports used in this section can be configured using regexes in plugin config (see
+            <span class="mono">vite.config.ts</span> file).
           </p>
 
           <h3>Original files</h3>
@@ -44,8 +51,8 @@
           <h3>Preserve line width</h3>
 
           <p>
-            Note that some images have too thick lines, and some are cropped. Please make sure that line width is
-            proportional to the image size, and images have a bit of safe spacing.
+            Try scaling images using slider at the bottom of the screen. Line width will stay the same despite image
+            size.
           </p>
 
           <div
@@ -53,37 +60,58 @@
             class="images"
           ></div>
 
-          <h3>Original files in <span class="mono">SvgImage</span> component</h3>
+          <h2>Render images with <span class="mono">SvgImage</span> component</h2>
 
           <p>
             This component will render SVG source code into a SVG symbol, so you'll have more freedom to manipulate it.
+            Most importantly, it allows you to set custom colors.
           </p>
+
+          <h3>Original files</h3>
 
           <div
             id="svg-image-original"
             class="images"
           ></div>
 
-          <h3>Preserve line width and use <span class="mono">SvgImage</span> component</h3>
+          <h3>Preserve line width</h3>
 
           <div
             id="pre-width-svg-image"
             class="images"
           ></div>
 
-          <h3>
-            Preserve line width, replace colors with <span class="mono">currentColor</span> and use
-            <span class="mono">SvgIcon</span> component
-          </h3>
-
-          <p>Basically this example shows how to use icons.</p>
+          <h3>Preserve line width and replace colors</h3>
 
           <div
-            id="svg-icon-pre-width-replace-color"
+            id="pre-width-replace-color-svg-image"
             class="images"
           ></div>
 
-          <h3>Animate color and use <span class="mono">SvgIcon</span> component</h3>
+          <h2>Render icons with <span class="mono">SvgIcon</span> component</h2>
+
+          <p>This component simplifies icons colorization and sizing.</p>
+
+          <p>
+            It makes sense to always preserve icon's line width. In real project this should be done via config (see
+            <span class="mono">vite.config.ts</span> file).
+          </p>
+
+          <h3>Original files</h3>
+
+          <div
+            id="svg-icons-orig"
+            class="images"
+          ></div>
+
+          <h3>Preserve line width and replace colors</h3>
+
+          <div
+            id="svg-icons-pre-width-replace-color"
+            class="images"
+          ></div>
+
+          <h3>Animate color</h3>
 
           <p>The example above but we'll animate colors using CSS.</p>
 
@@ -92,7 +120,7 @@
             class="images color-animation"
           ></div>
 
-          <h3>Reuse same SVG in multiple symbols</h3>
+          <h2>Automatically reuse same SVG in multiple symbols</h2>
 
           <p>
             This example demonstrates that one SVG is being reused in multiple
@@ -118,14 +146,14 @@
             <button id="remove-button">Remove image</button>
           </div>
 
-          <h4><span class="mono">SvgImage</span></h4>
+          <h3><span class="mono">SvgImage</span></h3>
 
           <div
             id="dynamic-images"
             class="images"
           ></div>
 
-          <h4><span class="mono">SvgIcon</span></h4>
+          <h3><span class="mono">SvgIcon</span></h3>
 
           <div
             id="dynamic-icons"
@@ -139,7 +167,7 @@
             each entry are actually different files in different directories: one directory for each section.
           </p>
 
-          <p>Each directory also contains following files:</p>
+          <p>Each directory contains following files:</p>
 
           <ol>
             <li>
@@ -150,6 +178,23 @@
             <li>
               <span class="mono">skip-loading.svg</span> - configured to not be loaded by
               <span class="mono">vite-awesome-svg-loader</span>. We'll show how it works in the last section.
+            </li>
+          </ol>
+
+          <p>Directory <span class="mono">config-demo/all</span> additionally contains following files:</p>
+
+          <ol>
+            <li>
+              <span class="mono">colors-not-preserved.svg</span> - configured to be skipped while replacing colors.
+            </li>
+
+            <li>
+              <span class="mono">line-width-not-preserved.svg</span> - configured to be skipped while preserving line
+              width.
+            </li>
+
+            <li>
+              <span class="mono">ignore-elements.svg</span> - file is transformed, but certain elements are ignored.
             </li>
           </ol>
 
@@ -174,6 +219,20 @@
             class="images cfg-replace-color"
           ></div>
 
+          <h3>All transforms except certain SVG elements</h3>
+
+          <p>
+            It's possible to skip transforms per-element and per-element-per-file. See
+            <span class="mono">vite.config.ts</span> file for examples.
+          </p>
+
+          <div id="per-element-transforms-checkbox"></div>
+
+          <div
+            id="skip-elements-image"
+            class="images"
+          ></div>
+
           <h3>Skip loading entirely</h3>
 
           <p>
@@ -187,20 +246,33 @@
 
           <ol id="skip-loading"></ol>
 
-          <h2>Named async icons example</h2>
+          <h2>Named icons with dynamic imports inside icon component</h2>
 
-          <p>This is just an example, you should implement your own component</p>
+          <p>
+            This is just an example, you should implement your own component that handles loading state, errors, etc.
+          </p>
 
           <div
             id="named-icons"
             class="images"
           ></div>
 
-          <h2>Put SVG into the DOM</h2>
+          <h2>Other rendering methods</h2>
 
           <p>
-            This is what essentially all UI frameworks do. However, this approach is recommended only when you need full
-            control over SVGs. For other purposes, use other loading methods such as URL or symbols.
+            So far we've demonstrated two rendering methods: URL and source code that's being reused as a symbol. Let's
+            see how else we can render images.
+          </p>
+
+          <p>
+            These methods are less performant than what we've already discussed. However, they may have their use-cases.
+          </p>
+
+          <h3>Put SVG directly into the DOM</h3>
+
+          <p>
+            This is what all UI frameworks do. However, this approach is recommended only when you need full control
+            over SVGs. For other purposes, use other rendering methods such as URL or symbols.
           </p>
 
           <div
@@ -208,9 +280,7 @@
             class="images svg-in-dom"
           ></div>
 
-          <h2>Less common loading types</h2>
-
-          <p>So far we've demonstrated two loading types: URL and source code that's being reused as a symbol.</p>
+          <h3>Data URI</h3>
 
           <p>
             SVGs can be loaded as a
@@ -233,21 +303,21 @@
             load raw base64.
           </p>
 
-          <h3>Source code data URI, original files</h3>
+          <h4>Source code data URI, original files</h4>
 
           <div
             id="source-data-uri"
             class="images"
           ></div>
 
-          <h3>Base64 data URI, original files</h3>
+          <h4>Base64 data URI, original files</h4>
 
           <div
             id="base64-data-uri"
             class="images"
           ></div>
 
-          <h3>Base64, original file</h3>
+          <h4>Base64, original file</h4>
 
           <p class="mono">
             <span class="hidden"> There's base64 data that's replaced with this text for assistive technologies. </span>
@@ -256,6 +326,126 @@
               id="base-64"
               aria-hidden="true"
             ></span>
+          </p>
+
+          <h2>Caveats</h2>
+
+          <h3>Stroke width should be in CSS pixels</h3>
+
+          <p>
+            When preserving line width, stroke width should be in CSS pixels. Image size doesn't matter. This is how it
+            looks like:
+          </p>
+
+          <div id="caveats-line-width-show-original-checkbox"></div>
+
+          <div
+            id="caveats-line-width"
+            class="images"
+            style="color: var(--text-color)"
+          ></div>
+
+          <p>Incorrect stroke width will result in something like this:</p>
+
+          <div
+            id="caveats-broken-line-width"
+            class="images"
+            style="color: var(--text-color)"
+          ></div>
+
+          <h3>Preserving line width works only on strokes</h3>
+
+          <p>Create your images with strokes instead of filled path to preserve line width.</p>
+
+          <p>Toggle original image to see that there's no difference when stroke is not preserved.</p>
+
+          <div id="caveats-only-strokes-supported-checkbox"></div>
+
+          <div
+            id="caveats-only-strokes-supported"
+            class="images"
+          ></div>
+
+          <h3>
+            Transparent colors should be omitted or set as <span class="mono">none</span> or
+            <span class="mono">transparent</span>
+          </h3>
+
+          <p>
+            Quite common catch is to set white color and then wonder why image is messed up. If you don't want fill,
+            omit it or set to <span class="mono">none</span> or <span class="mono">transparent</span>.
+          </p>
+
+          <div id="caveats-white-fill-checkbox"></div>
+
+          <div
+            id="caveats-white-fill"
+            class="images"
+          ></div>
+
+          <h2>Recipes</h2>
+
+          <h3>Multicolored icons</h3>
+
+          <p>Here we'll see how we can implement icons that have multiple colors, for example:</p>
+
+          <div
+            id="multicolor-original"
+            class="images"
+          ></div>
+
+          <p>
+            Our solution should be extensible, i.e. if accent color changes, we as developers should change only one
+            line of code.
+          </p>
+
+          <h4>CSS variables</h4>
+
+          <p>
+            Classic solution is to use variables in SVG files and render then directly. We'll use CSS variables as well
+            but leverage SVG symbols to improve rendering performance. This is done by using
+            <span class="mono">SvgImage</span> or <span class="mono">SvgIcon</span> components.
+          </p>
+
+          <p>
+            <span class="mono">setCurrentColorList</span> option should not be used for multicolored icons because
+            recoloring is done via CSS variables.
+          </p>
+
+          <p>Here's the result where we can manipulate colors however we wish:</p>
+
+          <div
+            id="multicolor-vars"
+            class="images"
+          ></div>
+
+          <p>
+            Since we're using variables instead of single color, for icons it's recommended to create a wrapper around
+            <span class="mono">SvgIcon</span> and omit <span class="mono">color</span> prop.
+          </p>
+
+          <h4>Composite images</h4>
+
+          <p>We can create separate SVG files and overlay them on top of each other.</p>
+
+          <p>
+            This allows us not to modify SVG files which is good for complex images. However, creating a good
+            abstraction over layers can be quite challenging.
+          </p>
+
+          <p>Here's how composite image may look like:</p>
+
+          <div
+            id="composite"
+            class="images"
+          ></div>
+
+          <h4>Antipatterns</h4>
+
+          <p>
+            Colorize some elements and ignore others with <span class="mono">skipSetCurrentColorSelectors</span> or
+            <span class="mono">skipTransformsSelectors</span> options. This will not be extensible, and it'll hurt build
+            performance. Don't use these options to achieve any such functionality.
           </p>
 
           <div

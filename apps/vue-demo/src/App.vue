@@ -3,23 +3,30 @@
     <h1>Vue awesome SVG loader demo</h1>
 
     <p>
-      This project demonstrates <span class="mono">vite-awesome-svg-loader</span> capabilities, and how it works with
-      different SVG images.
+      This project demonstrates
+
+      <a
+        href="https://github.com/matafokka/vite-awesome-svg-loader"
+        class="mono"
+        >vite-awesome-svg-loader</a
+      >
+
+      capabilities, and how it works with different SVG images.
     </p>
 
-    <p>As an example, actual icons, oversize lineart and actual lineart images are present.</p>
+    <p>As an example, actual icons and line art images are present.</p>
 
-    <h2>Basic functionality and configuration via import URL</h2>
+    <h2>Import images via URL and render with regular <span class="mono">&lt;img&gt;</span> tag</h2>
 
     <p>
-      Imports used in this section can be configured using regexes in plugin config. Later we'll demonstrate how this
-      configuration works.
+      Imports used in this section can be configured using regexes in plugin config (see
+      <span class="mono">vite.config.ts</span> file).
     </p>
 
     <h3>Original files</h3>
 
     <div class="images">
-      <!-- These URLs are imported in <script> tag -->
+      <!-- These URLs are imported in the <script> tag -->
       <img
         :src="origMusicIconUrl"
         class="image"
@@ -33,7 +40,7 @@
         class="image"
       />
 
-      <!-- We can also import URLS like so: -->
+      <!-- We can also import URLs like so: -->
       <img
         src="@/assets/import-demo/lineart/ghost.svg?url"
         class="image"
@@ -42,17 +49,12 @@
         src="@/assets/import-demo/lineart/sun.svg?url"
         class="image"
       />
-      <img
-        src="@/assets/import-demo/lineart/diamond.svg?url"
-        class="image"
-      />
     </div>
 
     <h3>Preserve line width</h3>
 
     <p>
-      Note that some images have too thick lines, and some are cropped. Please make sure that line width is proportional
-      to the image size, and images have a bit of safe spacing.
+      Try scaling images using slider at the bottom of the screen. Line width will stay the same despite image size.
     </p>
 
     <div class="images">
@@ -76,15 +78,16 @@
         src="@/assets/import-demo/lineart/sun.svg?url&preserve-line-width"
         class="image"
       />
-      <img
-        src="@/assets/import-demo/lineart/diamond.svg?url&preserve-line-width"
-        class="image"
-      />
     </div>
 
-    <h3>Original files in <span class="mono">SvgImage</span> component</h3>
+    <h2>Render images with <span class="mono">SvgImage</span> component</h2>
 
-    <p>This component will render SVG source code into a SVG symbol, so you'll have more freedom to manipulate it.</p>
+    <p>
+      This component will render SVG source code into a SVG symbol, so you'll have more freedom to manipulate it. Most
+      importantly, it allows you to set custom colors.
+    </p>
+
+    <h3>Original files</h3>
 
     <div class="images">
       <SvgImage
@@ -107,13 +110,9 @@
         :src="origSunImageSrc"
         class="image"
       />
-      <SvgImage
-        :src="origDiamondImageSrc"
-        class="image"
-      />
     </div>
 
-    <h3>Preserve line width and use <span class="mono">SvgImage</span> component</h3>
+    <h3>Preserve line width</h3>
 
     <div class="images">
       <SvgImage
@@ -136,18 +135,73 @@
         :src="preWidthSunImageSrc"
         class="image"
       />
+    </div>
+
+    <h3>Preserve line width and replace colors</h3>
+
+    <div class="images">
       <SvgImage
-        :src="preWidthDiamondImageSrc"
+        :src="preWidthReplaceColorMusicIconSrc"
         class="image"
+        style="color: #00988a"
+      />
+      <SvgImage
+        :src="preWidthReplaceColorStarIconSrc"
+        class="image"
+        style="color: orange"
+      />
+      <SvgImage
+        :src="preWidthReplaceColorVideoIconSrc"
+        class="image"
+        style="color: hotpink"
+      />
+      <SvgImage
+        :src="preWidthReplaceColorGhostImageSrc"
+        class="image"
+        style="color: purple"
+      />
+      <SvgImage
+        :src="preWidthReplaceColorSunImageSrc"
+        class="image"
+        style="color: green"
       />
     </div>
 
-    <h3>
-      Preserve line width, replace colors with <span class="mono">currentColor</span> and use
-      <span class="mono">SvgIcon</span> component
-    </h3>
+    <h2>Render icons with <span class="mono">SvgIcon</span> component</h2>
 
-    <p>Basically this example shows how to use icons.</p>
+    <p>This component simplifies icons colorization and sizing.</p>
+
+    <p>
+      It makes sense to always preserve icon's line width. In real project this should be done via config (see
+      <span class="mono">vite.config.ts</span> file).
+    </p>
+
+    <h3>Original files</h3>
+
+    <div class="images">
+      <SvgIcon
+        :src="origMusicIconSrc"
+        size="var(--image-size)"
+      />
+      <SvgIcon
+        :src="origStarIconSrc"
+        size="var(--image-size)"
+      />
+      <SvgIcon
+        :src="origVideoIconSrc"
+        size="var(--image-size)"
+      />
+      <SvgIcon
+        :src="origGhostImageSrc"
+        size="var(--image-size)"
+      />
+      <SvgIcon
+        :src="origSunImageSrc"
+        size="var(--image-size)"
+      />
+    </div>
+
+    <h3>Preserve line width and replace colors</h3>
 
     <div class="images">
       <SvgIcon
@@ -175,14 +229,9 @@
         size="var(--image-size)"
         color="green"
       />
-      <SvgIcon
-        :src="preWidthReplaceColorDiamondImageSrc"
-        size="var(--image-size)"
-        color="coral"
-      />
     </div>
 
-    <h3>Animate color and use <span class="mono">SvgIcon</span> component</h3>
+    <h3>Animate color</h3>
 
     <p>The example above but we'll animate colors using CSS.</p>
 
@@ -207,13 +256,9 @@
         :src="preWidthReplaceColorSunImageSrc"
         size="var(--image-size)"
       />
-      <SvgIcon
-        :src="preWidthReplaceColorDiamondImageSrc"
-        size="var(--image-size)"
-      />
     </div>
 
-    <h3>Reuse same SVG in multiple symbols</h3>
+    <h2>Automatically reuse same SVG in multiple symbols</h2>
 
     <p>
       This example demonstrates that one SVG is being reused in multiple
@@ -244,7 +289,7 @@
       </button>
     </div>
 
-    <h4><span class="mono">SvgImage</span></h4>
+    <h3><span class="mono">SvgImage</span></h3>
 
     <div class="images">
       <SvgImage
@@ -255,7 +300,7 @@
       />
     </div>
 
-    <h4><span class="mono">SvgIcon</span></h4>
+    <h3><span class="mono">SvgIcon</span></h3>
 
     <div class="images">
       <SvgIcon
@@ -263,7 +308,6 @@
         :key="i"
         :src="preWidthStarIconSrc"
         size="var(--image-size)"
-        class="image"
       />
     </div>
 
@@ -274,7 +318,7 @@
       entry are actually different files in different directories: one directory for each section.
     </p>
 
-    <p>Each directory also contains following files:</p>
+    <p>Each directory contains following files:</p>
 
     <ol>
       <li>
@@ -286,6 +330,18 @@
         <span class="mono">skip-loading.svg</span> - configured to not be loaded by
         <span class="mono">vite-awesome-svg-loader</span>. We'll show how it works in the last section.
       </li>
+    </ol>
+
+    <p>Directory <span class="mono">config-demo/all</span> additionally contains following files:</p>
+
+    <ol>
+      <li><span class="mono">colors-not-preserved.svg</span> - configured to be skipped while replacing colors.</li>
+
+      <li>
+        <span class="mono">line-width-not-preserved.svg</span> - configured to be skipped while preserving line width.
+      </li>
+
+      <li><span class="mono">ignore-elements.svg</span> - file is transformed, but certain elements are ignored.</li>
     </ol>
 
     <h3>Preserve line width</h3>
@@ -309,10 +365,6 @@
       />
       <SvgImage
         :src="cfgPreWidthSunImageSrc"
-        class="image"
-      />
-      <SvgImage
-        :src="cfgPreWidthDiamondImageSrc"
         class="image"
       />
       <SvgImage
@@ -345,10 +397,6 @@
         class="image"
       />
       <SvgImage
-        :src="cfgReplaceColorDiamondImageSrc"
-        class="image"
-      />
-      <SvgImage
         :src="cfgReplaceColorSkipTransformsImageSrc"
         class="image"
       />
@@ -378,12 +426,35 @@
         class="image"
       />
       <SvgImage
-        :src="cfgAllDiamondImageSrc"
+        :src="cfgColorsNotPreservedImageSrc"
+        class="image"
+      />
+      <SvgImage
+        :src="cfgLineWidthNotPreservedImageSrc"
         class="image"
       />
       <SvgImage
         :src="cfgAllSkipTransformsImageSrc"
         class="image"
+      />
+    </div>
+
+    <h3>All transforms except certain SVG elements</h3>
+
+    <p>
+      It's possible to skip transforms per-element and per-element-per-file. See
+      <span class="mono">vite.config.ts</span> file for examples.
+    </p>
+
+    <Checkbox
+      v-model="skipElementsShowOriginal"
+      label="Show original image"
+    />
+
+    <div class="images">
+      <SvgImage
+        :src="skipElementsShowOriginal ? cfgIgnoreElementsOrigImageSrc : cfgIgnoreElementsImageSrc"
+        class="standalone-image skip-elements-image"
       />
     </div>
 
@@ -409,9 +480,9 @@
       </li>
     </ol>
 
-    <h2>Named async icons example</h2>
+    <h2>Named icons with dynamic imports inside icon component</h2>
 
-    <p>This is just an example, you should implement your own component</p>
+    <p>This is just an example, you should implement your own component that handles loading state, errors, etc.</p>
 
     <Suspense>
       <div class="images">
@@ -433,9 +504,21 @@
       </div>
     </Suspense>
 
-    <h2>Put SVG into the DOM</h2>
+    <h2>Other rendering methods</h2>
 
-    <p>This is what essentially all UI frameworks do. However, this approach is recommended only when you need full control over SVGs. For other purposes, use other loading methods such as URL or symbols.</p>
+    <p>
+      So far we've demonstrated two rendering methods: URL and source code that's being reused as a symbol. Let's see
+      how else we can render images.
+    </p>
+
+    <p>These methods are less performant than what we've already discussed. However, they may have their use-cases.</p>
+
+    <h3>Put SVG directly into the DOM</h3>
+
+    <p>
+      This is what all UI frameworks do. However, this approach is recommended only when you need full control over
+      SVGs. For other purposes, use other rendering methods such as URL or symbols.
+    </p>
 
     <div class="images svg-in-dom">
       <div
@@ -458,15 +541,9 @@
         v-html="preWidthSunImageSrc"
         class="image"
       />
-      <div
-        v-html="preWidthDiamondImageSrc"
-        class="image"
-      />
     </div>
 
-    <h2>Less common loading types</h2>
-
-    <p>So far we've demonstrated two loading types: URL and source code that's being reused as a symbol.</p>
+    <h3>Data URI</h3>
 
     <p>
       SVGs can be loaded as a
@@ -489,7 +566,7 @@
       base64.
     </p>
 
-    <h3>Source code data URI, original files</h3>
+    <h4>Source code data URI, original files</h4>
 
     <div class="images">
       <img
@@ -512,13 +589,9 @@
         src="@/assets/import-demo/lineart/sun.svg?source-data-uri"
         class="image"
       />
-      <img
-        src="@/assets/import-demo/lineart/diamond.svg?source-data-uri"
-        class="image"
-      />
     </div>
 
-    <h3>Base64 data URI, original files</h3>
+    <h4>Base64 data URI, original files</h4>
 
     <div class="images">
       <img
@@ -541,13 +614,9 @@
         src="@/assets/import-demo/lineart/sun.svg?base64-data-uri"
         class="image"
       />
-      <img
-        src="@/assets/import-demo/lineart/diamond.svg?base64-data-uri"
-        class="image"
-      />
     </div>
 
-    <h3>Base64, original file</h3>
+    <h3>Base64 string, original file</h3>
 
     <p class="mono">
       <span class="hidden">There's base64 data that's replaced with this text for assistive technologies.</span>
@@ -555,6 +624,169 @@
       <span aria-hidden="true">
         {{ origMusicIconBase64 }}
       </span>
+    </p>
+
+    <h2>Caveats</h2>
+
+    <h3>Stroke width should be in CSS pixels</h3>
+
+    <p>
+      When preserving line width, stroke width should be in CSS pixels. Image size doesn't matter. This is how it looks
+      like:
+    </p>
+
+    <Checkbox
+      v-model="caveatsLineWidthShowOriginal"
+      label="Show original image"
+    />
+
+    <div class="images">
+      <SvgImage
+        :src="caveatsLineWidthShowOriginal ? lineWidthCaveatOrigImageSrc : lineWidthCaveatImageSrc"
+        class="text-color standalone-image"
+      />
+    </div>
+
+    <p>Incorrect stroke width will result in something like this:</p>
+
+    <div class="images">
+      <img
+        src="@/assets/caveats/broken-line-width.svg?url&preserve-line-width"
+        class="image standalone-image"
+      />
+    </div>
+
+    <h3>Preserving line width works only on strokes</h3>
+
+    <p>Create your images with strokes instead of filled path to preserve line width.</p>
+
+    <p>Toggle original image to see that there's no difference when stroke is not preserved.</p>
+
+    <Checkbox
+      v-model="caveatsOnlyStrokesSupportedShowOriginal"
+      label="Show original image"
+    />
+
+    <div class="images">
+      <SvgImage
+        :src="
+          caveatsOnlyStrokesSupportedShowOriginal
+            ? onlyStrokesSupportedCaveatOrigImageSrc
+            : onlyStrokesSupportedCaveatImageSrc
+        "
+        class="text-color standalone-image"
+      />
+    </div>
+
+    <h3>
+      Transparent colors should be omitted or set as <span class="mono">none</span> or
+      <span class="mono">transparent</span>
+    </h3>
+
+    <p>
+      Quite common catch is to set white color and then wonder why image is messed up. If you don't want fill, omit it
+      or set to <span class="mono">none</span> or <span class="mono">transparent</span>.
+    </p>
+
+    <Checkbox
+      v-model="whiteFillShowOriginal"
+      label="Show original image"
+    />
+
+    <div class="images">
+      <SvgImage
+        :src="whiteFillShowOriginal ? whiteFillCaveatOrigImageSrc : whiteFillCaveatImageSrc"
+        class="text-color standalone-image"
+      />
+    </div>
+
+    <h2>Recipes</h2>
+
+    <h3>Multicolored icons</h3>
+
+    <p>Here we'll see how we can implement icons that have multiple colors, for example:</p>
+
+    <div class="images">
+      <img
+        src="@/assets/recipes/multicolor/original.svg?url"
+        class="image"
+      />
+    </div>
+
+    <p>
+      Our solution should be extensible, i.e. if accent color changes, we as developers should change only one line of
+      code.
+    </p>
+
+    <h4>CSS variables</h4>
+
+    <p>
+      Classic solution is to use variables in SVG files and render then directly. We'll use CSS variables as well but
+      leverage SVG symbols to improve rendering performance. This is done by using <span class="mono">SvgImage</span> or
+      <span class="mono">SvgIcon</span> components.
+    </p>
+
+    <p>
+      <span class="mono">setCurrentColorList</span> option should not be used for multicolored icons because recoloring
+      is done via CSS variables.
+    </p>
+
+    <p>Here's the result where we can manipulate colors however we wish:</p>
+
+    <div class="images">
+      <SvgIcon
+        :src="multicolorVarsImageSrc"
+        size="var(--image-size)"
+        :style="{
+          '--primary-color': 'red',
+          '--secondary-color': 'blue',
+          '--tertiary-color': 'green',
+        }"
+      />
+
+      <SvgIcon
+        :src="multicolorVarsImageSrc"
+        size="var(--image-size)"
+        :style="{
+          '--primary-color': 'magenta',
+          '--secondary-color': 'cyan',
+          '--tertiary-color': 'yellow',
+        }"
+      />
+    </div>
+
+    <p>
+      Since we're using variables instead of single color, for icons it's recommended to create a wrapper around
+      <span class="mono">SvgIcon</span> and omit <span class="mono">color</span> prop.
+    </p>
+
+    <h4>Composite images</h4>
+
+    <p>We can create separate SVG files and overlay them on top of each other.</p>
+
+    <p>
+      This allows us not to modify SVG files which is good for complex images. However, creating a good abstraction over
+      layers can be quite challenging.
+    </p>
+
+    <p>Here's how composite image may look like:</p>
+
+    <div class="images">
+      <CompositeImage />
+
+      <CompositeImage
+        primary="magenta"
+        secondary="cyan"
+        tertiary="yellow"
+      />
+    </div>
+
+    <h4>Antipatterns</h4>
+
+    <p>
+      Colorize some elements and ignore others with <span class="mono">skipSetCurrentColorSelectors</span> or
+      <span class="mono">skipTransformsSelectors</span> options. This will not be extensible, and it'll hurt build
+      performance. Don't use these options to achieve any such functionality.
     </p>
   </article>
 </template>
@@ -571,7 +803,6 @@ import origStarIconSrc from "@/assets/import-demo/icons/star.svg";
 import origVideoIconSrc from "@/assets/import-demo/icons/video.svg";
 import origGhostImageSrc from "@/assets/import-demo/lineart/ghost.svg";
 import origSunImageSrc from "@/assets/import-demo/lineart/sun.svg";
-import origDiamondImageSrc from "@/assets/import-demo/lineart/diamond.svg";
 
 // Import images as sources and preserve line width
 import preWidthMusicIconSrc from "@/assets/import-demo/icons/music.svg?preserve-line-width";
@@ -579,7 +810,6 @@ import preWidthStarIconSrc from "@/assets/import-demo/icons/star.svg?preserve-li
 import preWidthVideoIconSrc from "@/assets/import-demo/icons/video.svg?preserve-line-width";
 import preWidthGhostImageSrc from "@/assets/import-demo/lineart/ghost.svg?preserve-line-width";
 import preWidthSunImageSrc from "@/assets/import-demo/lineart/sun.svg?preserve-line-width";
-import preWidthDiamondImageSrc from "@/assets/import-demo/lineart/diamond.svg?preserve-line-width";
 
 // Import images as sources, preserve line width and replace stroke and fill colors with currentColor.
 // Because of TypeScript limitations, we have to put @ts-ignore before the import.
@@ -595,8 +825,6 @@ import preWidthReplaceColorVideoIconSrc from "@/assets/import-demo/icons/video.s
 import preWidthReplaceColorGhostImageSrc from "@/assets/import-demo/lineart/ghost.svg?preserve-line-width&set-current-color";
 // @ts-ignore
 import preWidthReplaceColorSunImageSrc from "@/assets/import-demo/lineart/sun.svg?preserve-line-width&set-current-color";
-// @ts-ignore
-import preWidthReplaceColorDiamondImageSrc from "@/assets/import-demo/lineart/diamond.svg?preserve-line-width&set-current-color";
 
 // Configuration import demo. Note: there's no configuration in URL, everything's set in vite.config.ts file.
 
@@ -605,7 +833,6 @@ import cfgPreWidthStarIconSrc from "@/assets/config-demo/preserve-line-width/ico
 import cfgPreWidthVideoIconSrc from "@/assets/config-demo/preserve-line-width/icons/video.svg";
 import cfgPreWidthGhostImageSrc from "@/assets/config-demo/preserve-line-width/lineart/ghost.svg";
 import cfgPreWidthSunImageSrc from "@/assets/config-demo/preserve-line-width/lineart/sun.svg";
-import cfgPreWidthDiamondImageSrc from "@/assets/config-demo/preserve-line-width/lineart/diamond.svg";
 import cfgPreWidthSkipTransformsImageSrc from "@/assets/config-demo/preserve-line-width/skip-transforms.svg";
 import cfgPreWidthSkipLoading from "@/assets/config-demo/preserve-line-width/skip-loading.svg";
 
@@ -614,7 +841,6 @@ import cfgReplaceColorStarIconSrc from "@/assets/config-demo/set-current-color/i
 import cfgReplaceColorVideoIconSrc from "@/assets/config-demo/set-current-color/icons/video.svg";
 import cfgReplaceColorGhostImageSrc from "@/assets/config-demo/set-current-color/lineart/ghost.svg";
 import cfgReplaceColorSunImageSrc from "@/assets/config-demo/set-current-color/lineart/sun.svg";
-import cfgReplaceColorDiamondImageSrc from "@/assets/config-demo/set-current-color/lineart/diamond.svg";
 import cfgReplaceColorSkipTransformsImageSrc from "@/assets/config-demo/set-current-color/skip-transforms.svg";
 import cfgReplaceColorSkipLoading from "@/assets/config-demo/preserve-line-width/skip-loading.svg";
 
@@ -623,85 +849,44 @@ import cfgAllStarIconSrc from "@/assets/config-demo/all/icons/star.svg";
 import cfgAllVideoIconSrc from "@/assets/config-demo/all/icons/video.svg";
 import cfgAllGhostImageSrc from "@/assets/config-demo/all/lineart/ghost.svg";
 import cfgAllSunImageSrc from "@/assets/config-demo/all/lineart/sun.svg";
-import cfgAllDiamondImageSrc from "@/assets/config-demo/all/lineart/diamond.svg";
+import cfgColorsNotPreservedImageSrc from "@/assets/config-demo/all/colors-not-preserved.svg";
+import cfgLineWidthNotPreservedImageSrc from "@/assets/config-demo/all/line-width-not-preserved.svg";
 import cfgAllSkipTransformsImageSrc from "@/assets/config-demo/all/skip-transforms.svg";
 import cfgAllSkipLoading from "@/assets/config-demo/preserve-line-width/skip-loading.svg";
+import cfgIgnoreElementsImageSrc from "@/assets/config-demo/all/ignore-elements.svg";
+import cfgIgnoreElementsOrigImageSrc from "@/assets/config-demo/all/ignore-elements-orig.svg";
 
 // Import image as base64
 import origMusicIconBase64 from "@/assets/import-demo/icons/music.svg?base64";
 
-// Import helper components
+// Line width caveat
 
+// @ts-ignore
+import lineWidthCaveatImageSrc from "@/assets/caveats/line-width.svg?preserve-line-width&set-current-color";
+import lineWidthCaveatOrigImageSrc from "@/assets/caveats/line-width.svg?set-current-color";
+
+// @ts-ignore
+import onlyStrokesSupportedCaveatImageSrc from "@/assets/caveats/only-strokes-supported.svg?preserve-line-width&set-current-color";
+import onlyStrokesSupportedCaveatOrigImageSrc from "@/assets/caveats/only-strokes-supported.svg?set-current-color";
+
+import whiteFillCaveatImageSrc from "@/assets/caveats/white-fill.svg?set-current-color";
+import whiteFillCaveatOrigImageSrc from "@/assets/caveats/white-fill.svg";
+
+import multicolorVarsImageSrc from "@/assets/recipes/multicolor/vars.svg";
+
+// Import helper components
 import { SvgIcon, SvgImage } from "vite-awesome-svg-loader/vue-integration";
 
 // Page setup
 
 import NamedIcon from "@/NamedIcon.vue";
+import Checkbox from "@/Checkbox.vue";
+import CompositeImage from "@/CompositeImage.vue";
 import { ref } from "vue";
 
 const reusedImagesCount = ref(3);
+const skipElementsShowOriginal = ref(false);
+const caveatsLineWidthShowOriginal = ref(false);
+const caveatsOnlyStrokesSupportedShowOriginal = ref(false);
+const whiteFillShowOriginal = ref(false);
 </script>
-
-<style scoped lang="scss">
-// Set fixed images size
-
-.image {
-  min-width: var(--image-size);
-  min-height: var(--image-size);
-  width: var(--image-size);
-  height: var(--image-size);
-  max-width: var(--image-size);
-  max-height: var(--image-size);
-}
-
-// Make SVGs in DOM fit container
-.svg-in-dom :deep(svg) {
-  width: 100%;
-  height: 100%;
-}
-
-// Color animation
-
-@keyframes color1 {
-  0% {
-    color: red;
-  }
-
-  25% {
-    color: yellow;
-  }
-
-  50% {
-    color: greenyellow;
-  }
-
-  75% {
-    color: blue;
-  }
-
-  100% {
-    color: purple;
-  }
-}
-
-@keyframes color2 {
-  0% {
-    color: red;
-  }
-
-  100% {
-    color: blue;
-  }
-}
-
-// You can apply animation to the whole container
-.color-animation {
-  animation: color1 1s linear infinite;
-}
-
-// Or, if you want to be really precise, select actual <use> element to animate.
-
-.color-animation :nth-child(2n) {
-  animation: color2 1s linear infinite;
-}
-</style>

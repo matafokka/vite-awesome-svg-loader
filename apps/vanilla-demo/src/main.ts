@@ -6,7 +6,6 @@ import origStarIconUrl from "@/assets/import-demo/icons/star.svg?url";
 import origVideoIconUrl from "@/assets/import-demo/icons/video.svg?url";
 import origGhostImageUrl from "@/assets/import-demo/lineart/ghost.svg?url";
 import origSunImageUrl from "@/assets/import-demo/lineart/sun.svg?url";
-import origDiamondImageUrl from "@/assets/import-demo/lineart/diamond.svg?url";
 
 // Import original images as URLs and preserve line width
 import preWidthMusicIconUrl from "@/assets/import-demo/icons/music.svg?url&preserve-line-width";
@@ -14,7 +13,6 @@ import preWidthStarIconUrl from "@/assets/import-demo/icons/star.svg?url&preserv
 import preWidthVideoIconUrl from "@/assets/import-demo/icons/video.svg?url&preserve-line-width";
 import preWidthGhostImageUrl from "@/assets/import-demo/lineart/ghost.svg?url&preserve-line-width";
 import preWidthSunImageUrl from "@/assets/import-demo/lineart/sun.svg?url&preserve-line-width";
-import preWidthDiamondImageUrl from "@/assets/import-demo/lineart/diamond.svg?url&preserve-line-width";
 
 // Import original images as sources
 import origMusicIconSrc from "@/assets/import-demo/icons/music.svg";
@@ -22,7 +20,6 @@ import origStarIconSrc from "@/assets/import-demo/icons/star.svg";
 import origVideoIconSrc from "@/assets/import-demo/icons/video.svg";
 import origGhostImageSrc from "@/assets/import-demo/lineart/ghost.svg";
 import origSunImageSrc from "@/assets/import-demo/lineart/sun.svg";
-import origDiamondImageSrc from "@/assets/import-demo/lineart/diamond.svg";
 
 // Import images as sources and preserve line width
 import preWidthMusicIconSrc from "@/assets/import-demo/icons/music.svg?preserve-line-width";
@@ -30,7 +27,6 @@ import preWidthStarIconSrc from "@/assets/import-demo/icons/star.svg?preserve-li
 import preWidthVideoIconSrc from "@/assets/import-demo/icons/video.svg?preserve-line-width";
 import preWidthGhostImageSrc from "@/assets/import-demo/lineart/ghost.svg?preserve-line-width";
 import preWidthSunImageSrc from "@/assets/import-demo/lineart/sun.svg?preserve-line-width";
-import preWidthDiamondImageSrc from "@/assets/import-demo/lineart/diamond.svg?preserve-line-width";
 
 // Import images as sources, preserve line width and replace stroke and fill colors with currentColor.
 // Because of TypeScript limitations, we have to put @ts-ignore before the import.
@@ -46,8 +42,6 @@ import preWidthReplaceColorVideoIconSrc from "@/assets/import-demo/icons/video.s
 import preWidthReplaceColorGhostImageSrc from "@/assets/import-demo/lineart/ghost.svg?preserve-line-width&set-current-color";
 // @ts-ignore
 import preWidthReplaceColorSunImageSrc from "@/assets/import-demo/lineart/sun.svg?preserve-line-width&set-current-color";
-// @ts-ignore
-import preWidthReplaceColorDiamondImageSrc from "@/assets/import-demo/lineart/diamond.svg?preserve-line-width&set-current-color";
 
 // Configuration import demo. Note: there's no configuration in URL, everything's set in vite.config.ts file.
 
@@ -56,7 +50,6 @@ import cfgPreWidthStarIconSrc from "@/assets/config-demo/preserve-line-width/ico
 import cfgPreWidthVideoIconSrc from "@/assets/config-demo/preserve-line-width/icons/video.svg";
 import cfgPreWidthGhostImageSrc from "@/assets/config-demo/preserve-line-width/lineart/ghost.svg";
 import cfgPreWidthSunImageSrc from "@/assets/config-demo/preserve-line-width/lineart/sun.svg";
-import cfgPreWidthDiamondImageSrc from "@/assets/config-demo/preserve-line-width/lineart/diamond.svg";
 import cfgPreWidthSkipTransformsImageSrc from "@/assets/config-demo/preserve-line-width/skip-transforms.svg";
 import cfgPreWidthSkipLoading from "@/assets/config-demo/preserve-line-width/skip-loading.svg";
 
@@ -65,7 +58,6 @@ import cfgReplaceColorStarIconSrc from "@/assets/config-demo/set-current-color/i
 import cfgReplaceColorVideoIconSrc from "@/assets/config-demo/set-current-color/icons/video.svg";
 import cfgReplaceColorGhostImageSrc from "@/assets/config-demo/set-current-color/lineart/ghost.svg";
 import cfgReplaceColorSunImageSrc from "@/assets/config-demo/set-current-color/lineart/sun.svg";
-import cfgReplaceColorDiamondImageSrc from "@/assets/config-demo/set-current-color/lineart/diamond.svg";
 import cfgReplaceColorSkipTransformsImageSrc from "@/assets/config-demo/set-current-color/skip-transforms.svg";
 import cfgReplaceColorSkipLoading from "@/assets/config-demo/preserve-line-width/skip-loading.svg";
 
@@ -74,9 +66,12 @@ import cfgAllStarIconSrc from "@/assets/config-demo/all/icons/star.svg";
 import cfgAllVideoIconSrc from "@/assets/config-demo/all/icons/video.svg";
 import cfgAllGhostImageSrc from "@/assets/config-demo/all/lineart/ghost.svg";
 import cfgAllSunImageSrc from "@/assets/config-demo/all/lineart/sun.svg";
-import cfgAllDiamondImageSrc from "@/assets/config-demo/all/lineart/diamond.svg";
+import cfgColorsNotPreservedImageSrc from "@/assets/config-demo/all/colors-not-preserved.svg";
+import cfgLineWidthNotPreservedImageSrc from "@/assets/config-demo/all/line-width-not-preserved.svg";
 import cfgAllSkipTransformsImageSrc from "@/assets/config-demo/all/skip-transforms.svg";
 import cfgAllSkipLoading from "@/assets/config-demo/preserve-line-width/skip-loading.svg";
+import cfgIgnoreElementsImageSrc from "@/assets/config-demo/all/ignore-elements.svg";
+import cfgIgnoreElementsOrigImageSrc from "@/assets/config-demo/all/ignore-elements-orig.svg";
 
 // Import images as source code data URI
 import srcDataUriMusicIcon from "@/assets/import-demo/icons/music.svg?source-data-uri";
@@ -84,7 +79,6 @@ import srcDataUriStarIcon from "@/assets/import-demo/icons/star.svg?source-data-
 import srcDataUriVideoIcon from "@/assets/import-demo/icons/video.svg?source-data-uri";
 import srcDataUriGhostImage from "@/assets/import-demo/lineart/ghost.svg?source-data-uri";
 import srcDataUriSunImage from "@/assets/import-demo/lineart/sun.svg?source-data-uri";
-import srcDataUriDiamondImage from "@/assets/import-demo/lineart/diamond.svg?source-data-uri";
 
 // Import images as base64 data URI
 import base64DataUriMusicIcon from "@/assets/import-demo/icons/music.svg?source-data-uri";
@@ -92,10 +86,26 @@ import base64DataUriStarIcon from "@/assets/import-demo/icons/star.svg?source-da
 import base64DataUriVideoIcon from "@/assets/import-demo/icons/video.svg?source-data-uri";
 import base64DataUriGhostImage from "@/assets/import-demo/lineart/ghost.svg?source-data-uri";
 import base64DataUriSunImage from "@/assets/import-demo/lineart/sun.svg?source-data-uri";
-import base64DataUriDiamondImage from "@/assets/import-demo/lineart/diamond.svg?source-data-uri";
 
 // Import image as base64
 import origMusicIconBase64 from "@/assets/import-demo/icons/music.svg?base64";
+
+// Line width caveat
+
+// @ts-ignore
+import lineWidthCaveatImageSrc from "@/assets/caveats/line-width.svg?preserve-line-width&set-current-color";
+import lineWidthCaveatOrigImageSrc from "@/assets/caveats/line-width.svg?set-current-color";
+import brokenLineWidthImageUrl from "@/assets/caveats/broken-line-width.svg?url&preserve-line-width";
+
+// @ts-ignore
+import onlyStrokesSupportedCaveatImageSrc from "@/assets/caveats/only-strokes-supported.svg?preserve-line-width&set-current-color";
+import onlyStrokesSupportedCaveatOrigImageSrc from "@/assets/caveats/only-strokes-supported.svg?set-current-color";
+
+import whiteFillCaveatImageSrc from "@/assets/caveats/white-fill.svg?set-current-color";
+import whiteFillCaveatOrigImageSrc from "@/assets/caveats/white-fill.svg";
+
+import multicolorOriginalImageUrl from "@/assets/recipes/multicolor/original.svg?url";
+import multicolorVarsImageSrc from "@/assets/recipes/multicolor/vars.svg";
 
 // Import components
 import { SvgImage, SvgIcon } from "vite-awesome-svg-loader/vanilla-integration";
@@ -106,6 +116,8 @@ import { NamedIcon } from "./NamedIcon";
 import "ui/styles.scss";
 import "./dev-tests";
 import { initImageSizeAdjustment } from "ui/image-size-adjustment";
+import { Checkbox } from "./Checkbox";
+import { CompositeImage } from "./CompositeImage";
 initImageSizeAdjustment();
 
 // -------------
@@ -114,38 +126,33 @@ initImageSizeAdjustment();
 
 // We'll use functions like this to simplify image creation for our needs
 
+function createImage(url: string, container: Element) {
+  const img = document.createElement("img");
+  img.className = "image";
+  img.src = url;
+  container.appendChild(img);
+}
+
 function createImages(urls: string[], container: Element) {
   for (const url of urls) {
-    const img = document.createElement("img");
-    img.className = "image";
-    img.src = url;
-    container.appendChild(img);
+    createImage(url, container);
   }
 }
 
+// Original files
 createImages(
-  [origMusicIconUrl, origStarIconUrl, origVideoIconUrl, origGhostImageUrl, origSunImageUrl, origDiamondImageUrl],
+  [origMusicIconUrl, origStarIconUrl, origVideoIconUrl, origGhostImageUrl, origSunImageUrl],
   document.getElementById("url-original")!,
 );
 
-// -------------
-// Same, but preserve line width
-// -------------
-
+// Preserve line width
 createImages(
-  [
-    preWidthMusicIconUrl,
-    preWidthStarIconUrl,
-    preWidthVideoIconUrl,
-    preWidthGhostImageUrl,
-    preWidthSunImageUrl,
-    preWidthDiamondImageUrl,
-  ],
+  [preWidthMusicIconUrl, preWidthStarIconUrl, preWidthVideoIconUrl, preWidthGhostImageUrl, preWidthSunImageUrl],
   document.getElementById("url-pre-width")!,
 );
 
 // -------------
-// Use SvgImage with the original files
+// Render images with SvgImage
 // -------------
 
 function initSvgImages(srcs: string[], mountTo: Element) {
@@ -160,29 +167,38 @@ function initSvgImages(srcs: string[], mountTo: Element) {
   return images;
 }
 
+// Original files
 initSvgImages(
-  [origMusicIconSrc, origStarIconSrc, origVideoIconSrc, origGhostImageSrc, origSunImageSrc, origDiamondImageSrc],
+  [origMusicIconSrc, origStarIconSrc, origVideoIconSrc, origGhostImageSrc, origSunImageSrc],
   document.getElementById("svg-image-original")!,
 );
 
-// -------------
-// Preserve line width and use SvgImage
-// -------------
-
+// Preserve line width
 initSvgImages(
-  [
-    preWidthMusicIconSrc,
-    preWidthStarIconSrc,
-    preWidthVideoIconSrc,
-    preWidthGhostImageSrc,
-    preWidthSunImageSrc,
-    preWidthDiamondImageSrc,
-  ],
+  [preWidthMusicIconSrc, preWidthStarIconSrc, preWidthVideoIconSrc, preWidthGhostImageSrc, preWidthSunImageSrc],
   document.getElementById("pre-width-svg-image")!,
 );
 
+// Preserve line width and replace colors
+const allTransformsImgs = initSvgImages(
+  [
+    preWidthReplaceColorMusicIconSrc,
+    preWidthReplaceColorStarIconSrc,
+    preWidthReplaceColorVideoIconSrc,
+    preWidthReplaceColorGhostImageSrc,
+    preWidthReplaceColorSunImageSrc,
+  ],
+  document.getElementById("pre-width-replace-color-svg-image")!,
+);
+
+const allTransformsColors = ["#00988a", "orange", "hotpink", "purple", "green"];
+
+for (let i = 0; i < allTransformsImgs.length; i++) {
+  allTransformsImgs[i].getSvgEl().style.color = allTransformsColors[i];
+}
+
 // -------------
-// Preserve line width, replace colors with currentColor and use SvgIcon
+// Render icons with SvgIcon component
 // -------------
 
 function initIcons(icons: SvgIcon[], mountTo: Element) {
@@ -191,6 +207,19 @@ function initIcons(icons: SvgIcon[], mountTo: Element) {
   }
 }
 
+// Original files
+initIcons(
+  [
+    new SvgIcon(origMusicIconSrc),
+    new SvgIcon(origStarIconSrc),
+    new SvgIcon(origVideoIconSrc),
+    new SvgIcon(origGhostImageSrc),
+    new SvgIcon(origSunImageSrc),
+  ],
+  document.getElementById("svg-icons-orig")!,
+);
+
+// Preserve width and replace colors
 initIcons(
   [
     new SvgIcon(preWidthReplaceColorMusicIconSrc).setColor("#00988a"),
@@ -198,15 +227,11 @@ initIcons(
     new SvgIcon(preWidthReplaceColorVideoIconSrc).setColor("hotpink"),
     new SvgIcon(preWidthReplaceColorGhostImageSrc).setColor("purple"),
     new SvgIcon(preWidthReplaceColorSunImageSrc).setColor("green"),
-    new SvgIcon(preWidthReplaceColorDiamondImageSrc).setColor("coral"),
   ],
-  document.getElementById("svg-icon-pre-width-replace-color")!,
+  document.getElementById("svg-icons-pre-width-replace-color")!,
 );
 
-// -------------
-// SvgIcon with CSS-animated colors. See animation in "src/style.scss"
-// -------------
-
+// Animate color
 initIcons(
   [
     new SvgIcon(preWidthReplaceColorMusicIconSrc),
@@ -214,13 +239,12 @@ initIcons(
     new SvgIcon(preWidthReplaceColorVideoIconSrc),
     new SvgIcon(preWidthReplaceColorGhostImageSrc),
     new SvgIcon(preWidthReplaceColorSunImageSrc),
-    new SvgIcon(preWidthReplaceColorDiamondImageSrc),
   ],
   document.getElementById("svg-icons-animated-color")!,
 );
 
 // -------------
-// Reuse same SVG in multiple symbols demo setup
+// Automatically reuse same SVG in multiple symbols
 // -------------
 
 const dynamicImagesContainer = document.getElementById("dynamic-images")!;
@@ -278,7 +302,6 @@ initSvgImages(
     cfgPreWidthVideoIconSrc,
     cfgPreWidthGhostImageSrc,
     cfgPreWidthSunImageSrc,
-    cfgPreWidthDiamondImageSrc,
     cfgPreWidthSkipTransformsImageSrc,
   ],
   document.getElementById("cfg-pre-width")!,
@@ -292,7 +315,6 @@ initSvgImages(
     cfgReplaceColorVideoIconSrc,
     cfgReplaceColorGhostImageSrc,
     cfgReplaceColorSunImageSrc,
-    cfgReplaceColorDiamondImageSrc,
     cfgReplaceColorSkipTransformsImageSrc,
   ],
   document.getElementById("cfg-replace-color")!,
@@ -306,13 +328,25 @@ initSvgImages(
     cfgAllVideoIconSrc,
     cfgAllGhostImageSrc,
     cfgAllSunImageSrc,
-    cfgAllDiamondImageSrc,
+    cfgColorsNotPreservedImageSrc,
+    cfgLineWidthNotPreservedImageSrc,
     cfgAllSkipTransformsImageSrc,
   ],
   document.getElementById("cfg-all")!,
 );
 
-// Replace loading entirely, output path to the file
+// All transforms except certain SVG elements
+const allTransformsSvgImage = new SvgImage(cfgIgnoreElementsImageSrc, "#skip-elements-image");
+allTransformsSvgImage.getSvgEl().classList.add("standalone-image", "skip-elements-image");
+
+Checkbox.svgCheckbox({
+  selector: "#per-element-transforms-checkbox",
+  svg: allTransformsSvgImage,
+  src1: cfgIgnoreElementsImageSrc,
+  src2: cfgIgnoreElementsOrigImageSrc,
+});
+
+// Skip loading entirely, output path to the file
 const skipLoadingContainer = document.getElementById("skip-loading")!;
 
 for (const res of [cfgPreWidthSkipLoading, cfgReplaceColorSkipLoading, cfgAllSkipLoading]) {
@@ -325,7 +359,7 @@ for (const res of [cfgPreWidthSkipLoading, cfgReplaceColorSkipLoading, cfgAllSki
 }
 
 // -------------
-// Named async icons example. See example icon at src/NamedIcon.ts.
+// Named icons with dynamic imports. See example icon at src/NamedIcon.ts.
 // -------------
 
 function createNamedIcons(names: string[], container: Element) {
@@ -337,7 +371,7 @@ function createNamedIcons(names: string[], container: Element) {
 createNamedIcons(["music", "star", "video"], document.getElementById("named-icons")!);
 
 // -------------
-// Put SVG into the DOM
+// Put SVG directly into the DOM
 // -------------
 
 const svgInDomContainer = document.getElementById("svg-in-dom")!;
@@ -348,7 +382,6 @@ for (const src of [
   preWidthVideoIconSrc,
   preWidthGhostImageSrc,
   preWidthSunImageSrc,
-  preWidthDiamondImageSrc,
 ]) {
   const div = document.createElement("div");
   div.className = "image";
@@ -361,14 +394,7 @@ for (const src of [
 // -------------
 
 createImages(
-  [
-    srcDataUriMusicIcon,
-    srcDataUriStarIcon,
-    srcDataUriVideoIcon,
-    srcDataUriGhostImage,
-    srcDataUriSunImage,
-    srcDataUriDiamondImage,
-  ],
+  [srcDataUriMusicIcon, srcDataUriStarIcon, srcDataUriVideoIcon, srcDataUriGhostImage, srcDataUriSunImage],
   document.getElementById("source-data-uri")!,
 );
 
@@ -383,13 +409,97 @@ createImages(
     base64DataUriVideoIcon,
     base64DataUriGhostImage,
     base64DataUriSunImage,
-    base64DataUriDiamondImage,
   ],
   document.getElementById("base64-data-uri")!,
 );
 
 // -------------
-// Insert base64 of an image
+// Insert image encoded as base64
 // -------------
 
 document.getElementById("base-64")!.innerText = origMusicIconBase64;
+
+// -------------
+// Stroke width should be in CSS pixels
+// -------------
+
+// Main demo
+const strokeWidthImage = new SvgImage(lineWidthCaveatImageSrc, "#caveats-line-width");
+const strokeWidthSvg = strokeWidthImage.getSvgEl();
+strokeWidthSvg.classList.add("text-color", "standalone-image");
+
+Checkbox.svgCheckbox({
+  selector: "#caveats-line-width-show-original-checkbox",
+  svg: strokeWidthImage,
+  src1: lineWidthCaveatImageSrc,
+  src2: lineWidthCaveatOrigImageSrc,
+});
+
+// Broken width example
+createImage(brokenLineWidthImageUrl, document.getElementById("caveats-broken-line-width")!);
+
+// -------------
+// Preserving line width works only on strokes
+// -------------
+
+const strokesOnlyImage = new SvgImage(onlyStrokesSupportedCaveatImageSrc, "#caveats-only-strokes-supported");
+const strokesOnlySvg = strokesOnlyImage.getSvgEl();
+strokesOnlySvg.classList.add("text-color", "standalone-image");
+
+Checkbox.svgCheckbox({
+  selector: "#caveats-only-strokes-supported-checkbox",
+  svg: strokesOnlyImage,
+  src1: onlyStrokesSupportedCaveatImageSrc,
+  src2: onlyStrokesSupportedCaveatOrigImageSrc,
+});
+
+// -------------
+// Transparent colors and white fill
+// -------------
+
+const whiteFillImage = new SvgImage(whiteFillCaveatImageSrc, "#caveats-white-fill");
+const whiteFillSvg = whiteFillImage.getSvgEl();
+whiteFillSvg.classList.add("text-color", "standalone-image");
+
+Checkbox.svgCheckbox({
+  selector: "#caveats-white-fill-checkbox",
+  svg: whiteFillImage,
+  src1: whiteFillCaveatImageSrc,
+  src2: whiteFillCaveatOrigImageSrc,
+});
+
+// -------------
+// Multicolored icons
+// -------------
+
+// Original
+createImage(multicolorOriginalImageUrl, document.getElementById("multicolor-original")!);
+
+// CSS variables
+
+const multicolorIconsContainer = document.getElementById("multicolor-vars")!;
+
+function createMulticolorIcon(primary: string, secondary: string, tertiary: string) {
+  const multicolorVarsWrapper = new SvgIcon(multicolorVarsImageSrc, multicolorIconsContainer)
+    .setSize("var(--image-size)")
+    .getWrapper();
+  multicolorVarsWrapper.style.setProperty("--primary-color", primary);
+  multicolorVarsWrapper.style.setProperty("--secondary-color", secondary);
+  multicolorVarsWrapper.style.setProperty("--tertiary-color", tertiary);
+}
+
+createMulticolorIcon("red", "blue", "green");
+createMulticolorIcon("magenta", "cyan", "yellow");
+
+// -------------
+// Composite images
+// -------------
+
+const compositeImagesContainer = document.getElementById("composite")!;
+
+new CompositeImage(compositeImagesContainer);
+new CompositeImage(compositeImagesContainer, {
+  primary: "magenta",
+  secondary: "cyan",
+  tertiary: "yellow",
+});

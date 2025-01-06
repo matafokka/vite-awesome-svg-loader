@@ -1,0 +1,8 @@
+// Overlay images with positions hack
+.composite-image {
+  position: relative;
+
+  & > * {
+    position: absolute;
+  }
+}

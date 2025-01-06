@@ -51,18 +51,18 @@
       "require": "./dist/integration-utils/styles.css"
     },
     "./vue-integration": {
-      "import": "./dist/vue-integration/index.mjs",
-      "require": "./dist/vue-integration/index.js",
+      "import": "./dist/vue-integration/index.js",
+      "require": "./dist/vue-integration/index.cjs",
       "types": "./dist/vue-integration/index.d.ts"
     },
     "./vanilla-integration": {
-      "import": "./dist/vanilla-integration/index.mjs",
-      "require": "./dist/vanilla-integration/index.js",
+      "import": "./dist/vanilla-integration/index.js",
+      "require": "./dist/vanilla-integration/index.cjs",
       "types": "./dist/vanilla-integration/index.d.ts"
     },
     "./react-integration": {
-      "import": "./dist/react-integration/index.mjs",
-      "require": "./dist/react-integration/index.js",
+      "import": "./dist/react-integration/index.js",
+      "require": "./dist/react-integration/index.cjs",
       "types": "./dist/react-integration/index.d.ts"
     }
   },

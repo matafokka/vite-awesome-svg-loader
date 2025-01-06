@@ -2,7 +2,7 @@
   "extends": ["../../tsconfig.json"],
   "compilerOptions": {
     "outDir": "./dist",
-    "module": "commonjs",
+    "module": "ESNext",
     "target": "ES6",
     "lib": ["ESNext", "DOM"]
   },

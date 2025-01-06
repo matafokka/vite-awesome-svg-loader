@@ -9,7 +9,7 @@ export interface NamedIconProps extends Omit<SvgIconProps, "src"> {
 // I wasn't able to use dynamic imports for this
 const icons: any = import.meta.glob("/src/assets/import-demo/icons/*.svg", {
   // Put URL here or setup your imports via vite-awesome-svg-loader configuration
-  as: "preserve-line-width&set-current-color",
+  query: "?preserve-line-width&set-current-color",
 });
 
 // Provide a fallback while loading.

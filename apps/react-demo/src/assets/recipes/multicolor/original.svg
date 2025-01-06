@@ -1,0 +1,36 @@
+<svg
+  version="1.1"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  x="0px"
+  y="0px"
+  viewBox="0 0 24 24"
+  xml:space="preserve"
+>
+  <circle
+    fill="red"
+    cx="8.0524569"
+    cy="8.1588478"
+    r="7.8950858"
+  />
+
+  <circle
+    fill="blue"
+    cx="15.9475431"
+    cy="8.1588478"
+    r="7.8950858"
+  />
+
+  <circle
+    fill="green"
+    cx="12"
+    cy="15.8411522"
+    r="7.8950858"
+  />
+
+  <style type="text/css">
+    circle {
+      opacity: 0.5;
+    }
+  </style>
+</svg>
