@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, AllHTMLAttributes } from "react";
 import { SvgImage } from "./SvgImage";
 import { SvgIconProps as SvgIconPropsRaw } from "types";
 
-export interface SvgIconProps extends SvgIconPropsRaw, Omit<React.AllHTMLAttributes<HTMLSpanElement>, "size" | "src"> {}
+export interface SvgIconProps extends SvgIconPropsRaw, Omit<AllHTMLAttributes<HTMLSpanElement>, "size" | "src"> {}
 
-export function SvgIcon({src, size, color, colorTransition, ...attrs}: SvgIconProps) {
+export function SvgIcon({ src, size, color, colorTransition, ...attrs }: SvgIconProps) {
   const getIconStyle = () => {
-    const style: Record<string, any> = {};
+    const style: Record<string, any> = { ...(attrs.style || {}) };
 
     if (size && size !== "unset") {
       for (const param of ["width", "minWidth", "maxWidth", "height", "minHeight", "maxHeight"]) {
