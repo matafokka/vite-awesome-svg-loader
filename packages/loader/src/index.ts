@@ -410,14 +410,20 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
       const skipPreserveLineWidthSelectors = selectorsToList(
         relPathWithSlash,
         mergedOptions.skipPreserveLineWidthSelectors,
+        !shouldPreserveLineWidth,
       );
 
       const skipSetCurrentColorSelectors = selectorsToList(
         relPathWithSlash,
         mergedOptions.skipSetCurrentColorSelectors,
+        !shouldSetCurrentColor,
       );
 
-      const skipTransformsSelectors = selectorsToList(relPathWithSlash, mergedOptions.skipTransformsSelectors);
+      const skipTransformsSelectors = selectorsToList(
+        relPathWithSlash,
+        mergedOptions.skipTransformsSelectors,
+        shouldSkipTransforms,
+      );
 
       // We'll fill it later
       const nodesWithOrigColors: XastChild[] = [];
@@ -440,6 +446,8 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
       let code = fs.readFileSync(fullPath).toString();
       let isFillSetOnRoot = false;
 
+      let didTransform = false; // Detect additional passes, see multipass option
+
       code = optimize(code, {
         multipass: true,
         plugins: [
@@ -454,6 +462,12 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
           {
             name: "awesome-svg-loader",
             fn: () => {
+              if (didTransform) {
+                return null;
+              }
+
+              didTransform = true;
+
               return {
                 root: {
                   enter: (root) => {
@@ -578,8 +592,16 @@ function matchesPath(relPathWithSlash: string, matchers: (string | RegExp)[]) {
  * @param relPathWithSlash Relative path with leading slash
  * @param selectors Selectors
  */
-function selectorsToList(relPathWithSlash: string, selectors: (string | SelectorsPerFiles)[]) {
+function selectorsToList(
+  relPathWithSlash: string,
+  selectors: (string | SelectorsPerFiles)[],
+  returnEmptyList?: boolean,
+) {
   const resolvedSelectors: string[] = [];
+
+  if (returnEmptyList) {
+    return resolvedSelectors;
+  }
 
   for (const selector of selectors) {
     if (typeof selector === "string") {
@@ -642,7 +664,7 @@ function preserveLineWidth(node: XastElement, path: string) {
 }
 
 /**
- * Defines a list of elements which should have `fill` property to be forcefully replaced with `currentColor`.
+ * A list of elements which should have `fill` property to be forcefully replaced with `currentColor`.
  *
  * Fill color of these elements defaults to black, if `fill` property is not defined.
  */
@@ -740,95 +762,101 @@ function setCurrentColorCss(css: any, nodesWithOrigColors: XastChild[], isInline
 
   const ast = csstree.parse(css, { context });
 
-  csstree.walk(ast, function (node) {
-    // Skip rules with original colors
-    if ((node as any).__SKIP_SVG_LOADER__ || (this.rule as any)?.__SKIP_SVG_LOADER__) {
-      return;
-    }
-
-    // If need to preserve colors
-    if (shouldPreserveColors) {
-      // Reset lists if it's new rule
-      if (node.type === "SelectorList") {
-        origColorSelectors = [];
-        currentColorSelectors = [];
-        didSplitSelectors = false;
-        return;
-      }
-
-      // Classify selectors
-      if (node.type === "Selector") {
-        const selector = csstree.generate(node);
-        let isOrigColor = false;
-
-        for (const svgNode of nodesWithOrigColors) {
-          if (matchesSelector(svgNode, selector)) {
-            isOrigColor = true;
-            (node as any).__ORIG_COLOR__ = true;
-            break;
-          }
-        }
-
-        (isOrigColor ? origColorSelectors : currentColorSelectors).push(selector);
-        return;
-      }
-    }
-
-    // Check if there's a declaration with a color, and if this color should be replaced
-
-    if (node.type !== "Declaration" || !COLOR_ATTRS_TO_REPLACE[node.property]) {
-      return;
-    }
-
+  csstree.walk(ast, {
+    // Ignore because of broken types in csstree:
     // @ts-ignore
-    const identifier = node.value?.children?.first;
-    const color = identifier?.value || identifier?.name;
+    visit: shouldPreserveColors ? undefined : "Declaration",
 
-    if (!color || IGNORE_COLORS[color]) {
-      return;
-    }
+    enter: function (node) {
+      // Skip rules with original colors
+      if ((node as any).__SKIP_SVG_LOADER__ || (this.rule as any)?.__SKIP_SVG_LOADER__) {
+        return;
+      }
 
-    // Create new rule with original colors and remove such selectors from the current rule.
-    // We'll replace color in the current rule.
-
-    if (shouldPreserveColors && !didSplitSelectors && this.rule?.prelude.type === "SelectorList") {
-      // Split selectors and create a new rule
-
-      const origColorsRule = csstree.clone(this.rule) as csstree.Rule;
-      (origColorsRule as any).__SKIP_SVG_LOADER__ = true;
-      const origColorsSelectors = new csstree.List<csstree.CssNode>();
-      const selectors = this.rule.prelude.children;
-
-      selectors.forEach((node, listItem) => {
-        if ((node as any).__ORIG_COLOR__) {
-          selectors.remove(listItem);
-          origColorsSelectors.push(node);
-        }
-      });
-
-      (origColorsRule.prelude as csstree.SelectorList).children = origColorsSelectors;
-
-      // Parent can be either at-rule or stylesheet
-      const parent = this.atrule?.block?.children || this.stylesheet?.children;
-
-      // Find current rule in parent. FFS, why there's no indices?
-      let insertBefore: csstree.ListItem<csstree.CssNode> | undefined;
-
-      parent?.some((rule, listItem) => {
-        if (rule === this.rule) {
-          insertBefore = listItem;
-          return true;
+      // If need to preserve colors
+      if (shouldPreserveColors) {
+        // Reset lists if it's new rule
+        if (node.type === "SelectorList") {
+          origColorSelectors = [];
+          currentColorSelectors = [];
+          didSplitSelectors = false;
+          return;
         }
 
-        return false;
-      });
+        // Classify selectors
+        if (node.type === "Selector") {
+          const selector = csstree.generate(node);
+          let isOrigColor = false;
 
-      insertBefore ? parent?.insertData(origColorsRule, insertBefore) : parent?.push(origColorsRule);
-      didSplitSelectors = true;
-    }
+          for (const svgNode of nodesWithOrigColors) {
+            if (matchesSelector(svgNode, selector)) {
+              isOrigColor = true;
+              (node as any).__ORIG_COLOR__ = true;
+              break;
+            }
+          }
 
-    // Replace color
-    node.value = csstree.parse("currentColor", { context: "value" }) as csstree.Value;
+          (isOrigColor ? origColorSelectors : currentColorSelectors).push(selector);
+          return;
+        }
+      }
+
+      // Check if there's a declaration with a color, and if this color should be replaced
+
+      if (node.type !== "Declaration" || !COLOR_ATTRS_TO_REPLACE[node.property]) {
+        return;
+      }
+
+      // @ts-ignore
+      const identifier = node.value?.children?.first;
+      const color = identifier?.value || identifier?.name;
+
+      if (!color || IGNORE_COLORS[color]) {
+        return;
+      }
+
+      // Create new rule with original colors and remove such selectors from the current rule.
+      // We'll replace color in the current rule.
+
+      if (shouldPreserveColors && !didSplitSelectors && this.rule?.prelude.type === "SelectorList") {
+        // Split selectors and create a new rule
+
+        const origColorsRule = csstree.clone(this.rule) as csstree.Rule;
+        (origColorsRule as any).__SKIP_SVG_LOADER__ = true;
+        const origColorsSelectors = new csstree.List<csstree.CssNode>();
+        const selectors = this.rule.prelude.children;
+
+        selectors.forEach((node, listItem) => {
+          if ((node as any).__ORIG_COLOR__) {
+            selectors.remove(listItem);
+            origColorsSelectors.push(node);
+          }
+        });
+
+        (origColorsRule.prelude as csstree.SelectorList).children = origColorsSelectors;
+
+        // Parent can be either at-rule or stylesheet
+        const parent = this.atrule?.block?.children || this.stylesheet?.children;
+
+        // Find current rule in parent. FFS, why there's no indices?
+        let insertBefore: csstree.ListItem<csstree.CssNode> | undefined;
+
+        parent?.some((rule, listItem) => {
+          if (rule === this.rule) {
+            insertBefore = listItem;
+            return true;
+          }
+
+          return false;
+        });
+
+        insertBefore ? parent?.insertData(origColorsRule, insertBefore) : parent?.push(origColorsRule);
+        didSplitSelectors = true;
+      }
+
+      // Replace color
+      node.value = csstree.parse("currentColor", { context: "value" }) as csstree.Value;
+    } satisfies csstree.EnterOrLeaveFn,
   });
 
   return csstree.generate(ast);
