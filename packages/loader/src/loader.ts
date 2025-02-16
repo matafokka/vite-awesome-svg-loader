@@ -23,7 +23,7 @@ import { ResolvedColorReplacements } from "./internal/types";
 import { replaceColorsSvg } from "./internal/replaceColorsSvg";
 import { IMPORT_TYPES } from "./internal/const";
 
-const DEFAULT_OPTIONS: SvgLoaderOptions = {
+const DEFAULT_OPTIONS: Required<SvgLoaderOptions> = {
   tempDir: ".temp",
   preserveLineWidthList: [],
   skipPreserveLineWidthList: [],
@@ -90,7 +90,7 @@ const DEFAULT_OPTIONS: SvgLoaderOptions = {
  *
  * @param options Plugin options
  */
-export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): Plugin {
+export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
   const mergedOptions = { ...DEFAULT_OPTIONS, ...options };
 
   mergedOptions.tempDir = mergedOptions.tempDir.replaceAll("\\", "/");

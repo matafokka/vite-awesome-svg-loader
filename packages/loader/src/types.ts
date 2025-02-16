@@ -36,7 +36,7 @@ export interface SvgLoaderOptions {
    *
    * @default "temp"
    */
-  tempDir: string;
+  tempDir?: string;
 
   /**
    * A list of files or directories to preserve line width of, i.e. to set `vector-effect="non-scaling-stroke"`.
@@ -45,12 +45,12 @@ export interface SvgLoaderOptions {
    *
    * This also can be done in an import: `import imageSrc from "./path/to/image.svg?preserve-line-width"`.
    */
-  preserveLineWidthList: (string | RegExp)[];
+  preserveLineWidthList?: (string | RegExp)[];
 
   /**
    * A list of files or directories to disable preserving line width of. Overrides {@link preserveLineWidthList}.
    */
-  skipPreserveLineWidthList: (string | RegExp)[];
+  skipPreserveLineWidthList?: (string | RegExp)[];
 
   /**
    * A list of CSS selectors to disable {@link preserveLineWidthList} for. Use it to leave specific elements stroke
@@ -60,7 +60,7 @@ export interface SvgLoaderOptions {
    *
    * Unlike {@link skipSetCurrentColorSelectors} and {@link skipTransformsSelectors}, doesn't impact build performance.
    */
-  skipPreserveLineWidthSelectors: (string | SelectorsPerFiles)[];
+  skipPreserveLineWidthSelectors?: (string | SelectorsPerFiles)[];
 
   /**
    * A list of files or directories to replace fill, stroke and `<stop>` colors with `currentColor` (default) or other
@@ -84,12 +84,12 @@ export interface SvgLoaderOptions {
    * 1. {@link ColorMap}
    * 1. `string | RegExp`
    */
-  replaceColorsList: (string | RegExp | ColorMap | ColorMapPerFiles)[];
+  replaceColorsList?: (string | RegExp | ColorMap | ColorMapPerFiles)[];
 
   /**
    * A list of files or directories to disable color replacements of. Overrides {@link replaceColorsList}.
    */
-  skipReplaceColorsList: (string | RegExp)[];
+  skipReplaceColorsList?: (string | RegExp)[];
 
   /**
    * A list of CSS selectors to disable {@link skipReplaceColorsList} for. Use it to leave specific elements colors
@@ -102,7 +102,7 @@ export interface SvgLoaderOptions {
    *
    * **Heavy usage may significantly slow down build time.** Limit selectors to specific files to improve performance.
    */
-  skipReplaceColorsSelectors: (string | SelectorsPerFiles)[];
+  skipReplaceColorsSelectors?: (string | SelectorsPerFiles)[];
 
   /**
    * A list of files to skip while transforming.
@@ -112,7 +112,7 @@ export interface SvgLoaderOptions {
    *
    * SVGO is still applied to the added files.
    */
-  skipTransformsList: (string | RegExp)[];
+  skipTransformsList?: (string | RegExp)[];
 
   /**
    * A list of CSS selectors to disable all transforms for. Use it to leave specific elements as-is.
@@ -124,14 +124,14 @@ export interface SvgLoaderOptions {
    *
    * **Heavy usage may significantly slow down build time.** Limit selectors to specific files to improve performance.
    */
-  skipTransformsSelectors: (string | SelectorsPerFiles)[];
+  skipTransformsSelectors?: (string | SelectorsPerFiles)[];
 
   /**
    * A list of files to skip loading of. Useful for passing original files to another loader.
    *
    * This also can be done in an import: `import imageSrc from "./path/to/image.svg?skip-transforms"`.
    */
-  skipFilesList: (string | RegExp)[];
+  skipFilesList?: (string | RegExp)[];
 
   /**
    * Default import type, i.e. what you get without specifying anything in the import URL.
@@ -157,7 +157,7 @@ export interface SvgLoaderOptions {
    *
    * @default "source"
    */
-  defaultImport: ImportType;
+  defaultImport?: ImportType;
 
   // Deprecated options
 
@@ -168,7 +168,7 @@ export interface SvgLoaderOptions {
    *
    * @deprecated Deprecated in favor of {@link replaceColorsList}
    */
-  setCurrentColorList: (string | RegExp)[];
+  setCurrentColorList?: (string | RegExp)[];
 
   /**
    * A list of files or directories to disable setting current color of. Overrides {@link setCurrentColorList} and
@@ -176,7 +176,7 @@ export interface SvgLoaderOptions {
    *
    * @deprecated Deprecated in favor of {@link replaceColorsList}
    */
-  skipSetCurrentColorList: (string | RegExp)[];
+  skipSetCurrentColorList?: (string | RegExp)[];
 
   /**
    * A list of CSS selectors to disable {@link setCurrentColorList} for.Overrides {@link setCurrentColorList},
@@ -184,7 +184,7 @@ export interface SvgLoaderOptions {
    *
    * @deprecated Deprecated in favor of {@link skipReplaceColorsSelectors}
    */
-  skipSetCurrentColorSelectors: (string | SelectorsPerFiles)[];
+  skipSetCurrentColorSelectors?: (string | SelectorsPerFiles)[];
 }
 
 export type ImportType = "url" | "source" | "source-data-uri" | "base64" | "base64-data-uri";
