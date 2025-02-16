@@ -12,8 +12,10 @@
       content="width=device-width, initial-scale=1.0, minimum-scale=1"
     />
     <title>Vanilla JS Demo</title>
-    <script type="module" crossorigin src="./assets/index-CQc-0L8a.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CaO9j5AS.css">
+    <script type="module" crossorigin src="./assets/index-B5tB5guy.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Zj6e_rwJ.css">
+    <script type="module">import.meta.url;import("_").catch(()=>1);(async function*(){})().next();if(location.protocol!="file:"){window.__vite_is_modern_browser=true}</script>
+    <script type="module">!function(){if(window.__vite_is_modern_browser)return;console.warn("vite: loading legacy chunks, syntax error above and the same error below should be ignored");var e=document.getElementById("vite-legacy-polyfill"),n=document.createElement("script");n.src=e.src,n.onload=function(){System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))},document.body.appendChild(n)}();</script>
   </head>
   <body>
     <div id="content-wrapper">
@@ -403,18 +405,37 @@
 
           <h4>CSS variables</h4>
 
-          <p>
-            Classic solution is to use variables in SVG files and render then directly. We'll use CSS variables as well
-            but leverage SVG symbols to improve rendering performance. This is done by using
-            <span class="mono">SvgImage</span> or <span class="mono">SvgIcon</span> components.
-          </p>
+          <p>Classic solution is to use variables in SVG files and render then directly.</p>
 
-          <p>
-            <span class="mono">setCurrentColorList</span> option should not be used for multicolored icons because
-            recoloring is done via CSS variables.
-          </p>
+          <p>With this loader, we can improve classic approach by:</p>
 
-          <p>Here's the result where we can manipulate colors however we wish:</p>
+          <ol>
+            <li>
+              Leveraging SVG symbols to improve rendering performance. We've already done this by using
+              <span class="mono">SvgImage</span> and <span class="mono">SvgIcon</span> components.
+            </li>
+
+            <li>
+              <p>
+                Using a color map instead of hard-coding variables. For example, we can map
+                <span class="mono">red</span> to <span class="mono">var(--primary-color)</span>,
+                <span class="mono">green</span> - to <span class="mono">var(--secondary-color)</span>,
+                <span class="mono">blue</span> - to <span class="mono">var(--tertiary-color)</span> and so on. This
+                allows designers and developers to work seamlessly and share same icon sets without any additional
+                manual modifications.
+              </p>
+
+              <p>
+                This is done via <span class="mono">replaceColorsList</span> option, see
+                <span class="mono">vite.config.ts</span>
+              </p>
+
+              <p>
+                If your design system supports variables and exports icons with variables, it's better to use these
+                variables as-is.
+              </p>
+            </li>
+          </ol>
 
           <div
             id="multicolor-vars"
@@ -540,5 +561,8 @@
       <div id="adjustment-container"></div>
     </div>
 
+    <script nomodule>!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",(function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()}),!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();</script>
+    <script nomodule crossorigin id="vite-legacy-polyfill" src="./assets/polyfills-legacy-Cnz0XH9z.js"></script>
+    <script nomodule crossorigin id="vite-legacy-entry" data-src="./assets/index-legacy-CmECBygY.js">System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))</script>
   </body>
 </html>
