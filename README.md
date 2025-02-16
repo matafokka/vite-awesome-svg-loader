@@ -9,8 +9,8 @@ A Vite plugin that:
    1. Source code base64.
    1. Source code base64 [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
 1. Can preserve line width, i.e. make icons and line art have same line width when scaling.
-1. Can replace colors with `currentColor`.
-1. Will minimize your SVGs using [SVGO](https://github.com/svg/svgo).
+1. Can replace colors with `currentColor` or a custom color via configuration (see `replaceColorsList` option).
+1. Will automatically minimize your SVGs using [SVGO](https://github.com/svg/svgo).
 1. Allows you to create SVG sprites using provided integrations.
 
 `vite-awesome-svg-loader` is framework-agnostic. All integrations are done in form of subpath imports (for example, `vite-awesome-svg-loader/vue-integration`). This means that you'll get only what you need in your app bundle. This also means that you can develop your own integration using `vite-awesome-svg-loader/integration-utils` import.

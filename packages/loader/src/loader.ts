@@ -49,44 +49,18 @@ const DEFAULT_OPTIONS: Required<SvgLoaderOptions> = {
  *    1. Source code data URI: `import imageSrcDataUri from "./path/to/image.svg?source-data-uri"`.
  *    1. Source code Base64: `import imageBase64 from "./path/to/image.svg?base64"`.
  *    1. Source code Base64 data URI: `import imageBase64DataUri from "./path/to/image.svg?base64-data-uri"`.
+ *
  * 1. Can preserve line width (make icons and line art have same line width when scaling):
  * `import imageSrc from "./path/to/image.svg?preserve-line-width"`.
- * See also: {@link SvgLoaderOptions.preserveLineWidthList}.
- * 1. Can replace colors with `currentColor` (or custom color via config):
+ * Can be configured via {@link SvgLoaderOptions.preserveLineWidthList}.
+ *
+ * 1. Can replace colors with `currentColor` (or a custom color via {@link SvgLoaderOptions.replaceColorsList}):
  * `import imageSrc from "./path/to/image.svg?set-current-color"`.
- * See also: {@link SvgLoaderOptions.replaceColorsList}.
- * 1. Will minimize your SVGs using [SVGO](https://github.com/svg/svgo).
+ * Can be configured via {@link SvgLoaderOptions.replaceColorsList}.
  *
- * Parameters can be chained with an `&` symbol like in a normal URL:
+ * 1. Will automatically minimize your SVGs using [SVGO](https://github.com/svg/svgo).
  *
- * ```ts
- * // Import image as URL and preserve its line width
- * import imageUrl from "./path/to/image.svg?url&preserve-line-width";
- *
- * // Import image as Base64 Data URI, preserve line width and set currentColor
- * import imageBase64 from "./path/to/image.svg?base64-data-uri&preserve-line-width&set-current-color";
- * ```
- *
- * You can explicitly disable any parameter by setting it to `false` (case-insensitive, takes precedence over config):
- *
- * ```ts
- * import imageUrl from "./path/to/image.svg?url&preserve-line-width=false";
- * ```
- *
- * Transforms can be skipped altogether (but not SVGO):
- *
- * ```ts
- * import imageSrc from "./path/to/image.svg?skip-transforms";
- * ```
- *
- * Loading can be skipped altogether. In this case, another loader (if added to the Vite config) will be used.
- *
- * ```ts
- * import image from "./path/to/image.svg?skip-awesome-svg-loader";
- * ```
- *
- * You can set filenames and regexes in {@link SvgLoaderOptions}, so you don't have to write such long urls for every
- * import.
+ * 1. Allows you to create SVG sprites using provided integrations.
  *
  * @param options Plugin options
  */
