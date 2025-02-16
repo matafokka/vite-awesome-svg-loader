@@ -28,8 +28,8 @@ Sure, it adds a layer of complexity. Sure, common strings can be interpolated, a
 1. `build:packages` - builds all packages. Use this while developing to speed up the build.
 1. `build:apps` - builds all apps.
 1. `build:*` - builds a specific demo. For example, `build:vue` will build only Vue demo. Use this while developing to speed up the build.
-1. `dev` - executes `dev` command for all demos.
-1. `dev:*` - executes `dev` command for a specific demo. For example, `dev:vue` will run only Vue demo.
+1. `dev` - builds all packages and executes `dev` command for all demos.
+1. `dev:*` - builds all packages and executes `dev` command for a specific demo. For example, `dev:vue` will run only Vue demo.
 1. `lint` - lints the code with ESLint.
 1. `format` - formats the code with Prettier.
 
