@@ -103,10 +103,41 @@ viteAwesomeSvgLoader({
   skipPreserveLineWidthList: [/line-width-not-preserved\.svg/],
 
   // A list of files or directories to preserve color of
-  setCurrentColorList: [/config-demo\/set-current-color\//, /config-demo\/all\//],
+  replaceColorsList: [
+    // File names
+    "some-file.svg",
 
-  // A list of files to skip while replacing colors. Overrides setCurrentColorList.
-  skipSetCurrentColorList: [/colors-not-preserved\.svg/],
+    // Regexes that are checked against whole path and file name with extension
+    /config-demo\/set-current-color\//,
+    /config-demo\/all\//,
+
+    // Map of color replacements. Key is an original color, value is its replacement. Both can be any values:
+    // HEX, name, rgb() or arbitrary custom values. Applied to all files.
+    {
+      "#003147": "red",
+      "rgb(0, 49, 71)": "#003147",
+      "myCustomColor": "var(--some-color-var)",
+    },
+
+    // Map of color replacements per files
+    {
+      files: ["vars.svg"], // File names or regexes, same format as above
+
+      // Replacements, same format as above
+      replacements: {
+        red: "var(--primary-color)",
+        green: "var(--secondary-color)",
+        blue: "var(--tertiary-color)",
+      },
+
+      // Default value for colors that are not in replacements map. Set an empty string to preserve original colors.
+      // Default value is "currentColor",
+      default: "currentColor"
+    },
+  ],
+
+  // A list of files to skip while replacing colors. Overrides replaceColorsList.
+  skipReplaceColorsList: [/colors-not-preserved\.svg/],
 
   // A list of files to skip while transforming. File skip-transforms.svg is present in every directory.
   skipTransformsList: [/skip-transforms\.svg/, /ignore-elements-orig\.svg/],
@@ -126,14 +157,14 @@ viteAwesomeSvgLoader({
     },
   ],
 
-  // These two options are not recommended due to architectural and performance considerations (see JSDoc):
+  // These options are not recommended due to architectural and performance reasons (see JSDoc):
 
   // A list of selectors to skip while replacing colors. Same format as above.
-  skipSetCurrentColorSelectors: ['*[data-original-color="true"], *[data-original-color="true"] *'],
+  skipReplaceColorsSelectors: ['*[data-original-color="true"], *[data-original-color="true"] *'],
 
   // A list of selectors to skip while transforming. Same format as above.
   skipTransformsSelectors: ['*[data-no-transforms="true"], *[data-no-transforms="true"] *'],
-}),
+})
 ```
 
 6. Optional. Use integrations to create sprite sheets. Or [write your own integration](#custom-integration).
@@ -322,6 +353,15 @@ Such components are not present in the integrations because glob imports do not 
 See: https://vitejs.dev/guide/features#glob-import
 
 **Note**: if you want to support browsers without [ES modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import), use [@vitejs/plugin-legacy](https://www.npmjs.com/package/@vitejs/plugin-legacy) as shown in the demos.
+
+### For library authors
+
+If your icon set is not extensible, just add `vite-awesome-svg-loader` and build your library.
+
+If your icon set is extensible, you'll need to:
+
+1. Provide a plugin that wraps `vite-awesome-svg-loader` and sets your settings.
+1. Tell your users to use your plugin, import icons as source code and pass it to your components.
 
 ### Comparison with other loaders
 

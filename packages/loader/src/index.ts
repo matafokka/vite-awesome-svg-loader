@@ -78,9 +78,11 @@ export interface SvgLoaderOptions {
   skipPreserveLineWidthSelectors: (string | SelectorsPerFiles)[];
 
   /**
-   * A list of files or directories to replace fill, stroke and `<stop>` colors to `currentColor` of, i.e.:
+   * A list of files or directories to replace fill, stroke and `<stop>` colors with `currentColor` (default) or other
+   * colors (if {@link ColorMapPerFiles} or {@link ColorMap} is specified), i.e.:
    *
-   * 1. `fill`, `stroke` and `stop-color` attributes and CSS identifiers will be replaced with `currentColor`.
+   * 1. `fill`, `stroke` and `stop-color` attributes and CSS identifiers will be replaced with `currentColor` or other
+   * given color.
    * 2. `none`, `transparent` or `currentColor` values will not be replaced.
    *
    * Opacity (i.e. `rgba()`) won't be preserved.
@@ -89,46 +91,33 @@ export interface SvgLoaderOptions {
    * This is done because opacity may be handled with a stylesheet selector. This case is hard to implement, and it may
    * slow down build process. This behavior might be changed in future, but it shouldn't break your project.
    *
-   * This option is primarily for outlined and filled images.
+   * Setting `currentColor` can be done with an import: `import imageSrc from "./path/to/image.svg?set-current-color"`.
    *
-   * This also can be done in an import: `import imageSrc from "./path/to/image.svg?set-current-color"`.
+   * Replacements priority:
+   *
+   * 1. {@link ColorMapPerFiles}
+   * 1. {@link ColorMap}
+   * 1. `string | RegExp`
    */
-  setCurrentColorList: (string | RegExp)[];
+  replaceColorsList: (string | RegExp | ColorMap | ColorMapPerFiles)[];
 
   /**
-   * A list of files or directories to disable setting current color of. Overrides {@link setCurrentColorList}.
+   * A list of files or directories to disable color replacements of. Overrides {@link replaceColorsList}.
    */
-  skipSetCurrentColorList: (string | RegExp)[];
+  skipReplaceColorsList: (string | RegExp)[];
 
   /**
-   * A list of CSS selectors to disable {@link setCurrentColorList} for. Use it to leave specific elements colors as-is.
+   * A list of CSS selectors to disable {@link skipReplaceColorsList} for. Use it to leave specific elements colors
+   * as-is.
    *
    * Can be a list of selectors or selectors-per-files specifiers.
    *
-   * **You probably don't need this option.**
-   *
-   * For example, if you're creating multi-colored icons, consider following:
-   *
-   * 1. Using SVG-symbols
-   * 1. Add data-attributes for different colors: `data-color-primary`, `data-color-secondary` or whatever fits your
-   * needs.
-   * 1. Colorize icon with CSS:
-   *
-   * ```css
-   * svg *[data-color-primary] {
-   *   color: var(--icon-color-primary);
-   * }
-   *
-   * svg *[data-color-secondary] {
-   *   color: var(--icon-color-secondary);
-   * }
-   * ```
-   *
-   * This way you'll get full extensibility.
+   * **You probably don't need this option.** Think of other ways to solve your problem. "Recipes" section
+   * in the demos may help you.
    *
    * **Heavy usage may significantly slow down build time.** Limit selectors to specific files to improve performance.
    */
-  skipSetCurrentColorSelectors: (string | SelectorsPerFiles)[];
+  skipReplaceColorsSelectors: (string | SelectorsPerFiles)[];
 
   /**
    * A list of files to skip while transforming.
@@ -145,8 +134,8 @@ export interface SvgLoaderOptions {
    *
    * Can be a list of selectors or selectors-per-files specifiers.
    *
-   * You probably don't need this option. Try rethinking how you manage your assets (see example at
-   * {@link skipSetCurrentColorSelectors}). This option is for some very obscure edge cases only.
+   * **You probably don't need this option.** Think of other ways to solve your problem. "Recipes" section
+   * in the demos may help you.
    *
    * **Heavy usage may significantly slow down build time.** Limit selectors to specific files to improve performance.
    */
@@ -184,6 +173,33 @@ export interface SvgLoaderOptions {
    * @default "source"
    */
   defaultImport: ImportType;
+
+  // Deprecated options
+
+  /**
+   * A list of files or directories to replace fill, stroke and `<stop>` colors of with `currentColor`.
+   *
+   * Overrides {@link replaceColorsList}.
+   *
+   * @deprecated Deprecated in favor of {@link replaceColorsList}
+   */
+  setCurrentColorList: (string | RegExp)[];
+
+  /**
+   * A list of files or directories to disable setting current color of. Overrides {@link setCurrentColorList} and
+   * {@link replaceColorsList}.
+   *
+   * @deprecated Deprecated in favor of {@link replaceColorsList}
+   */
+  skipSetCurrentColorList: (string | RegExp)[];
+
+  /**
+   * A list of CSS selectors to disable {@link setCurrentColorList} for.Overrides {@link setCurrentColorList},
+   * {@link replaceColorsList} and {@link skipReplaceColorsSelectors}.
+   *
+   * @deprecated Deprecated in favor of {@link skipReplaceColorsSelectors}
+   */
+  skipSetCurrentColorSelectors: (string | SelectorsPerFiles)[];
 }
 
 /**
@@ -201,6 +217,54 @@ export interface SelectorsPerFiles {
   selectors: string[];
 }
 
+/**
+ * Maps original SVG colors (case-insensitive) to their replacements
+ */
+export type ColorMap = Record<string, string>;
+
+/**
+ * Maps original SVG colors (case-insensitive) to their replacements. Can be applied to specific files via {@link files} property.
+ *
+ * @example
+ *
+ * {
+ *   // Optional list of files to apply replacements to.
+ *   files: ["my-file.svg", /icon\-*.\.svg/],
+ *
+ *   // Will replace all colors with "red" value with "var(--primary-color)".
+ *   // It'll replace only "red". HEX ("#ff0000"), RGB ("rgb(255, 0, 0)") and other values won't be replaced.
+ *   "red": "var(--primary-color)",
+ *
+ *   // Same as above: this HEX value (case-insensitive) will be replaced with "var(--secondary-color)".
+ *   // Just "blue" or any other values with the same resulting color won't be replaced.
+ *   "#0000ff": "var(--secondary-color)",
+ *
+ *   // Again, only this value (case-insensitive) will be replaced with "var(--tertiary-color)". Any other value will be
+ *   // left as-is.
+ *   "rgb(0, 255, 0)": "var(--tertiary-color)",
+ * }
+ */
+export interface ColorMapPerFiles {
+  /**
+   * A list of files to apply replacements to. If omitted, replacements will be applied to all files
+   */
+  files: (string | RegExp)[];
+
+  /**
+   * Maps original SVG colors (case-insensitive) to their replacements
+   */
+  replacements: ColorMap;
+
+  /**
+   * Replacement for other colors. Set to empty string to leave colors as-is.
+   *
+   * @default "currentColor"
+   */
+  default?: string;
+}
+
+type ResolvedColorReplacements = Required<Omit<ColorMapPerFiles, "files">>;
+
 const DEFAULT_OPTIONS: SvgLoaderOptions = {
   tempDir: ".temp",
   preserveLineWidthList: [],
@@ -209,6 +273,9 @@ const DEFAULT_OPTIONS: SvgLoaderOptions = {
   setCurrentColorList: [],
   skipSetCurrentColorList: [],
   skipSetCurrentColorSelectors: [],
+  replaceColorsList: [],
+  skipReplaceColorsList: [],
+  skipReplaceColorsSelectors: [],
   skipTransformsList: [],
   skipTransformsSelectors: [],
   skipFilesList: [],
@@ -301,6 +368,50 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
   let root = "";
   let base = "";
   let oldViteRoot = "";
+
+  const replaceColorsList = options.setCurrentColorList || mergedOptions.replaceColorsList;
+
+  // Prioritize replacements like so:
+  const replacementsWithFiles: ColorMapPerFiles[] = []; // ColorMapPerFiles
+  const filesWithCurrentColor: ColorMapPerFiles[] = []; // string | RegExp
+
+  // ColorMap
+  const allFilesReplacements: ColorMapPerFiles = {
+    files: [/.*/],
+    replacements: {},
+    default: "",
+  };
+
+  let hasAllFilesReplacements = false;
+
+  // Normalize list and apply prioritization
+  for (const replacements of replaceColorsList) {
+    if (typeof replacements === "string" || replacements instanceof RegExp) {
+      filesWithCurrentColor.push({
+        files: [replacements],
+        replacements: {},
+        default: "currentColor",
+      });
+
+      continue;
+    }
+
+    if (replacements.files instanceof Array) {
+      replacementsWithFiles.push(replacements as ColorMapPerFiles);
+      continue;
+    }
+
+    for (const color in replacements) {
+      hasAllFilesReplacements = true;
+      allFilesReplacements.replacements[color] = (replacements as ColorMap)[color];
+    }
+  }
+
+  const replaceColorsListNormalized: ColorMapPerFiles[] = [...replacementsWithFiles, ...filesWithCurrentColor];
+
+  if (hasAllFilesReplacements) {
+    replaceColorsListNormalized.push(allFilesReplacements);
+  }
 
   return {
     name: "vite-awesome-svg-loader",
@@ -402,21 +513,56 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
         matchesQueryOrList(relPathWithSlash, query["preserve-line-width"], mergedOptions.preserveLineWidthList) &&
         !matchesQueryOrList(relPathWithSlash, undefined, mergedOptions.skipPreserveLineWidthList);
 
-      const shouldSetCurrentColor =
-        !shouldSkipTransforms &&
-        matchesQueryOrList(relPathWithSlash, query["set-current-color"], mergedOptions.setCurrentColorList) &&
-        !matchesQueryOrList(relPathWithSlash, undefined, mergedOptions.skipSetCurrentColorList);
-
       const skipPreserveLineWidthSelectors = selectorsToList(
         relPathWithSlash,
         mergedOptions.skipPreserveLineWidthSelectors,
         !shouldPreserveLineWidth,
       );
 
-      const skipSetCurrentColorSelectors = selectorsToList(
+      let shouldReplaceColors = false;
+
+      const colorReplacements: ResolvedColorReplacements = {
+        replacements: {},
+        // @ts-ignore
+        default: undefined,
+      };
+
+      if (
+        !shouldSkipTransforms &&
+        !matchesQueryOrList(
+          relPathWithSlash,
+          undefined,
+          options.skipSetCurrentColorList || mergedOptions.skipReplaceColorsList,
+        )
+      ) {
+        if (matchesQuery(query["set-current-color"])) {
+          colorReplacements.default = "currentColor";
+          shouldReplaceColors = true;
+        } else {
+          for (const replacements of replaceColorsListNormalized) {
+            if (!matchesPath(relPathWithSlash, replacements.files)) {
+              continue;
+            }
+
+            shouldReplaceColors = true;
+
+            if (colorReplacements.default === undefined && replacements.default !== undefined) {
+              colorReplacements.default = replacements.default;
+            }
+
+            for (const color in replacements.replacements) {
+              colorReplacements.replacements[color] ||= replacements.replacements[color];
+            }
+          }
+        }
+      }
+
+      colorReplacements.default ??= "currentColor";
+
+      const skipReplaceColorsSelectors = selectorsToList(
         relPathWithSlash,
-        mergedOptions.skipSetCurrentColorSelectors,
-        !shouldSetCurrentColor,
+        options.skipSetCurrentColorSelectors || mergedOptions.skipReplaceColorsSelectors,
+        !shouldReplaceColors,
       );
 
       const skipTransformsSelectors = selectorsToList(
@@ -425,20 +571,25 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
         shouldSkipTransforms,
       );
 
-      // We'll fill it later
-      const nodesWithOrigColors: XastChild[] = [];
+      // Hash path and transform parameters to guarantee same output for duplicate parameters.
+      // We don't want to cache the results because there may be a lot of files. Limited cache also won't help because
+      // duplicates won't likely follow one after another.
 
-      // Make a short sorted string from params to guarantee unique file name for the same file
+      let hash = relPathWithSlash + "-";
 
-      let joinedParamsStr = "";
-
-      for (const param of [shouldSkipTransforms, shouldPreserveLineWidth, shouldSetCurrentColor]) {
-        joinedParamsStr += param ? "1" : "0";
+      for (const param of [shouldSkipTransforms, shouldPreserveLineWidth, shouldReplaceColors]) {
+        hash += param ? "1" : "0";
       }
+
+      if (shouldReplaceColors) {
+        hash += JSON.stringify(colorReplacements);
+      }
+
+      hash = new MurmurHash3(hash).result();
 
       // Create unique asset file name
       const fileNameNoExt = path.basename(relPathWithSlash).split(".")[0];
-      const assetFileNameNoExt = `${fileNameNoExt}-${joinedParamsStr}-${new MurmurHash3(relPathWithSlash).result()}`;
+      const assetFileNameNoExt = `${fileNameNoExt}-${hash}`;
       const assetFileName = assetFileNameNoExt + ".svg";
       const assetRelPath = path.dirname(relPathWithSlash) + "/" + assetFileName;
 
@@ -446,6 +597,7 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
       let code = fs.readFileSync(fullPath).toString();
       let isFillSetOnRoot = false;
 
+      const nodesWithOrigColors: XastChild[] = [];
       let didTransform = false; // Detect additional passes, see multipass option
 
       code = optimize(code, {
@@ -471,7 +623,7 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
               return {
                 root: {
                   enter: (root) => {
-                    for (const selectors of [skipSetCurrentColorSelectors, skipTransformsSelectors]) {
+                    for (const selectors of [skipReplaceColorsSelectors, skipTransformsSelectors]) {
                       for (const selector of selectors) {
                         nodesWithOrigColors.push(...querySelectorAll(root, selector));
                       }
@@ -488,8 +640,8 @@ export function viteAwesomeSvgLoader(options: Partial<SvgLoaderOptions> = {}): P
                       preserveLineWidth(node, fullPath);
                     }
 
-                    if (shouldSetCurrentColor && !matchesSelectors(node, skipSetCurrentColorSelectors)) {
-                      isFillSetOnRoot = setCurrentColor(node, isFillSetOnRoot, nodesWithOrigColors);
+                    if (shouldReplaceColors && !matchesSelectors(node, skipReplaceColorsSelectors)) {
+                      isFillSetOnRoot = replaceColors(node, isFillSetOnRoot, colorReplacements, nodesWithOrigColors);
                     }
                   },
                 },
@@ -556,15 +708,11 @@ function escapeBackticks(str: string) {
  * @param matchers List of matchers to check path and filename against
  */
 function matchesQueryOrList(relPathWithSlash: string, queryValue: string | undefined, matchers: (string | RegExp)[]) {
-  if (queryValue?.toLowerCase() === "false") {
-    return false;
-  }
+  return matchesQuery(queryValue) || matchesPath(relPathWithSlash, matchers);
+}
 
-  if (queryValue) {
-    return true;
-  }
-
-  return matchesPath(relPathWithSlash, matchers);
+function matchesQuery(queryValue: string | undefined) {
+  return !!queryValue && queryValue.toLowerCase() !== "false";
 }
 
 /**
@@ -577,10 +725,14 @@ function matchesPath(relPathWithSlash: string, matchers: (string | RegExp)[]) {
   const toMatch = [filename, relPathWithSlash];
 
   for (const matcher of matchers) {
+    const isRegex = matcher instanceof RegExp;
+
     for (const entry of toMatch) {
-      if (entry === matcher || (matcher instanceof RegExp && matcher.exec(entry))) {
-        return true;
+      if (isRegex) {
+        return !!matcher.exec(entry);
       }
+
+      return entry === matcher;
     }
   }
 
@@ -664,7 +816,7 @@ function preserveLineWidth(node: XastElement, path: string) {
 }
 
 /**
- * A list of elements which should have `fill` property to be forcefully replaced with `currentColor`.
+ * A list of elements which should have `fill` property to be forcefully replaced.
  *
  * Fill color of these elements defaults to black, if `fill` property is not defined.
  */
@@ -682,7 +834,7 @@ const ELEMENTS_TO_FORCE_SET_FILL_OF: Record<string, true> = {
 };
 
 const COLOR_ATTRS_TO_REPLACE: Record<string, true> = {
-  "fill": true,
+  // Fill is done separately
   "stroke": true,
   "stop-color": true,
 };
@@ -693,20 +845,33 @@ const IGNORE_COLORS: Record<string, true> = {
   currentColor: true,
 };
 
+function replaceColor(color: string | undefined, replacements: ResolvedColorReplacements) {
+  if (!color) {
+    return "";
+  }
+
+  return replacements.replacements[color.toLowerCase()] || replacements.default || color;
+}
+
 /**
  * Sets current color of a given node
  * @returns New value of `isFillSetOnRoot`.
  */
-function setCurrentColor(node: XastElement, isFillSetOnRoot: boolean, nodesWithOrigColors: XastChild[]) {
+function replaceColors(
+  node: XastElement,
+  isFillSetOnRoot: boolean,
+  replacements: ResolvedColorReplacements,
+  nodesWithOrigColors: XastChild[],
+) {
   if (node.name === "style") {
     const firstChild: any = node.children[0];
-    const newCss = setCurrentColorCss(firstChild?.value, nodesWithOrigColors, false);
+    const newCss = replaceColorsCss(firstChild?.value, replacements, nodesWithOrigColors, false);
 
     if (newCss) {
       firstChild.value = newCss;
     }
   } else {
-    const newCss = setCurrentColorCss(node.attributes.style, nodesWithOrigColors, true);
+    const newCss = replaceColorsCss(node.attributes.style, replacements, nodesWithOrigColors, true);
 
     if (newCss) {
       node.attributes.style = newCss;
@@ -727,22 +892,27 @@ function setCurrentColor(node: XastElement, isFillSetOnRoot: boolean, nodesWithO
     ((isRoot && isFillSetOnRoot) || (!isRoot && !isFillSetOnRoot && ELEMENTS_TO_FORCE_SET_FILL_OF[node.name])) &&
     !IGNORE_COLORS[fillAttr]
   ) {
-    node.attributes.fill = "currentColor";
+    node.attributes.fill = replaceColor(fillAttr, replacements);
   }
 
   // Replace rest of the colors
-  for (const color in COLOR_ATTRS_TO_REPLACE) {
-    const attrsColor = node.attributes[color];
+  for (const attr in COLOR_ATTRS_TO_REPLACE) {
+    const attrsColor = node.attributes[attr];
 
     if (attrsColor && !IGNORE_COLORS[attrsColor]) {
-      node.attributes[color] = "currentColor";
+      node.attributes[attr] = replaceColor(attrsColor, replacements);
     }
   }
 
   return isFillSetOnRoot;
 }
 
-function setCurrentColorCss(css: any, nodesWithOrigColors: XastChild[], isInline = false) {
+function replaceColorsCss(
+  css: any,
+  replacements: ResolvedColorReplacements,
+  nodesWithOrigColors: XastChild[],
+  isInline = false,
+) {
   if (!css || typeof css !== "string") {
     return "";
   }
@@ -855,7 +1025,10 @@ function setCurrentColorCss(css: any, nodesWithOrigColors: XastChild[], isInline
       }
 
       // Replace color
-      node.value = csstree.parse("currentColor", { context: "value" }) as csstree.Value;
+
+      node.value = csstree.parse(replaceColor(csstree.generate(node.value), replacements), {
+        context: "value",
+      }) as csstree.Value;
     } satisfies csstree.EnterOrLeaveFn,
   });
 

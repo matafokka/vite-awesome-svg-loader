@@ -7,22 +7,25 @@
   viewBox="0 0 24 24"
   xml:space="preserve"
 >
+  <!-- Use red color as a placeholder for primary-color variable -->
   <circle
-    fill="var(--primary-color)"
+    fill="red"
     cx="8.0524569"
     cy="8.1588478"
     r="7.8950858"
   />
 
+  <!-- Use green color as a placeholder for secondary-color variable -->
   <circle
-    fill="var(--secondary-color)"
+    fill="green"
     cx="15.9475431"
     cy="8.1588478"
     r="7.8950858"
   />
 
+  <!-- Use blue color as a placeholder for tertiary-color variable -->
   <circle
-    fill="var(--tertiary-color)"
+    fill="blue"
     cx="12"
     cy="15.8411522"
     r="7.8950858"

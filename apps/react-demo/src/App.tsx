@@ -864,19 +864,37 @@ export default function App() {
       </p>
 
       <h4>CSS variables</h4>
+      <p>Classic solution is to use variables in SVG files and render then directly.</p>
 
-      <p>
-        Classic solution is to use variables in SVG files and render then directly. We'll use CSS variables as well but
-        leverage SVG symbols to improve rendering performance. This is done by using{" "}
-        <span className="mono">SvgImage</span> or <span className="mono">SvgIcon</span> components.
-      </p>
+      <p>With this loader, we can improve classic approach by:</p>
 
-      <p>
-        <span className="mono">setCurrentColorList</span> option should not be used for multicolored icons because
-        recoloring is done via CSS variables.
-      </p>
+      <ol>
+        <li>
+          Leveraging SVG symbols to improve rendering performance. We've already done this by using{" "}
+          <span className="mono">SvgImage</span> and <span className="mono">SvgIcon</span> components.
+        </li>
 
-      <p>Here's the result where we can manipulate colors however we wish:</p>
+        <li>
+          <p>
+            Using a color map instead of hard-coding variables. For example, we can map{" "}
+            <span className="mono">red</span> to <span className="mono">var(--primary-color)</span>,{" "}
+            <span className="mono">green</span> - to <span className="mono">var(--secondary-color)</span>,{" "}
+            <span className="mono">blue</span> - to <span className="mono">var(--tertiary-color)</span> and so on. This{" "}
+            allows designers and developers to work seamlessly and share same icon sets without any additional manual{" "}
+            modifications.
+          </p>
+
+          <p>
+            This is done via <span className="mono">replaceColorsList</span> option, see{" "}
+            <span className="mono">vite.config.ts</span>
+          </p>
+
+          <p>
+            If your design system supports variables and exports icons with variables, it's better to use these{" "}
+            variables as-is.
+          </p>
+        </li>
+      </ol>
 
       <div className="images">
         <SvgIcon
