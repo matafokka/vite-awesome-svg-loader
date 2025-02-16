@@ -39,7 +39,7 @@
     "prettier": "^3.0.3",
     "sass": "^1.69.3",
     "tsconfig": "*",
-    "tsup": "^8.0.1",
+    "tsup": "^8.3.6",
     "turbo": "^2.3.3",
     "typescript": "~5.2.0",
     "vite": "^6.0.7",

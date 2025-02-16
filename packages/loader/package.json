@@ -6,7 +6,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "npx tsup ./src/index.ts --format esm,cjs && tsc --emitDeclarationOnly --declaration && node ./src/generate-types.mjs"
+    "build": "npx tsup && node ./src/generate-types.mjs"
   },
   "dependencies": {
     "css-tree": "^2.3.1",
