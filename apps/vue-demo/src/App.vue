@@ -697,6 +697,7 @@
       <SvgImage
         :src="whiteFillShowOriginal ? whiteFillCaveatOrigImageSrc : whiteFillCaveatImageSrc"
         class="text-color standalone-image"
+        style="background-color: white; color: black;"
       />
     </div>
 

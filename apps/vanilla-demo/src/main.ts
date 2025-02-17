@@ -460,6 +460,8 @@ Checkbox.svgCheckbox({
 const whiteFillImage = new SvgImage(whiteFillCaveatImageSrc, "#caveats-white-fill");
 const whiteFillSvg = whiteFillImage.getSvgEl();
 whiteFillSvg.classList.add("text-color", "standalone-image");
+whiteFillSvg.style.backgroundColor = "white";
+whiteFillSvg.style.color = "black";
 
 Checkbox.svgCheckbox({
   selector: "#caveats-white-fill-checkbox",

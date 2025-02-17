@@ -842,6 +842,7 @@ export default function App() {
         <SvgImage
           src={whiteFillShowOriginal ? whiteFillCaveatOrigImageSrc : whiteFillCaveatImageSrc}
           className="text-color standalone-image"
+          style={{ backgroundColor: "white", color: "black" }}
         />
       </div>
 
