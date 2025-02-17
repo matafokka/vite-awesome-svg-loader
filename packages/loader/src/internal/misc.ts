@@ -60,11 +60,11 @@ export function matchesPath(relPathWithSlash: string, matchers: (string | RegExp
     const isRegex = matcher instanceof RegExp;
 
     for (const entry of toMatch) {
-      if (isRegex) {
-        return !!matcher.exec(entry);
-      }
+      const matches = isRegex ? matcher.test(entry) : entry === matcher;
 
-      return entry === matcher;
+      if (matches) {
+        return true;
+      }
     }
   }
 
@@ -72,7 +72,14 @@ export function matchesPath(relPathWithSlash: string, matchers: (string | RegExp
 }
 
 /**
- * Converts CSS selectors to a list
+ * Normalizes selector string. For now, removes unneccesarry whitespace.
+ */
+function normalizeSelector(selector: string) {
+  return selector.replaceAll(/\s+/g, " ").trim();
+}
+
+/**
+ * Converts CSS selectors to a list and normalizes each selector
  * @param relPathWithSlash Relative path with leading slash
  * @param selectors Selectors
  */
@@ -89,12 +96,14 @@ export function selectorsToList(
 
   for (const selector of selectors) {
     if (typeof selector === "string") {
-      resolvedSelectors.push(selector);
+      resolvedSelectors.push(normalizeSelector(selector));
       continue;
     }
 
     if (matchesPath(relPathWithSlash, selector.files)) {
-      resolvedSelectors.push(...selector.selectors);
+      for (const selectorStr of selector.selectors) {
+        resolvedSelectors.push(normalizeSelector(selectorStr))
+      }
     }
   }
 
@@ -121,7 +130,7 @@ export function matchesSelectors(node: XastChild, selectors: string[]) {
 
 export function replaceColor(color: string | undefined, replacements: ResolvedColorReplacements) {
   if (!color) {
-    return "";
+    return replacements.default || "";
   }
 
   return replacements.replacements[color.toLowerCase()] || replacements.default || color;

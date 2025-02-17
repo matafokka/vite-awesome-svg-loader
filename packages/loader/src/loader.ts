@@ -294,21 +294,27 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
         shouldSkipTransforms,
       );
 
-      // Hash path and transform parameters to guarantee same output for duplicate parameters.
+      // Hash path and transform parameters to guarantee same output for duplicate parameters. All parameters
+      // should be accounted and normalized (i.e. stuff like whitespace in CSS selectors shouldn't affect output).
+      //
       // We don't want to cache the results because there may be a lot of files. Limited cache also won't help because
       // duplicates won't likely follow one after another.
 
-      let hash = relPathWithSlash + "-";
+      const hashParts: string[] = [relPathWithSlash];
+
+      for (const arr of [skipPreserveLineWidthSelectors, skipReplaceColorsSelectors, skipTransformsSelectors]) {
+        hashParts.push(arr.join(","))
+      }
 
       for (const param of [shouldSkipTransforms, shouldPreserveLineWidth, shouldReplaceColors]) {
-        hash += param ? "1" : "0";
+        hashParts.push(param ? "1" : "0");
       }
 
       if (shouldReplaceColors) {
-        hash += JSON.stringify(colorReplacements);
+        hashParts.push(JSON.stringify(colorReplacements));
       }
 
-      hash = new MurmurHash3(hash).result();
+      const hash = new MurmurHash3(hashParts.join("__")).result();
 
       // Create unique asset file name
       const fileNameNoExt = path.basename(relPathWithSlash).split(".")[0];
