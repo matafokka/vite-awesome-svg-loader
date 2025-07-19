@@ -1,6 +1,6 @@
 {
   "name": "vite-awesome-svg-loader",
-  "description": "Imports SVGs as source code, base64 and data URI. Preserves stroke width, replaces colors with currentColor. Optimizes SVGs with SVGO. Creates SVG sprites.",
+  "description": "Imports SVGs as source code, base64 and data URI. Preserves stroke width, replaces colors with currentColor or custom colors. Optimizes SVGs with SVGO. Creates SVG sprites.",
   "keywords": [
     "vite",
     "svg",
