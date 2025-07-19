@@ -11,8 +11,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 let svgDeclarations = "";
 
 function getDeclaration(paramAndValue) {
-  return `declare module "*.svg?${paramAndValue}" { const src: string; export default src; }\n`;
+  return [
+    `declare module "*.svg${paramAndValue ? "?" + paramAndValue : ""}" {`,
+    `  export const src: string;`,
+    `  export default src;`,
+    `  export const prefix: string`,
+    `}\n`,
+  ].join("\n");
 }
+
+// Svg without query
+
+svgDeclarations += getDeclaration();
 
 // Build import types
 

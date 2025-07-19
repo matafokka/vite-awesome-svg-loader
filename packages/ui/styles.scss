@@ -130,6 +130,15 @@ ol {
   background-origin: 0 0;
 }
 
+div.standalone-image {
+  width: 100%;
+  display: flex;
+
+  svg {
+    width: fit-content;
+  }
+}
+
 input {
   background-color: var(--bg-accent-color);
   border: 1px solid var(--text-color);

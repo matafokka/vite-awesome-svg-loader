@@ -317,7 +317,7 @@
             class="images"
           ></div>
 
-          <h4>Base64, original file</h4>
+          <h4>Base64 string, original file</h4>
 
           <p class="mono">
             <span class="hidden"> There's base64 data that's replaced with this text for assistive technologies. </span>
@@ -327,6 +327,27 @@
               aria-hidden="true"
             ></span>
           </p>
+
+          <h2>Classes and IDs prefixes. Targeting SVG nodes.</h2>
+
+          <p>
+            All IDs and classes of every SVG elements are prefixed with a unique string to avoid collisions. If you need
+            this prefix, you can extract it like so:
+          </p>
+
+          <p class="mono">import iconSrc, { prefix: iconPrefix } from "@/some/icon.svg"</p>
+
+          <p>
+            The following demo changes element's colors when user clicks on it. Each element has its own color map. The
+            checks are performed by looking at the class names.
+          </p>
+
+          <div class="images">
+            <div
+              id="targeting-demo-container"
+              class="standalone-image"
+            ></div>
+          </div>
 
           <h2>Caveats</h2>
 

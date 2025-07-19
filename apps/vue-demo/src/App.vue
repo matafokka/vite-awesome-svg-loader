@@ -631,6 +631,28 @@
       </span>
     </p>
 
+    <h2>Classes and IDs prefixes. Targeting SVG nodes.</h2>
+
+    <p>
+      All IDs and classes of every SVG elements are prefixed with a unique string to avoid collisions. If you need this
+      prefix, you can extract it like so:
+    </p>
+
+    <p class="mono">import iconSrc, { prefix: iconPrefix } from "@/some/icon.svg"</p>
+
+    <p>
+      The following demo changes element's colors when user clicks on it. Each element has its own color map. The checks
+      are performed by looking at the class names.
+    </p>
+
+    <div class="images">
+      <div
+        v-html="targetingDemoIconSrc"
+        class="standalone-image"
+        @click="targetingDemoOnClick"
+      />
+    </div>
+
     <h2>Caveats</h2>
 
     <h3>Stroke width should be in CSS pixels</h3>
@@ -702,7 +724,7 @@
       <SvgImage
         :src="whiteFillShowOriginal ? whiteFillCaveatOrigImageSrc : whiteFillCaveatImageSrc"
         class="text-color standalone-image"
-        style="background-color: white; color: black;"
+        style="background-color: white; color: black"
       />
     </div>
 
@@ -885,6 +907,9 @@ import cfgIgnoreElementsOrigImageSrc from "@/assets/config-demo/all/ignore-eleme
 // Import image as base64
 import origMusicIconBase64 from "@/assets/import-demo/icons/music.svg?base64";
 
+// Get classes and IDs prefix to target DOM elements
+import targetingDemoIconSrc, { prefix as targetingDemoIconPrefix } from "@/assets/import-demo/targeting-demo.svg";
+
 // Line width caveat
 
 // @ts-ignore
@@ -908,11 +933,58 @@ import { SvgIcon, SvgImage } from "vite-awesome-svg-loader/vue-integration";
 import NamedIcon from "@/NamedIcon.vue";
 import Checkbox from "@/Checkbox.vue";
 import CompositeImage from "@/CompositeImage.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 const reusedImagesCount = ref(3);
 const skipElementsShowOriginal = ref(false);
 const caveatsLineWidthShowOriginal = ref(false);
 const caveatsOnlyStrokesSupportedShowOriginal = ref(false);
 const whiteFillShowOriginal = ref(false);
+
+// Targeting demo
+
+const colorsGetter = (colors: string[]) => {
+  let index = 0;
+
+  return () => {
+    index++;
+
+    if (index === colors.length) {
+      index = 0;
+    }
+
+    return colors[index];
+  };
+};
+
+const leftElementClass = targetingDemoIconPrefix + "left-element";
+const rightElementClass = targetingDemoIconPrefix + "right-element";
+const getLeftElementColor = colorsGetter(["#ffd6d6", "#e8ffd6", "#d6efff"]);
+const getRightElementColor = colorsGetter(["#f3d6ff", "#ffffd6", "#dad6ff"]);
+
+// Set initial styles when component is mounted
+onMounted(() => {
+  const leftEl = document.getElementsByClassName(leftElementClass)[0] as SVGElement | undefined;
+  const rightEl = document.getElementsByClassName(rightElementClass)[0] as SVGElement | undefined;
+
+  if (!leftEl || !rightEl) {
+    return;
+  }
+
+  leftEl.style.fill = getLeftElementColor();
+  rightEl.style.fill = getRightElementColor();
+  [leftEl, rightEl].forEach((el) => (el.style.cursor = "pointer"));
+});
+
+const targetingDemoOnClick = (e: MouseEvent) => {
+  if (!(e.target instanceof SVGElement)) {
+    return;
+  }
+
+  if (e.target.classList.contains(leftElementClass)) {
+    e.target.style.fill = getLeftElementColor();
+  } else if (e.target.classList.contains(rightElementClass)) {
+    e.target.style.fill = getRightElementColor();
+  }
+};
 </script>

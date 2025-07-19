@@ -303,7 +303,7 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
       const hashParts: string[] = [relPathWithSlash];
 
       for (const arr of [skipPreserveLineWidthSelectors, skipReplaceColorsSelectors, skipTransformsSelectors]) {
-        hashParts.push(arr.join(","))
+        hashParts.push(arr.join(","));
       }
 
       for (const param of [shouldSkipTransforms, shouldPreserveLineWidth, shouldReplaceColors]) {
@@ -327,6 +327,7 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
       let isFillSetOnRoot = false;
 
       const nodesWithOrigColors: XastChild[] = [];
+      const classesAndIdsPrefix = assetFileNameNoExt + "__";
       let didTransform = false; // Detect additional passes, see multipass option
 
       code = optimize(code, {
@@ -337,7 +338,8 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
             params: {
               prefixIds: true,
               prefixClassNames: true,
-              prefix: assetFileNameNoExt,
+              prefix: classesAndIdsPrefix,
+              delim: "",
             },
           },
           {
@@ -388,22 +390,35 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
         }
       }
 
+      /**
+       * Returns exports string
+       * @param src Source code enclosed with quotes. Single quotes, double quotes and backticks are fine
+       * as long as they're escaped in the actual source code.)
+       * @returns Exports string
+       */
+      const getExports = (src: string) => {
+        return [
+          `export const src = ${src};`,
+          `export const prefix = "${classesAndIdsPrefix}"`,
+          `export default src`,
+        ].join("\n");
+      };
+
       switch (importType) {
         case "source":
-          return "export default `" + escapeBackticks(code) + "`;";
+          return getExports("`" + escapeBackticks(code) + "`");
         case "source-data-uri":
-          return "export default `data:image/svg+xml," + encodeURIComponent(code) + "`;";
+          return getExports("`data:image/svg+xml," + encodeURIComponent(code) + "`");
         case "base64":
-          return "export default `" + escapeBackticks(toBase64(code)) + "`;";
+          return getExports("`" + escapeBackticks(toBase64(code)) + "`");
         case "base64-data-uri":
-          return "export default `data:image/svg+xml;base64," + encodeURIComponent(toBase64(code)) + "`;";
+          return getExports("`data:image/svg+xml;base64," + encodeURIComponent(toBase64(code)) + "`");
       }
 
       if (!isBuildMode) {
         const assetUrl = mergedOptions.tempDir + assetRelPath;
         fs.outputFileSync(root + assetUrl, code);
-
-        return `export default "${base + assetUrl}"`;
+        return getExports(`"${base + assetUrl}"`);
       }
 
       const assetId = this.emitFile({
@@ -412,7 +427,7 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
         source: code,
       });
 
-      return `export default "__VITE_ASSET__${assetId}__";`;
+      return getExports(`"__VITE_ASSET__${assetId}__"`);
     },
   };
 }

@@ -90,6 +90,9 @@ import base64DataUriSunImage from "@/assets/import-demo/lineart/sun.svg?source-d
 // Import image as base64
 import origMusicIconBase64 from "@/assets/import-demo/icons/music.svg?base64";
 
+// Get classes and IDs prefix to target DOM elements
+import targetingDemoIconSrc, { prefix as targetingDemoIconPrefix } from "@/assets/import-demo/targeting-demo.svg";
+
 // Line width caveat
 
 // @ts-ignore
@@ -419,6 +422,46 @@ createImages(
 // -------------
 
 document.getElementById("base-64")!.innerText = origMusicIconBase64;
+
+// -------------
+// Targeting demo
+// -------------
+
+const targetingDemoContainer = document.getElementById("targeting-demo-container")!;
+targetingDemoContainer.innerHTML = targetingDemoIconSrc;
+
+const colorsGetter = (colors: string[]) => {
+  let index = 0;
+
+  return () => {
+    index++;
+
+    if (index === colors.length) {
+      index = 0;
+    }
+
+    return colors[index];
+  };
+};
+
+const leftElementClass = targetingDemoIconPrefix + "left-element";
+const rightElementClass = targetingDemoIconPrefix + "right-element";
+const getLeftElementColor = colorsGetter(["#ffd6d6", "#e8ffd6", "#d6efff"]);
+const getRightElementColor = colorsGetter(["#f3d6ff", "#ffffd6", "#dad6ff"]);
+
+const leftEl = document.getElementsByClassName(leftElementClass)[0] as SVGElement;
+const rightEl = document.getElementsByClassName(rightElementClass)[0] as SVGElement;
+
+// Set initial styles
+
+leftEl.style.fill = getLeftElementColor();
+rightEl.style.fill = getRightElementColor();
+[leftEl, rightEl].forEach((el) => (el.style.cursor = "pointer"));
+
+// Handle clicks
+
+leftEl.addEventListener("click", () => (leftEl.style.fill = getLeftElementColor()));
+rightEl.addEventListener("click", () => (rightEl.style.fill = getRightElementColor()));
 
 // -------------
 // Stroke width should be in CSS pixels

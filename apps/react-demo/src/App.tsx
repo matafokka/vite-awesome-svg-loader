@@ -88,6 +88,9 @@ import base64DataUriSunImage from "@/assets/import-demo/lineart/sun.svg?source-d
 // Import image as base64
 import origMusicIconBase64 from "@/assets/import-demo/icons/music.svg?base64";
 
+// Get classes and IDs prefix to target DOM elements
+import targetingDemoIconSrc, { prefix as targetingDemoIconPrefix } from "@/assets/import-demo/targeting-demo.svg";
+
 // Line width caveat
 
 // @ts-ignore
@@ -110,7 +113,7 @@ import multicolorVarsImageSrc from "@/assets/recipes/multicolor/vars.svg";
 import { SvgIcon, SvgImage } from "vite-awesome-svg-loader/react-integration";
 
 // Page setup
-import { CSSProperties, useState } from "react";
+import { CSSProperties, MouseEventHandler, useEffect, useState } from "react";
 import { NamedIcon } from "./NamedIcon";
 import { Checkbox } from "./Checkbox";
 import { CompositeImage } from "./CompositeImage";
@@ -121,6 +124,53 @@ export default function App() {
   const [caveatsLineWidthShowOriginal, setCaveatsLineWidthShowOriginal] = useState(false);
   const [caveatsOnlyStrokesSupportedShowOriginal, setCaveatsOnlyStrokesSupportedShowOriginal] = useState(false);
   const [whiteFillShowOriginal, setWhiteFillShowOriginal] = useState(false);
+
+  // Targeting demo
+
+  const colorsGetter = (colors: string[]) => {
+    let index = 0;
+
+    return () => {
+      index++;
+
+      if (index === colors.length) {
+        index = 0;
+      }
+
+      return colors[index];
+    };
+  };
+
+  const leftElementClass = targetingDemoIconPrefix + "left-element";
+  const rightElementClass = targetingDemoIconPrefix + "right-element";
+  const getLeftElementColor = colorsGetter(["#ffd6d6", "#e8ffd6", "#d6efff"]);
+  const getRightElementColor = colorsGetter(["#f3d6ff", "#ffffd6", "#dad6ff"]);
+
+  // Set initial styles when component is mounted
+  useEffect(() => {
+    const leftEl = document.getElementsByClassName(leftElementClass)[0] as SVGElement | undefined;
+    const rightEl = document.getElementsByClassName(rightElementClass)[0] as SVGElement | undefined;
+
+    if (!leftEl || !rightEl) {
+      return;
+    }
+
+    leftEl.style.fill = getLeftElementColor();
+    rightEl.style.fill = getRightElementColor();
+    [leftEl, rightEl].forEach((el) => (el.style.cursor = "pointer"));
+  }, []);
+
+  const targetingDemoOnClick: MouseEventHandler<HTMLElement> = (e) => {
+    if (!(e.target instanceof SVGElement)) {
+      return;
+    }
+
+    if (e.target.classList.contains(leftElementClass)) {
+      e.target.style.fill = getLeftElementColor();
+    } else if (e.target.classList.contains(rightElementClass)) {
+      e.target.style.fill = getRightElementColor();
+    }
+  };
 
   return (
     <article className="main">
@@ -772,6 +822,28 @@ export default function App() {
 
         <span aria-hidden="true">{origMusicIconBase64}</span>
       </p>
+
+      <h2>Classes and IDs prefixes. Targeting SVG nodes.</h2>
+
+      <p>
+        All IDs and classes of every SVG elements are prefixed with a unique string to avoid collisions. If you need
+        this prefix, you can extract it like so:
+      </p>
+
+      <p className="mono">{'import iconSrc, { prefix: iconPrefix } from "@/some/icon.svg"'}</p>
+
+      <p>
+        The following demo changes element's colors when user clicks on it. Each element has its own color map. The
+        checks are performed by looking at the class names.
+      </p>
+
+      <div className="images">
+        <div
+          dangerouslySetInnerHTML={{ __html: targetingDemoIconSrc }}
+          className="standalone-image"
+          onClick={targetingDemoOnClick}
+        />
+      </div>
 
       <h2>Caveats</h2>
 
