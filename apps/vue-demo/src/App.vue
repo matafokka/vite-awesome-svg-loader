@@ -239,22 +239,27 @@
       <SvgIcon
         :src="preWidthReplaceColorMusicIconSrc"
         size="var(--image-size)"
+        color-transition="none"
       />
       <SvgIcon
         :src="preWidthReplaceColorStarIconSrc"
         size="var(--image-size)"
+        color-transition="none"
       />
       <SvgIcon
         :src="preWidthReplaceColorVideoIconSrc"
         size="var(--image-size)"
+        color-transition="none"
       />
       <SvgIcon
         :src="preWidthReplaceColorGhostImageSrc"
         size="var(--image-size)"
+        color-transition="none"
       />
       <SvgIcon
         :src="preWidthReplaceColorSunImageSrc"
         size="var(--image-size)"
+        color-transition="none"
       />
     </div>
 

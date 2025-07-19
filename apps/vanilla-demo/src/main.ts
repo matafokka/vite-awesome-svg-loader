@@ -239,7 +239,8 @@ initIcons(
     new SvgIcon(preWidthReplaceColorVideoIconSrc),
     new SvgIcon(preWidthReplaceColorGhostImageSrc),
     new SvgIcon(preWidthReplaceColorSunImageSrc),
-  ],
+  ].map((icon) => icon.setColorTransition("none")),
+
   document.getElementById("svg-icons-animated-color")!,
 );
 

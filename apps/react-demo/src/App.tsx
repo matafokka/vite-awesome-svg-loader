@@ -365,22 +365,27 @@ export default function App() {
         <SvgIcon
           src={preWidthReplaceColorMusicIconSrc}
           size="var(--image-size)"
+          colorTransition="none"
         />
         <SvgIcon
           src={preWidthReplaceColorStarIconSrc}
           size="var(--image-size)"
+          colorTransition="none"
         />
         <SvgIcon
           src={preWidthReplaceColorVideoIconSrc}
           size="var(--image-size)"
+          colorTransition="none"
         />
         <SvgIcon
           src={preWidthReplaceColorGhostImageSrc}
           size="var(--image-size)"
+          colorTransition="none"
         />
         <SvgIcon
           src={preWidthReplaceColorSunImageSrc}
           size="var(--image-size)"
+          colorTransition="none"
         />
       </div>
 
