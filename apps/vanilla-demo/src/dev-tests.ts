@@ -17,9 +17,9 @@ const devTestsContainer = document.getElementById("dev-tests")!;
 if (import.meta.env.DEV) {
   devTestsContainer.style.display = "";
 
-  // -------------
-  // SvgImage
-  // -------------
+  //----------//
+  // SvgImage //
+  //----------//
 
   // SvgImage.setSrc() works
   createImage(document.getElementById("replace-src")!).setSrc(origStarIconSrc);
@@ -53,9 +53,9 @@ if (import.meta.env.DEV) {
   // Remounting works without prior unmounting
   createImage(unmountingWorksContainer).mount("#remounting-works-2");
 
-  // -------------
-  // SvgIcon
-  // -------------
+  //---------//
+  // SvgIcon //
+  //---------//
 
   // Unmounting and remounting works
   const iconUnmountingWorksContainer = document.getElementById("icon-unmounting-works")!;

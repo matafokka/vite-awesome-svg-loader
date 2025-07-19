@@ -123,9 +123,9 @@ import { Checkbox } from "./Checkbox";
 import { CompositeImage } from "./CompositeImage";
 initImageSizeAdjustment();
 
-// -------------
-// Insert imported images as URLs
-// -------------
+//--------------------------------//
+// Insert imported images as URLs //
+//--------------------------------//
 
 // We'll use functions like this to simplify image creation for our needs
 
@@ -154,9 +154,9 @@ createImages(
   document.getElementById("url-pre-width")!,
 );
 
-// -------------
-// Render images with SvgImage
-// -------------
+//-----------------------------//
+// Render images with SvgImage //
+//-----------------------------//
 
 function initSvgImages(srcs: string[], mountTo: Element) {
   const images: SvgImage[] = [];
@@ -200,9 +200,9 @@ for (let i = 0; i < allTransformsImgs.length; i++) {
   allTransformsImgs[i].getSvgEl().style.color = allTransformsColors[i];
 }
 
-// -------------
-// Render icons with SvgIcon component
-// -------------
+//-------------------------------------//
+// Render icons with SvgIcon component //
+//-------------------------------------//
 
 function initIcons(icons: SvgIcon[], mountTo: Element) {
   for (const icon of icons) {
@@ -247,9 +247,9 @@ initIcons(
   document.getElementById("svg-icons-animated-color")!,
 );
 
-// -------------
-// Automatically reuse same SVG in multiple symbols
-// -------------
+//--------------------------------------------------//
+// Automatically reuse same SVG in multiple symbols //
+//--------------------------------------------------//
 
 const dynamicImagesContainer = document.getElementById("dynamic-images")!;
 const dynamicIconsContainer = document.getElementById("dynamic-icons")!;
@@ -294,9 +294,9 @@ for (let i = 0; i < 3; i++) {
   addDynamicImage();
 }
 
-// -------------
-// Plugin config demo
-// -------------
+//--------------------//
+// Plugin config demo //
+//--------------------//
 
 // Preserve line width
 initSvgImages(
@@ -362,9 +362,9 @@ for (const res of [cfgPreWidthSkipLoading, cfgReplaceColorSkipLoading, cfgAllSki
   skipLoadingContainer.appendChild(li);
 }
 
-// -------------
-// Named icons with dynamic imports. See example icon at src/NamedIcon.ts.
-// -------------
+//-------------------------------------------------------------------------//
+// Named icons with dynamic imports. See example icon at src/NamedIcon.ts. //
+//-------------------------------------------------------------------------//
 
 function createNamedIcons(names: string[], container: Element) {
   for (const name of names) {
@@ -374,9 +374,9 @@ function createNamedIcons(names: string[], container: Element) {
 
 createNamedIcons(["music", "star", "video"], document.getElementById("named-icons")!);
 
-// -------------
-// Put SVG directly into the DOM
-// -------------
+//-------------------------------//
+// Put SVG directly into the DOM //
+//-------------------------------//
 
 const svgInDomContainer = document.getElementById("svg-in-dom")!;
 
@@ -393,18 +393,18 @@ for (const src of [
   svgInDomContainer.appendChild(div);
 }
 
-// -------------
-// Insert images loaded as source code data URI
-// -------------
+//----------------------------------------------//
+// Insert images loaded as source code data URI //
+//----------------------------------------------//
 
 createImages(
   [srcDataUriMusicIcon, srcDataUriStarIcon, srcDataUriVideoIcon, srcDataUriGhostImage, srcDataUriSunImage],
   document.getElementById("source-data-uri")!,
 );
 
-// -------------
-// Insert images loaded as base64 data URI
-// -------------
+//-----------------------------------------//
+// Insert images loaded as base64 data URI //
+//-----------------------------------------//
 
 createImages(
   [
@@ -417,15 +417,15 @@ createImages(
   document.getElementById("base64-data-uri")!,
 );
 
-// -------------
-// Insert image encoded as base64
-// -------------
+//--------------------------------//
+// Insert image encoded as base64 //
+//--------------------------------//
 
 document.getElementById("base-64")!.innerText = origMusicIconBase64;
 
-// -------------
-// Targeting demo
-// -------------
+//----------------//
+// Targeting demo //
+//----------------//
 
 const targetingDemoContainer = document.getElementById("targeting-demo-container")!;
 targetingDemoContainer.innerHTML = targetingDemoIconSrc;
@@ -463,9 +463,9 @@ rightEl.style.fill = getRightElementColor();
 leftEl.addEventListener("click", () => (leftEl.style.fill = getLeftElementColor()));
 rightEl.addEventListener("click", () => (rightEl.style.fill = getRightElementColor()));
 
-// -------------
-// Stroke width should be in CSS pixels
-// -------------
+//--------------------------------------//
+// Stroke width should be in CSS pixels //
+//--------------------------------------//
 
 // Main demo
 const strokeWidthImage = new SvgImage(lineWidthCaveatImageSrc, "#caveats-line-width");
@@ -482,9 +482,9 @@ Checkbox.svgCheckbox({
 // Broken width example
 createImage(brokenLineWidthImageUrl, document.getElementById("caveats-broken-line-width")!);
 
-// -------------
-// Preserving line width works only on strokes
-// -------------
+//---------------------------------------------//
+// Preserving line width works only on strokes //
+//---------------------------------------------//
 
 const strokesOnlyImage = new SvgImage(onlyStrokesSupportedCaveatImageSrc, "#caveats-only-strokes-supported");
 const strokesOnlySvg = strokesOnlyImage.getSvgEl();
@@ -497,9 +497,9 @@ Checkbox.svgCheckbox({
   src2: onlyStrokesSupportedCaveatOrigImageSrc,
 });
 
-// -------------
-// Transparent colors and white fill
-// -------------
+//-----------------------------------//
+// Transparent colors and white fill //
+//-----------------------------------//
 
 const whiteFillImage = new SvgImage(whiteFillCaveatImageSrc, "#caveats-white-fill");
 const whiteFillSvg = whiteFillImage.getSvgEl();
@@ -514,9 +514,9 @@ Checkbox.svgCheckbox({
   src2: whiteFillCaveatOrigImageSrc,
 });
 
-// -------------
-// Multicolored icons
-// -------------
+//--------------------//
+// Multicolored icons //
+//--------------------//
 
 // Original
 createImage(multicolorOriginalImageUrl, document.getElementById("multicolor-original")!);
@@ -537,9 +537,9 @@ function createMulticolorIcon(primary: string, secondary: string, tertiary: stri
 createMulticolorIcon("red", "blue", "green");
 createMulticolorIcon("magenta", "cyan", "yellow");
 
-// -------------
-// Composite images
-// -------------
+//------------------//
+// Composite images //
+//------------------//
 
 const compositeImagesContainer = document.getElementById("composite")!;
 
