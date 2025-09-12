@@ -185,9 +185,39 @@ export interface SvgLoaderOptions {
    * @deprecated Deprecated in favor of {@link skipReplaceColorsSelectors}
    */
   skipSetCurrentColorSelectors?: (string | SelectorsPerFiles)[];
+
+  /**
+   * Should emit SVG files in [library mode](https://vite.dev/guide/build.html#library-mode) when SVGs are imported via
+   * `?url` import type.
+   *
+   * Possible values:
+   *
+   * 1. `source-data-uri` - no files will be emitted, and source data URI will be exported
+   * (like with `?source-data-uri` import type).
+   *
+   * 1. `base-64-data-uri` - no files will be emitted, and base64 data URI will be exported
+   * (like with `?base-64-data-uri` import type).
+   *
+   *
+   * 1. `emit-files` - files will be emitted, and exports like this will be produced:
+   *
+   *    ```ts
+   *    "" + new URL("file-name-[hash].svg", import.meta.url).href
+   *    ```
+   *
+   *    **Warning:** suitable only for internal use because:
+   *
+   *    1. This may cause issues when your library is consumed. Additional setup from the users will be required.
+   *    1. This is not aligned with the default Vite behavior.
+   *
+   * @default "source-data-uri"
+   */
+  urlImportsInLibraryMode?: UrlImportsInLibraryMode;
 }
 
 export type ImportType = "url" | "source" | "source-data-uri" | "base64" | "base64-data-uri";
+
+export type UrlImportsInLibraryMode = "emit-files" | "source-data-uri" | "base64-data-uri";
 
 /**
  * CSS selector per file or files

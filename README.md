@@ -369,6 +369,8 @@ If your icon set is extensible, you'll need to:
 1. Provide a plugin that wraps `vite-awesome-svg-loader` and sets your settings.
 1. Tell your users to use your plugin, import icons as source code and pass it to your components.
 
+Check out `urlImportsInLibraryMode` option if you're importing files as URLs.
+
 ### Comparison with other loaders
 
 **[vite-svg-loader](https://github.com/jpkleemans/vite-svg-loader)**
@@ -400,6 +402,12 @@ Implements a portion `vite-awesome-svg-loader` functionality.
 **Other loaders and plugins**
 
 Same as above. If your loader is different, and you want it to get roasted, or if it kills `vite-awesome-svg-loader`, please, let the community know by creating an issue :p
+
+### URL imports are causing issues in library mode
+
+First of all, please report these issues.
+
+Then set `urlImportsInLibraryMode` option to `source-data-uri` (recommended) or `base64-data-uri` and see if it helps.
 
 ### How can I help?
 

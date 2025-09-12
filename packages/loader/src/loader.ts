@@ -38,6 +38,7 @@ const DEFAULT_OPTIONS: Required<SvgLoaderOptions> = {
   skipTransformsSelectors: [],
   skipFilesList: [],
   defaultImport: "source",
+  urlImportsInLibraryMode: "source-data-uri",
 };
 
 /**
@@ -88,6 +89,7 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
   mergedOptions.tempDir = "/" + mergedOptions.tempDir;
 
   let isBuildMode = false;
+  let isLibraryMode = false;
   let root = "";
   let base = "";
   let oldViteRoot = "";
@@ -145,6 +147,7 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
     },
 
     configResolved(config) {
+      isLibraryMode = !!config.build.lib
       root = normalizeBaseDir(config.root);
       base = normalizeBaseDir(config.base);
       oldViteRoot = root[1] === ":" ? root.substring(2) : root;
@@ -388,6 +391,10 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
         if (query[type]) {
           importType = type;
         }
+      }
+
+      if (isLibraryMode && importType === "url" && mergedOptions.urlImportsInLibraryMode !== "emit-files") {
+        importType = mergedOptions.urlImportsInLibraryMode
       }
 
       /**
