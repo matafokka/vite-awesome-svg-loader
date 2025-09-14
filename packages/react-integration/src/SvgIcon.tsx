@@ -6,7 +6,7 @@ export interface SvgIconProps extends SvgIconPropsRaw, Omit<AllHTMLAttributes<HT
 
 export function SvgIcon({ src, size, color, colorTransition, ...attrs }: SvgIconProps) {
   const getIconStyle = () => {
-    const style: Record<string, any> = { ...(attrs.style || {}) };
+    const style: Record<string, any> = {};
 
     if (size && size !== "unset") {
       for (const param of ["width", "minWidth", "maxWidth", "height", "minHeight", "maxHeight"]) {
@@ -29,8 +29,8 @@ export function SvgIcon({ src, size, color, colorTransition, ...attrs }: SvgIcon
   return (
     <span
       {...attrs}
-      className="awesome-svg-loader-icon icon"
-      style={iconStyle}
+      className={"awesome-svg-loader-icon icon " + attrs.className}
+      style={{ ...attrs.style, ...iconStyle }}
     >
       <SvgImage
         src={src}
