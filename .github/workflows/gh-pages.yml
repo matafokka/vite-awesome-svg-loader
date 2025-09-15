@@ -11,16 +11,15 @@ jobs:
   deploy:
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
+    env:
+      DOCS_BASE_URL: /vite-awesome-svg-loader
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 18
       - run: npm install
-      - name: build
-        env:
-          DOCS_BASE_URL: "/vite-awesome-svg-loader"
-        run: npm run build
+      - run: npm run build
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
