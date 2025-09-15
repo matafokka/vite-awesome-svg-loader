@@ -7,19 +7,25 @@ on:
     types: [created]
   workflow_dispatch:
 
+env:
+  DOCS_BASE_URL: /vite-awesome-svg-loader
+
 jobs:
+  echo-base-url:
+    steps:
+      - run: echo "$DOCS_BASE_URL"
+
   deploy:
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
-    env:
-      DOCS_BASE_URL: /vite-awesome-svg-loader
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+      - run: echo "$DOCS_BASE_URL"
       - run: npm install
-      - run: npm run build
+      - run: export DOCS_BASE_URL="$DOCS_BASE_URL" && npm run build
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
