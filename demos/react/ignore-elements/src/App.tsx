@@ -3,17 +3,23 @@ import originalImageSrc from "@/assets/ignore-elements-original.svg";
 import { Fragment, useState } from "react";
 import { SvgImage } from "vite-awesome-svg-loader/react-integration";
 
-const Checkbox = "demo-checkbox" as keyof JSX.IntrinsicElements;
+declare module "react/jsx-runtime" {
+  namespace JSX {
+    interface IntrinsicElements {
+      "demo-checkbox": any;
+    }
+  }
+}
 
 export default function App() {
   const [isOriginalShown, setIsOriginalShown] = useState(false);
 
   return (
     <Fragment>
-      <Checkbox
+      <demo-checkbox
         label="Show original image"
         checked={isOriginalShown}
-        onChange={(e: any) => setIsOriginalShown(e.checked)}
+        onchange={(e: any) => setIsOriginalShown(e.checked)}
       />
 
       <div
