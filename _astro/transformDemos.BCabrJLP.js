@@ -1,0 +1,1 @@
+function p(s,n){n+="/";const o={};for(const t in s){const e=t.indexOf(n)+n.length,i=t.indexOf("/",e),c=t.substring(e,i).split(/[-|_| |\\.]/);let a="";for(const r of c)a+=r[0].toUpperCase()+r.substring(1);o[a]=s[t]}return o}export{p as t};
