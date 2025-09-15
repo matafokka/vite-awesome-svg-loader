@@ -10,8 +10,6 @@ const [vanillaTypeDoc, vanillaTypeDocGroup] = createStarlightTypeDocPlugin();
 
 const frameworks = ["React", "Vue"];
 
-console.log(process.env.DOCS_BASE_URL, process.env); // TODO: Remove
-
 // https://astro.build/config
 export default defineConfig({
   base: process.env.DOCS_BASE_URL,
