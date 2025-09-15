@@ -36,8 +36,6 @@
 }
 
 :root {
-  view-transition-name: none;
-
   // Demo-related
 
   --icons-vertical-spacing-raw: calc(var(--image-size) * 0.4);
@@ -82,6 +80,21 @@
   max-width: 300px;
 }
 
+// ClientRouter breaks search bar after navigation. So we'll add view transitions to mask font swapping.
+// This is taken from the Expressive code's site:
+// https://github.com/expressive-code/expressive-code/blob/b5fad4d5fd4a1ad46bac46b888f890f5e678a869/docs/src/styles/custom.css#L81
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+:root::view-transition-old(root),
+:root::view-transition-new(root) {
+  animation-duration: 0.1s;
+}
+
 // Code
 
 .expressive-code .frame {
@@ -97,7 +110,8 @@
 .standalone-image {
   background-origin: 0 0;
 
-  &, & > svg {
+  &,
+  & > svg {
     width: fit-content;
     max-height: 200px;
   }

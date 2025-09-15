@@ -44,7 +44,6 @@ export default defineConfig({
       },
 
       components: {
-        Head: "./src/components/Head.astro",
         SiteTitle: "./src/components/SiteTitle.astro",
       },
 

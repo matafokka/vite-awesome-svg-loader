@@ -9,8 +9,16 @@ function getNormalizedPathName() {
  */
 export function onAstroSamePageLoad(cb: () => void) {
   const url = getNormalizedPathName();
+  cb();
+
+  let isFirstCall = true;
 
   document.addEventListener("astro:page-load", () => {
+    if (isFirstCall) {
+      isFirstCall = false;
+      return;
+    }
+
     if (url === getNormalizedPathName()) {
       cb();
     }
