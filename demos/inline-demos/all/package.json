@@ -1,0 +1,20 @@
+{
+  "name": "inline-demos",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "dev": "npm run build-only -- --watch",
+    "build": "npm run type-check && vite build",
+    "build-only": "vite build",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "vite-awesome-svg-loader": "*",
+    "utils": "*"
+  }
+}

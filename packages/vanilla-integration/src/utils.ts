@@ -1,3 +1,6 @@
+/**
+ * HTML element or selector that will be passed to `document.querySelector()`
+ */
 export type ElementOrSelector = Element | string;
 
 /**

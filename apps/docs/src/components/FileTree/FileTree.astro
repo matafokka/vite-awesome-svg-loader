@@ -1,0 +1,143 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import type { StarlightIcon } from "@astrojs/starlight/types";
+import { Icon } from "@astrojs/starlight/components";
+import type { FileTreeNode } from "types/demos";
+import { getFileExtension } from "@/utils/files";
+import { getClasses } from "@/utils/props";
+
+interface Props extends HTMLAttributes<"div"> {
+  tree: FileTreeNode[];
+  isRoot?: boolean;
+}
+
+const { isRoot: isRootRaw, tree, ...attrs } = Astro.props;
+const classList = getClasses(Astro.props);
+
+const isRoot = isRootRaw ?? true;
+const Tag = isRoot ? "file-tree" : "div";
+classList[isRoot ? "tree" : "subtree"] = true;
+
+const EXT_TO_ICON: Record<string, StarlightIcon | undefined> = {
+  vue: "seti:vue",
+  ts: "seti:typescript",
+  tsx: "seti:typescript",
+  js: "seti:javascript",
+  jsx: "seti:javascript",
+  json: "seti:json",
+  java: "seti:java",
+  css: "seti:css",
+  sass: "seti:css",
+  scss: "seti:css",
+};
+
+function getIconName(fileName: string, isFile: boolean): StarlightIcon {
+  if (!isFile) {
+    return "seti:folder";
+  }
+
+  if (fileName.startsWith("vite.config")) {
+    return "seti:vite";
+  }
+
+  return EXT_TO_ICON[getFileExtension(fileName)] || "document";
+}
+---
+
+<Tag class:list={classList}>
+  {
+    Astro.props.tree.map((item) => {
+      const isFile = typeof item.content === "string";
+      const ItemTag = isFile ? "button" : "div";
+
+      const itemButton = (
+        <ItemTag
+          data-tree-item
+          data-full-path={item.fullPath}
+          class={"tree-item " + (isFile ? "file" : "folder")}
+        >
+          <Icon name={getIconName(item.name, isFile)} />
+          <span class="text">{item.name}</span>
+        </ItemTag>
+      );
+
+      if (isFile) {
+        return itemButton;
+      }
+
+      return [
+        itemButton,
+        <Astro.self
+          tree={item.content as FileTreeNode[]}
+          isRoot={false}
+        />,
+      ];
+    })
+  }
+</Tag>
+
+<script>
+  import "./FileTreeElement";
+</script>
+
+<style lang="scss">
+  file-tree {
+    display: block;
+    padding: 12px;
+    background-color: var(--sl-color-bg-sidebar);
+    border-right: 1px solid var(--sl-color-gray-5);
+    user-select: none;
+    overflow: auto;
+
+    &,
+    * {
+      margin: 0;
+    }
+  }
+
+  .subtree {
+    margin-left: 12px;
+    padding-left: 4px;
+    border-left: 1px solid var(--sl-color-hairline-light);
+  }
+
+  .tree-item {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    margin-top: 4px;
+    padding: 4px 6px;
+    border-radius: 0.25rem;
+    line-height: normal;
+    background: unset;
+    background-color: unset;
+    border: none;
+    text-align: left;
+    color: var(--sl-color-text);
+
+    file-tree > &:first-child {
+      margin-top: 0;
+    }
+
+    .text {
+      margin-left: 0.5rem;
+    }
+
+    svg {
+      min-width: 1rem; // min-content doesn't work with flex when content is overflowing
+    }
+
+    &.active {
+      background-color: var(--sl-color-text-accent);
+      color: var(--sl-color-text-invert);
+    }
+
+    &.file:not(:disabled) {
+      cursor: pointer;
+
+      &:hover {
+        color: var(--sl-color-text-accent);
+      }
+    }
+  }
+</style>

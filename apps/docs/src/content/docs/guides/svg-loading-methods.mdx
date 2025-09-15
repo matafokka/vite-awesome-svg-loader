@@ -1,0 +1,173 @@
+---
+title: "SVG loading methods"
+sidebar:
+  order: 1
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+These are possible loading methods and their tradeoffs
+
+## Render SVGs in the DOM
+
+Put whole SVG source code into the DOM every time image is displayed. This is the most popular method.
+
+This is implemented by importing images with `?source` query parameter _(or `source`
+[default import option](/loader-api-reference/interfaces/svgloaderoptions/#defaultimport))_
+and inserting the result directly into the DOM:
+
+```ts
+import imgSrc from "./image.svg?source";
+
+document.getElementById("image-container")!.innerHtml = imgSrc;
+```
+
+1. **Advantages:**
+
+   1. Simplicity.
+   1. Great customization. This is actually the only option, if you need to manipulate the content,
+      or need more than just CSS styles.
+
+1. **Disadvantages:**
+   1. Very bad performance. Browser needs to parse and update good number of DOM nodes. It doesn't really matter
+      when images count is low, but it may slow down the page when 1000+ images are used.
+      Another loading method is always preferred when customization is not required.
+
+## Link as an image
+
+<Aside type="caution" title="Not for icons">
+   Images loaded this way can be customized only by using
+   [CSS filters](https://developer.mozilla.org/en-US/docs/Web/CSS/filter).
+   However, browsers implement filters incorrectly, so it's impossible to write 100% correct color to `filter()`
+   conversion function. The discrepancies are often way off the desired result.
+   If you try to fix them, you'll lose all performance benefits gained by instancing.
+
+So this is not suitable for icons or any other element requiring precise colors. Simple filters only.
+
+</Aside>
+
+Set `src` attribute of an `<img>` element:
+
+```html
+<img src="/image.svg" />
+```
+
+Or load via `background-image` CSS property:
+
+```css
+.element {
+  background-image: url("/image.svg");
+}
+```
+
+This is implemented via `?url` import and `url`
+[default import option](/loader-api-reference/interfaces/svgloaderoptions/#defaultimport):
+
+```ts
+import imgUrl from "./image.svg?url";
+
+const img = document.createElement("img");
+img.href = imgUrl;
+document.body.appendChild(img);
+```
+
+1. **Advantages:**
+
+   1. Simplicity.
+   1. Great performance thanks to instancing.
+
+2. **Disadvantages:**
+   1. Lack of any customization, good only for static images. You can't modify external assets using JS or CSS.
+      The only thing you can do is [CSS filters](https://developer.mozilla.org/en-US/docs/Web/CSS/filter)
+      (see warning above!).
+
+## Symbols
+
+Put all images into a single `<svg>` node and wrap each image with a `<symbol>` element.
+
+```html
+<!-- Create sprite sheet -->
+
+<svg>
+  <symbol id="#image1">...</symbol>
+  <symbol id="#image2">...</symbol>
+</svg>
+
+<!-- Use images from the sprite sheet -->
+
+<svg>
+  <use href="#image1" />
+</svg>
+
+<svg>
+  <use href="#image2" />
+</svg>
+
+<svg>
+  <!-- Content of the linked images won't be duplicated with multiple <use> elements -->
+  <use href="#image2" />
+</svg>
+```
+
+This is implemented by importing images with `?source` query parameter _(or `source`
+[default import option](/loader-api-reference/interfaces/svgloaderoptions/#defaultimport))_
+and passing the result to the `<SvgImage>` or `<Svg Icon>` component provided by the integrations.
+See examples for your framework.
+
+1. **Advantages:**
+
+   1. Performance is way better than when using whole SVG each time.
+   1. Images can be customized via CSS, for example, you can set custom stroke and fill colors.
+
+1. **Disadvantages:**
+   1. Requires a bit of maintenance in form of using provided integrations.
+   1. Performance is worse than when linking an image.
+   1. Customization is not that great when using whole SVG source code.
+
+## Data URI
+
+Either use source code or base64 in a [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
+Then set `src` attribute of an `<img>` element:
+
+```html
+<img src="data:..." />
+```
+
+Or load via `background-image` CSS property:
+
+```css
+.element {
+  background-image: url("data:...");
+}
+```
+
+Implemented via `?source-data-uri` and `base64-data-uri` imports, `source-data-uri` and `base64-data-uri`
+[default import options](/loader-api-reference/interfaces/svgloaderoptions/#defaultimport).
+
+```ts
+import srcDataUri from "./image.svg?source-data-uri";
+import base64DataUri from "./image.svg?base64-data-uri";
+
+const uris = [srcDataUri, base64DataUri];
+
+for (const uri of uris) {
+  const img = document.createElement("img");
+  img.src = imgUrl;
+  document.body.appendChild(img);
+}
+```
+
+1. **Advantages:**
+
+   1. Great performance, although a tiny bit worse than when linking an image.
+
+2. **Disadvantages:**
+   1. Lack of any customization, good only for static images.
+   2. Increased memory and traffic usage when linking images.
+
+## Summary
+
+1. If you don't need customization, i.e. you want to display static images, use linking method.
+1. If you only need CSS customization, use symbols. This is preferred option for icons and line art that's needed to be customized.
+1. If you need heavy customization and interactivity, put whole SVG source code into the DOM.
+1. As for the data URI, not sure why you would need it. It's implemented just for completeness sake.

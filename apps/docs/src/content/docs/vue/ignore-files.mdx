@@ -1,0 +1,13 @@
+---
+title: Ignore files
+tableOfContents: false
+sidebar:
+  order: 8
+---
+
+import Demos from "@/demos/vue";
+import Demo from "@/components/Demo.astro";
+
+<Demo demo={Demos.IgnoreFiles}>
+  <Demos.IgnoreFiles.App client:only="vue" />
+</Demo>

@@ -1,3 +1,5 @@
+// Public types
+
 /**
  * Props of `<SvgImage>` component
  */

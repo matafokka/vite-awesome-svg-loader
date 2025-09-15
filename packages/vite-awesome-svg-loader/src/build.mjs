@@ -15,18 +15,14 @@ fse.copy(path.join(loaderDir, "dist"), distDir);
 
 const packagesContent = fse.readdirSync(packagesDir);
 
-const IGNORE_DIRS_LIST = {
-  "ui": true,
-  "types": true,
-  "vite-awesome-svg-loader": true, // Don't copy build script
-  "loader": true, // This is copied separately
-};
+/** A matchers of the directories to bundle */
+const TO_BUNDLE = [/-integration$/, /integration-utils/]
 
 for (const entry of packagesContent) {
   (async () => {
     const entryDir = path.join(packagesDir, entry);
 
-    if (!IGNORE_DIRS_LIST[entry] && (await fse.lstat(entryDir)).isDirectory()) {
+    if (TO_BUNDLE.find(regex => entry.match(regex)) && (await fse.lstat(entryDir)).isDirectory()) {
       await fse.copy(path.join(entryDir, "dist"), path.join(distDir, entry));
     }
   })();

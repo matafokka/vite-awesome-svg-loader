@@ -21,4 +21,4 @@ jobs:
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: ./apps/build-demos/dist
+          folder: ./apps/docs/dist

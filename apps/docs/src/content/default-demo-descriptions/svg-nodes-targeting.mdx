@@ -1,0 +1,17 @@
+---
+title: T
+---
+
+All IDs and classes of every SVG elements are prefixed with a unique string to avoid collisions.
+If you need this prefix, you can extract it like so:
+
+```ts
+import imageSrc, { prefix: imagePrefix } from "@/image.svg";
+```
+
+This works with any import method.
+
+One of the purposes of this is targeting SVG elements in scripts or styles.
+
+The demo below changes element's colors when user clicks on it. Each element has its own color map.
+This is implemented via accessing by a class name.

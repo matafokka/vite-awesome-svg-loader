@@ -1,0 +1,73 @@
+---
+import { getClasses } from "@/utils/props";
+import { Icon } from "@astrojs/starlight/components";
+import type { StarlightIcon } from "@astrojs/starlight/types";
+import type { HTMLAttributes } from "astro/types";
+
+export interface Props extends HTMLAttributes<"div"> {
+  /**
+   * Frame title
+   */
+  title: string;
+
+  /**
+   * Title icon
+   */
+  icon?: StarlightIcon;
+}
+
+const { icon, title, ...attrs } = Astro.props;
+const classList = getClasses(attrs);
+---
+
+<div class:list={{ ...classList, "not-content frame": true }}>
+  <div class="title">
+    <slot name="before-title" />
+
+    {
+      icon && (
+        <Icon
+          name={icon}
+          class="title-icon"
+        />
+      )
+    }
+
+    <span>{title}</span>
+  </div>
+
+  <slot />
+</div>
+
+<style lang="scss">
+  .frame {
+    --frame-title-vertical-padding: 4px;
+    --frame-title-horizontal-padding: 6px;
+    --frame-title-min-height: 28px;
+
+    border: 1px solid var(--sl-color-gray-5);
+
+    :global(.expressive-code pre),
+    :global(.expressive-code .header::before),
+    :global(.expressive-code .header > .title) {
+      border: none;
+    }
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    min-height: var(--frame-title-min-height);
+    width: 100%;
+    padding: var(--frame-title-vertical-padding) var(--frame-title-horizontal-padding);
+    background-color: var(--sl-color-gray-6);
+    border-bottom: 1px solid var(--sl-color-gray-5);
+    font-weight: bold;
+    line-height: normal;
+
+    .title-icon {
+      min-width: 1rem;
+      margin-right: 6px;
+    }
+  }
+</style>

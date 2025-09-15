@@ -1,0 +1,17 @@
+{
+  "name": "vite-file-tree-builder",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "npx tsup",
+    "postbuild": "node src/postbuild.mjs"
+  },
+  "dependencies": {
+    "fs-extra": "^11.1.1",
+    "vite": "*",
+    "types": "*"
+  }
+}

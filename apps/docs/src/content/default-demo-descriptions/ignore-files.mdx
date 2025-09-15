@@ -1,0 +1,18 @@
+---
+title: T
+---
+
+There are following [configuration options](/loader-api-reference/interfaces/svgloaderoptions) to set up ignore lists on
+per-file basis:
+
+1. [skipPreserveLineWidthList](/loader-api-reference/interfaces/svgloaderoptions/#skippreservelinewidthlist) -
+a list of files or directories to disable preserving line width of.
+
+1. [skipReplaceColorsList](/loader-api-reference/interfaces/svgloaderoptions/#skipreplacecolorslist) -
+a list of files or directories to disable color replacements of.
+
+1. [skipTransformsList](/loader-api-reference/interfaces/svgloaderoptions/#skiptransformslist) -
+a list of files to skip while transforming (applies to any transformation except SVGO).
+
+1. [skipFilesList](/loader-api-reference/interfaces/svgloaderoptions/#skipfileslist) -
+a list of files to skip loading of. Files will be passed to another loader.

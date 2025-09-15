@@ -1,0 +1,44 @@
+---
+title: React quick start
+tableOfContents: false
+sidebar:
+  order: 0
+  label: Quick start
+---
+
+import { Steps } from "@astrojs/starlight/components";
+
+<Steps>
+1. Import components:
+
+   ```ts
+   import {
+     SvgImage, // Basically implements SVG sprites
+     SvgIcon, // Basic SVG icon that uses SvgImage component internally
+   } from "vite-awesome-svg-loader/react-integration";
+   ```
+
+1. Import images:
+
+   ```ts
+   import imageSrc from "@/path/to/image.svg";
+   ```
+1. Display images:
+
+   ```tsx
+   export function MyComponent() {
+     return (
+       <div class="main">
+         <SvgImage src={imageSrc} />
+
+         <SvgIcon
+           src={imageSrc}
+           size="24px"
+           color="red"
+           colorTransition="0.3s ease-out"
+         />
+       </div>
+     )
+   }
+   ```
+</Steps>

@@ -1,0 +1,113 @@
+---
+title: For contributors
+sidebar:
+  order: 9999
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+## Architecture
+
+This project uses [Turborepo](https://turbo.build/) to manage build process.
+
+### Project structure
+
+- `apps` - applications.
+  - `docs` - documentation website.
+- `demos` - demos.
+  - `inline` - inline demos for various pages outside of specific framework context.
+  - `*` - demos for each supported framework.
+- `packages` - loader itself, integrations and internal utilities.
+  - `integration-utils` - utility functions and constants for integrations. Bundled with the loader to allow users to write their own integrations.
+  - `loader` - loader's source code.
+  - `types` - types for the integrations.
+  - `utils` - common utilities.
+  - `*-integration` - specific framework integration.
+  - `vite-astro-entry-generator` - a plugin that generates an Astro component that loads a script on the client side.
+  - `vite-awesome-svg-loader` - final loader bundle.
+  - `vite-file-tree-builder` - a plugin that builds a project's file tree.
+- `modules.d.ts` - types for untyped external modules.
+
+### Demos
+
+Demos are self-contained NPM packages.
+
+All demos should contain their own scripts and assets. The code and the assets are often duplicated across the demos.
+
+When demo is built, its file tree is formed that will be displayed in the docs website.
+
+Demos should be small and should not have a sprawling file tree.
+
+Demos are built in [Vite library mode](https://vite.dev/guide/build.html#library-mode) and rebuilt whenever a change
+occurs. This pattern avoids necessity for the running multiple web servers.
+
+### Scripts
+
+1. `build` - builds whole project.
+1. `build:packages` - builds all packages. Use this while developing to speed up the build.
+1. `build:apps` - builds all apps.
+1. `build:demos` - builds all demos.
+1. `dev` - builds all packages and executes `dev` all dev commands. This command is resource heavy!
+1. `dev:docs:standalone` - runs `dev` command for `docs` packages without running all demos in watch mode.
+This is a lighter alternative to `dev`. The docs are still updated whenever demo is rebuilt.
+1. `lint` - lints the code with ESLint.
+1. `format` - formats the code with Prettier.
+
+### Bundle structure
+
+Every project (both in `apps` and `packages` directories) should be bundled into `dist` directory inside project's root.
+For example, `vue-demo` bundle is in `apps/vue-demo/dist` directory.
+
+### TypeScript and JavaScript
+
+The primary language for this project is TypeScript. TypeScript should be used while developing loader itself, integrations and demos.
+
+However, build scripts are written in JS to simplify development and speed up the build. Typing is not critical for these scripts. Thus, TypeScript is just not worth it.
+
+### Dependencies
+
+Dependencies that are used by more than one project should be installed for the whole project, i.e. added to the root `package.json`.
+
+Such dependencies include Vite, TypeScript, Vue, React, Solid, etc.
+
+Local dependencies should be installed in package or app where they're required.
+
+`vite-awesome-svg-loader` final bundle dependencies always should be in `packages/vite-awesome-svg-loader/package.json` file even if they're duplicated in the root `package.json`.
+
+## Code style
+
+Prettier should be used to format the code. Styles that are left for the user to decide are handled by ESLint rules.
+
+This project tries to keep the source code clean and readable. Please, try to do so as well, i.e. don't stack `if`s too many times, don't use bit shifts unnecessarily, etc.
+
+## Integrations development
+
+<Aside type="caution">
+  See [custom integrations guide](/guides/custom-integrations/) before developing
+</Aside>
+
+1. Create an issue to notify the community that you'll be working on your integration.
+1. Create integration package using `npx turbo generate workspace` command or by copying an existing integration.
+1. Develop integration:
+   1. Open `package.json` file inside your integration directory.
+   1. Add `"integration-utils": "*"` dependency.
+   1. Develop your integration.
+1. Update `vite-awesome-svg-loader` package with your integration:
+   1. Open `packages/vite-awesome-svg-loader/package.json`.
+   1. Add your integration to the `exports` and `typesVersions["*"]` fields. Basically copy already existing entry and change directory name. Unfortunately, we can't point to another `package.json` and shouldn't dynamically create a package.
+1. Develop demos for your integration:
+   1. Duplicate any existing demo and pages in the `/apps/docs/src/content/docs` directory.
+   1. Develop your demos.
+   1. Update the docs:
+      1. Add a glob import for the demos inside `/apps/docs/src/demos` directory.
+      1. Update the previously copied pages.
+      1. Feel free to add your own pages if needed.
+1. Submit a PR with your integration.
+
+## Loader development
+
+1. Create an issue to notify the community that you'll be working on your feature.
+1. Develop your feature. Make sure to document it with JSDoc.
+1. Update the docs to showcase your feature.
+1. Test if demos work.
+1. Submit a PR.

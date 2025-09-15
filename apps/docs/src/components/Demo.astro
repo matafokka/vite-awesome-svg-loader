@@ -1,0 +1,36 @@
+---
+import type { DemoExport } from "types/demos";
+import DemoCode from "@/components/DemoCode.astro";
+import PaddedFrame from "@/components/PaddedFrame.astro";
+
+interface Props {
+  demo: Omit<DemoExport, "App">;
+}
+
+const { demo } = Astro.props;
+let Description: any;
+
+try {
+  Description = (await import(`../content/default-demo-descriptions/${demo.name}.mdx`)).default;
+} catch (e) {
+  // Skip
+}
+---
+
+{Description && <Description />}
+
+<PaddedFrame
+  title="Rendered demo"
+  icon="rocket"
+  class="rendered-demo"
+>
+  <slot />
+</PaddedFrame>
+
+<DemoCode tree={demo.fileTree} />
+
+<style lang="scss">
+  .rendered-demo {
+    margin: 32px 0;
+  }
+</style>

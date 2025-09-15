@@ -1,0 +1,17 @@
+{
+  "name": "react-svg-image",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run build -- --watch",
+    "build": "npm run type-check && npm run build-only",
+    "build-only": "vite build --config vite.config.lib.ts",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "vite-awesome-svg-loader": "*",
+    "vite-file-tree-builder": "*"
+  }
+}

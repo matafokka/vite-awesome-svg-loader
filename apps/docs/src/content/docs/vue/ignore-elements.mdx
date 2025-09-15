@@ -1,0 +1,13 @@
+---
+title: Ignore elements
+tableOfContents: false
+sidebar:
+  order: 9
+---
+
+import Demos from "@/demos/vue";
+import Demo from "@/components/Demo.astro";
+
+<Demo demo={Demos.IgnoreElements}>
+  <Demos.IgnoreElements.App client:only="vue" />
+</Demo>

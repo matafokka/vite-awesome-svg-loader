@@ -1,0 +1,79 @@
+---
+title: FAQ
+sidebar:
+  order: 1
+---
+
+## Can this loader put whole SVG source code every time I use an image?
+
+Yes, load an image as a source code and insert that code into the DOM like shown in the demos.
+
+## Should I always import my images like shown in the examples? Can I simplify this?
+
+Yes, use `import.meta.glob()` like shown in the demos.
+
+Such components are not present in the integrations because glob imports do not support variable interpolation.
+See: https://vitejs.dev/guide/features#glob-import
+
+## Does it support legacy browsers?
+
+By default, `vite-awesome-svg-loader` requires
+[ES modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import) support.
+
+Use [@vitejs/plugin-legacy](https://www.npmjs.com/package/@vitejs/plugin-legacy) to support ES5 environments:
+
+```ts
+// vite.config.ts
+
+import { fileURLToPath, URL } from "node:url";
+import { defineConfig } from "vite";
+import legacy from "@vitejs/plugin-legacy";
+
+// Import vite-awesome-svg-loader
+import { viteAwesomeSvgLoader } from "vite-awesome-svg-loader";
+
+export default defineConfig({
+  plugins: [
+    // Frameworks...
+    viteAwesomeSvgLoader(), // vite-awesome-svg-loader
+    // Other plugins...
+
+    // Add legacy browsers support
+    legacy({
+      targets: [
+        "chrome >= 51",
+        "and_chr >= 51",
+        "edge >= 15",
+        "safari >= 10",
+        "firefox >= 54",
+        "opera >= 38",
+        "android >= 4.4",
+        "op_mob >= 73",
+        "ios_saf >= 10",
+        "and_qq >= 13.1",
+        "baidu >= 13.18",
+        "kaios >= 3.1",
+      ],
+    }),
+  ],
+});
+```
+
+## URL imports are causing issues in library mode
+
+First of all, please report these issues.
+
+Then set [urlImportsInLibraryMode](/loader-api-reference/interfaces/svgloaderoptions/#urlimportsinlibrarymode)
+option to `source-data-uri` (recommended) or `base64-data-uri` and see if it helps.
+
+## How can I help?
+
+1. Create an integration with your favorite framework.
+1. Add new functionality to the loader itself.
+1. Report bugs.
+1. Create feature requests by creating an issue.
+
+## I want to participate in vite-awesome-svg-loader development. Where do I start?
+
+Thanks for considering contribution! Please start with
+[the guide for contributors](/additional-information/for-contributors).

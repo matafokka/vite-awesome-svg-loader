@@ -1,0 +1,60 @@
+---
+title: Vite Awesome SVG Loader Documentation
+description: |
+  Vite Awesome SVG Loader documentation website. This loader:
+  imports SVGs as source code, base64 and data URI;
+  preserves stroke width;
+  replaces colors with currentColor or custom colors;
+  optimizes SVGs with SVGO;
+  creates SVG sprites.
+template: doc
+prev: false
+next: false
+sidebar:
+  label: Home
+---
+
+import { CardGrid, LinkCard, Aside } from "@astrojs/starlight/components";
+
+## What is this?
+
+This is a Vite plugin that:
+
+1. Can [import SVGs](/guides/svg-loading-methods/) as:
+   1. Source code (default import type).
+   1. URL to a static asset.
+   1. Source code [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
+   1. Source code base64.
+   1. Source code base64 [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
+1. Can [preserve line width](/guides/available-transformations/#preserve-line-width), i.e. make icons and line art
+have same line width when scaling.
+1. Can replace colors with [currentColor](/guides/available-transformations/#replace-all-colors-with-currentcolor-value)
+or a [custom color via configuration](/guides/available-transformations/#replace-colors-with-custom-values).
+1. Automatically minimizes your SVGs with [SVGO](https://github.com/svg/svgo).
+1. Allows you to create [SVG sprites](/guides/svg-loading-methods/#symbols) using provided integrations.
+
+`vite-awesome-svg-loader` is framework-agnostic. All integrations are done as subpath imports
+(for example, `vite-awesome-svg-loader/vue-integration`). This means that you'll get only what you need in your
+app bundle. This also means that you can [develop your own integration](/guides/custom-integrations)
+using `vite-awesome-svg-loader/integration-utils` import.
+
+## Great! How do I use it?
+
+<Aside>
+  Make sure to check out the website's navbar for useful links
+</Aside>
+
+### Learn the basics
+
+<LinkCard title={"Read the " + '"Getting started"' + " guide"} href="/guides/getting-started" />
+<LinkCard title="Learn about SVG loading methods" href="/guides/svg-loading-methods" />
+<LinkCard title="See configuration options" href="/loader-api-reference/interfaces/svgloaderoptions" />
+
+### Jump straight to the demos and examples
+
+<CardGrid>
+  <LinkCard title="React" href="/react/quick-start" />
+  <LinkCard title="Vue" href="/vue/quick-start" />
+  <LinkCard title="Vanilla JS" href="/vanilla-js/quick-start" />
+  <LinkCard title="Custom framework" href="/guides/custom-integrations" />
+</CardGrid>

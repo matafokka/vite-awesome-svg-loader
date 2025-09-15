@@ -1,0 +1,15 @@
+---
+title: "For library authors"
+next: false
+sidebar:
+  order: 9999
+---
+
+If your icon set is not extensible, just add `vite-awesome-svg-loader` and build your library.
+
+If your icon set is extensible, you'll need to:
+
+1. Provide a plugin that wraps `vite-awesome-svg-loader` and sets your settings.
+1. Tell your users to use your plugin, import icons as source code and pass it to your components.
+
+Check out [urlImportsInLibraryMode](/loader-api-reference/interfaces/svgloaderoptions/#urlimportsinlibrarymode) option if you're importing files as URLs.

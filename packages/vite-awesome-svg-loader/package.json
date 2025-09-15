@@ -28,7 +28,7 @@
     "svgo"
   ],
   "version": "2.1.0",
-  "homepage": "https://github.com/matafokka/vite-awesome-svg-loader",
+  "homepage": "https://matafokka.github.io/vite-awesome-svg-loader",
   "repository": "https://github.com/matafokka/vite-awesome-svg-loader",
   "license": "LGPL-2.1-or-later",
   "private": true,

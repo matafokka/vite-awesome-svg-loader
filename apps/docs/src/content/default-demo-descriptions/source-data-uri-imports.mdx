@@ -1,0 +1,20 @@
+---
+title: T
+---
+
+SVGs may be imported as source [data URIs](https://en.wikipedia.org/wiki/Data_URI_scheme) and passed to the standard
+`<img>` element (see [main article](/guides/svg-loading-methods/#data-uri)). This is done by appending
+`?source-data-uri` to the import:
+
+```ts
+import imageUrl from "./image.svg?source-data-uri";
+```
+
+A line width of an image may be [preserved](/guides/available-transformations/#preserve-line-width)
+by adding a `preserve-line-width` parameter to the import query:
+
+```ts
+import imageUrl from "./image.svg?source-data-uri&preserve-line-width";
+```
+
+Other transformations may be applied via [configuration](/loader-api-reference/interfaces/svgloaderoptions).

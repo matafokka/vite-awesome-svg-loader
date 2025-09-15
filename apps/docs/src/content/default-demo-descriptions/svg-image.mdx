@@ -1,0 +1,17 @@
+---
+title: T
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+<Aside>
+  SVG symbols provide a way to customize images that doesn't hurt performance as much as putting SVGs
+  directly into the DOM. See [main article](/guides/svg-loading-methods) for the details.
+</Aside>
+
+`SvgImage` component renders SVG source code into an SVG symbol, so you'll have more freedom to manipulate it.
+Most importantly, it allows you to set custom colors.
+
+This example also introduces `vite-awesome-svg-loader`
+[configuration](/loader-api-reference/interfaces/svgloaderoptions). Make sure to check out `vite.config.ts` file in
+the demo's files below.

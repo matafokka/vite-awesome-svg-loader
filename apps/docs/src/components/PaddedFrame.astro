@@ -1,0 +1,15 @@
+---
+import Frame, { type Props } from "@/components/Frame.astro";
+---
+
+<Frame {...Astro.props}>
+  <div class="content">
+    <slot />
+  </div>
+</Frame>
+
+<style lang="scss">
+  .content {
+    padding: 12px;
+  }
+</style>

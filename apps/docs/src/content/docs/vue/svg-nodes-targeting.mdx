@@ -1,0 +1,13 @@
+---
+title: SVG nodes targeting
+tableOfContents: false
+sidebar:
+  order: 7
+---
+
+import Demos from "@/demos/vue";
+import Demo from "@/components/Demo.astro";
+
+<Demo demo={Demos.SvgNodesTargeting}>
+  <Demos.SvgNodesTargeting.App client:only="vue" />
+</Demo>

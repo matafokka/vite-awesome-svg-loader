@@ -1,0 +1,47 @@
+---
+title: Vanilla JS quick start
+tableOfContents: false
+sidebar:
+  order: 0
+  label: Quick start
+---
+
+import { Aside, Steps } from "@astrojs/starlight/components";
+
+<Aside type="caution" title="This is not for integrations">
+  Do **NOT** use this to create custom integrations. Vanilla JS integration is almost always larger than it needs to be.
+  Use `vite-awesome-svg-loader/integration-utils` instead.
+  See [custom integrations guide](/guides/custom-integrations/).
+
+  ___
+
+  But if you need all or almost all Vanilla JS integration API then it's OK to use 👍
+</Aside>
+
+<Steps>
+1. Import classes:
+
+   ```ts
+   import {
+     SvgImage, // Basically implements SVG sprites
+     SvgIcon, // Basic SVG icon that uses SvgImage class internally
+   } from "vite-awesome-svg-loader/vanilla-integration";
+   ```
+
+1. Import images:
+
+   ```ts
+   import imageSrc from "@/path/to/image.svg";
+   ```
+
+1. Display images:
+
+   ```ts
+   new SvgImage(imageSrc, "#my-container"); // Create an image and mount it to the element with "my-container" id.
+
+   new SvgIcon(imageSrc, "#my-container") // Create an icon and mount it to the element with "my-container" id.
+     .setSize("24px") // Set 24px size
+     .setColor("red") // Set red color
+     .setColorTransition("0.3s ease-out"); // Set color transition
+   ```
+</Steps>

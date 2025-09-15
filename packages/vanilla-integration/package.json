@@ -3,17 +3,16 @@
   "version": "0.0.0",
   "type": "module",
   "private": true,
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "vite build && typedoc src/index.ts --out ./docs --name \"Vanilla Integration\" --readme README_DOCS.md"
+    "build": "vite build"
   },
   "dependencies": {
     "integration-utils": "*"
-  },
-  "devDependencies": {
-    "typedoc": "0.25.6"
   }
 }

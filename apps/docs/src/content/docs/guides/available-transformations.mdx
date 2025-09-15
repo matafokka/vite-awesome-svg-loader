@@ -1,0 +1,91 @@
+---
+title: Available SVG transformations
+sidebar:
+  order: 2
+---
+import AvailableTransformations from "./scripts/AvailableTransformations.astro"
+import Frame from "@/components/Frame.astro";
+import PaddedFrame from "@/components/PaddedFrame.astro";
+
+## Preserve line width
+
+This makes all SVG elements with `stroke` have constant line width regardless of the image size.
+
+This is done via `?preserve-line-width` import
+or [preserveLineWidth](/loader-api-reference/interfaces/svgloaderoptions/#preservelinewidthlist) option.
+
+
+<Frame title="Example usage">
+  ```ts
+  import imgSrc from "./image.svg?source&preserve-line-width";
+
+  document.getElementById("image-container")!.innerHtml = imgSrc;
+  ```
+</Frame>
+
+
+<PaddedFrame title="Original file">
+  <div id="pre-width-orig" class="not-content images"></div>
+</PaddedFrame>
+
+<PaddedFrame title="Preserved line width">
+  <div id="pre-width-transformed" class="not-content images"></div>
+</PaddedFrame>
+
+## Replace all colors with `currentColor` value
+
+This allows you to recolor your images with a single color.
+
+This is done via `?set-current-color` import
+or [replaceColorsList](/loader-api-reference/interfaces/svgloaderoptions/#replacecolorslist) option.
+
+<Frame title="Example usage">
+  ```ts
+  import imgSrc from "./image.svg?source&set-current-color";
+
+  const img = document.getElementById("image-container")!
+  img.innerHtml = imgSrc;
+  img.style.color = "red"; // Override image color
+  ```
+</Frame>
+
+<PaddedFrame title="Original and transformed files">
+  <div id="set-current-color" class="not-content images" style="color: red;"></div>
+</PaddedFrame>
+
+
+# Replace colors with custom values
+
+This allows you to recolor your images however you want.
+
+This is done via [replaceColorsList](/loader-api-reference/interfaces/svgloaderoptions/#replacecolorslist) option.
+
+<Frame title="Example vite.config.ts">
+  ```ts
+  import { defineConfig } from "vite";
+  import { viteAwesomeSvgLoader } from "vite-awesome-svg-loader";
+
+  export default defineConfig({
+    plugins: [
+      viteAwesomeSvgLoader({
+        replaceColorsList: [
+          {
+            files: ["multicolor.svg"],
+            replacements: {
+              red: "cyan",
+              blue: "magenta",
+              green: "yellow",
+            },
+          },
+        ],
+      }),
+    ],
+  });
+  ```
+</Frame>
+
+<PaddedFrame title="Original and transformed files">
+  <div id="replace-colors" class="not-content images"></div>
+</PaddedFrame>
+
+<AvailableTransformations />

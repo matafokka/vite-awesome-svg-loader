@@ -1,0 +1,83 @@
+---
+title: Getting started
+prev: false
+sidebar:
+  order: 0
+---
+
+import { Badge, Steps, Aside, LinkCard } from "@astrojs/starlight/components";
+
+## Install `vite-awesome-svg-loader`
+
+```sh
+npm i vite-awesome-svg-loader
+```
+
+## Add `vite-awesome-svg-loader` to Vite config file
+
+```ts
+// vite.config.ts
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+
+// Import vite-awesome-svg-loader
+import { viteAwesomeSvgLoader } from "vite-awesome-svg-loader";
+
+export default defineConfig({
+  plugins: [
+    vue(), // Or whatever framework you're using
+
+    // vite-awesome-svg-loader:
+    viteAwesomeSvgLoader({ /* Optional configuration */ }),
+
+    // Other plugins...
+  ],
+  // Rest of the configuration...
+});
+```
+
+## <Badge text="Optional" /> <Badge text="Typescript Only" /> Register import types
+
+<Aside>
+Unfortunately, it's not possible to generate all import types, so only some will work without an error.
+
+You can still suppress errors by using `//@ts-ignore` comments.
+</Aside>
+
+This will make TypeScript happy with URL parameters.
+
+<Steps>
+1. Create `env.d.ts` file or use existing file where you store
+[triple slash directives](https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html).
+
+1. Add following string to it:
+
+   ```ts
+   /// <reference types="vite-awesome-svg-loader" />
+   ```
+
+1. Open `tsconfig.json` and add `env.d.ts` to the `include` property:
+
+   ```json
+   { "include": ["env.d.ts"] }
+   ```
+</Steps>
+
+## <Badge text="Optional" /> Configure loader
+
+This step is **highly recommended** because you won't need to import every file with URL parameters.
+
+<LinkCard title="See configuration options" href="/loader-api-reference/interfaces/svgloaderoptions" />
+
+## Start importing files
+
+Pick and combine [loading methods](/guides/svg-loading-methods) and
+[available transformations](/guides/available-transformations):
+
+```ts
+import imgUrl from "./image.svg?url";
+import imgSrc from "./image.svg?source";
+import preLineWidthImgSrc from "./image.svg?source&preserve-line-width";
+import recoloredImgSrc from "./image.svg?source&set-current-color";
+import fullyTransformedImgSrc from "./image.svg?source&preserve-line-width&set-current-color";
+```

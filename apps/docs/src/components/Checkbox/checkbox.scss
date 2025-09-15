@@ -1,0 +1,57 @@
+demo-checkbox {
+  width: fit-content;
+  color: var(--sl-color-text-accent);
+  line-height: normal;
+
+  label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    user-select: none;
+    cursor: pointer;
+
+    $input: 'input[type="checkbox"]';
+
+    #{$input} {
+      $size: 22px;
+      $padding: 8px;
+
+      width: 0;
+      height: 0;
+      display: flex;
+      align-items: center;
+      margin-right: $size;
+
+      &::after {
+        content: "✔";
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: $size;
+        width: $size;
+        height: $size;
+        font-size: $size - $padding;
+        line-height: $size;
+        border-radius: 6px;
+        border: 2px solid var(--sl-color-text-accent);
+        background-color: var(--sl-color-bg);
+        color: transparent;
+        cursor: pointer;
+        font-family: initial;
+      }
+
+      &:checked::after {
+        color: var(--sl-color-text-accent);
+      }
+    }
+
+    &:hover #{$input}::after {
+      background-color: var(--sl-color-accent-low);
+    }
+
+    span {
+      font-weight: 600;
+    }
+  }
+}

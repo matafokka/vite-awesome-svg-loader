@@ -1,0 +1,12 @@
+{
+  "extends": ["../../tsconfig.json"],
+  "compilerOptions": {
+    "outDir": "./dist",
+    "module": "ESNext",
+    "target": "ES6",
+    "lib": ["ESNext", "DOM"],
+    "esModuleInterop": true
+  },
+  "include": ["src", "../../modules.d.ts"],
+  "exclude": ["node_modules"]
+}

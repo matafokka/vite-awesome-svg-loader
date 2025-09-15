@@ -1,0 +1,13 @@
+---
+title: URL Imports
+tableOfContents: false
+sidebar:
+  order: 1
+---
+
+import Demos from "@/demos/vue";
+import Demo from "@/components/Demo.astro";
+
+<Demo demo={Demos.UrlImports}>
+  <Demos.UrlImports.App client:only="vue" />
+</Demo>

@@ -1,0 +1,35 @@
+---
+title: Comparison with other loaders
+sidebar:
+  order: 3
+---
+
+**[vite-svg-loader](https://github.com/jpkleemans/vite-svg-loader)**
+
+Implements a portion `vite-awesome-svg-loader` functionality. This loader can also import SVGs as Vue components.
+
+Due to framework-agnostic nature of `vite-awesome-svg-loader` and relative simplicity of outputting raw HTML, this task is delegated to the user, and can be done as easy as you would with [vite-svg-loader](https://github.com/jpkleemans/vite-svg-loader) as shown in the [Vue demo](apps/vue-demo/README.md):
+
+```vue
+<template>
+  <div v-html="imageSrc" />
+</template>
+
+<script lang="ts" setup>
+import imageSrc from "./path/to/image.svg";
+</script>
+```
+
+Similar approach can be applied to any other framework or vanilla JS.
+
+**[@poppanator/sveltekit-svg](https://github.com/poppa/sveltekit-svg), [vite-plugin-react-svg](https://github.com/damianstasik/vite-svg), [@svgx/vite-plugin-react](https://github.com/salihbenlalla/svgx), [rollup-plugin-svelte-svg](https://www.npmjs.com/package/rollup-plugin-svelte-svg), [vite-plugin-solid-svg](https://github.com/jfgodoy/vite-plugin-solid-svg) and many more**
+
+Same as above, but for other frameworks.
+
+**[vite-plugin-svg-icons](https://github.com/vbenjs/vite-plugin-svg-icons/), [vite-plugin-magical-svg](https://github.com/cyyynthia/vite-plugin-magical-svg), [vite-plugin-svg-sprite](https://github.com/meowtec/vite-plugin-svg-sprite)**
+
+Implements a portion `vite-awesome-svg-loader` functionality.
+
+**Other loaders and plugins**
+
+Same as above. If your loader is different, and you want it to get roasted, or if it kills `vite-awesome-svg-loader`, please, let the community know by creating an issue :p

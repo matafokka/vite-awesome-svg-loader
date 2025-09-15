@@ -1,0 +1,73 @@
+---
+title: Caveats
+sidebar:
+  order: 99999
+---
+
+import PaddedFrame from "@/components/PaddedFrame.astro";
+import Caveats from "./scripts/Caveats.astro";
+
+<Caveats />
+
+## Stroke width should be in CSS pixels
+
+When preserving line width, stroke width should be in CSS pixels. Image size doesn't matter. This is how it looks like:
+
+<PaddedFrame title="Example" icon="rocket">
+  <demo-checkbox
+    id="line-width-checkbox"
+    label="Show original image"
+  />
+
+  <div
+    id="line-width-images"
+    class="images"
+  ></div>
+</PaddedFrame>
+
+Incorrect stroke width will result in something like this:
+
+<PaddedFrame
+  title="Example"
+  icon="rocket"
+>
+  <div
+    id="broken-line-width"
+    class="images"
+  ></div>
+</PaddedFrame>
+
+## Preserving line width works only on strokes
+
+Create your images with strokes instead of filled path to preserve line width.
+
+Toggle original image to see that there's no difference when stroke is not preserved.
+
+<PaddedFrame title="Example" icon="rocket">
+  <demo-checkbox
+    id="only-strokes-supported-checkbox"
+    label="Show original image"
+  />
+
+  <div
+    id="only-strokes-supported-images"
+    class="images"
+  ></div>
+</PaddedFrame>
+
+## Transparent colors should be omitted or set as none or transparent
+
+Quite common catch is to set white color and then wonder why image is messed up. If you don't want fill, omit it or
+set it to `none` or `transparent`.
+
+<PaddedFrame title="Example" icon="rocket">
+  <demo-checkbox
+    id="transparent-colors-checkbox"
+    label="Show original image"
+  />
+
+  <div
+    id="transparent-colors-images"
+    class="images"
+  ></div>
+</PaddedFrame>

@@ -1,0 +1,312 @@
+---
+import FileTree from "@/components/FileTree/FileTree.astro";
+import Frame from "@/components/Frame.astro";
+import { getFileExtension } from "@/utils/files";
+import { Code, Icon } from "@astrojs/starlight/components";
+import type { FileTreeNode } from "types/demos";
+
+interface Props {
+  tree: FileTreeNode[];
+}
+
+interface FileOnlyNode extends Omit<FileTreeNode, "content"> {
+  content: string;
+}
+
+// Flatten tree
+
+const files: FileOnlyNode[] = [];
+
+function processSubtree(subtree: FileTreeNode[]) {
+  for (const node of subtree) {
+    if (typeof node.content === "string") {
+      files.push(node as FileOnlyNode);
+    } else {
+      processSubtree(node.content);
+    }
+  }
+}
+
+processSubtree(Astro.props.tree);
+
+const EXT_TO_LANG: Record<string, string | undefined> = {
+  mts: "ts",
+  mjs: "js",
+  svg: "xml",
+};
+
+const PRESERVE_INDENT_IGNORE_LIST: Record<string, true | undefined> = {
+  svg: true,
+};
+---
+
+<demo-code>
+  <Frame
+    title="Demo's source code"
+    icon="document"
+  >
+    <Fragment slot="before-title">
+      <button
+        class="toggle-files-button"
+        title="Toggle project files"
+      >
+        <Icon name="bars" />
+      </button>
+    </Fragment>
+
+    <div class="code-viewer">
+      <FileTree
+        tree={Astro.props.tree}
+        class="demo-code-tree"
+      />
+
+      <div class="code-wrapper">
+        {
+          files.map((file) => {
+            const ext = getFileExtension(file.name);
+
+            return (
+              <Code
+                code={file.content}
+                lang={EXT_TO_LANG[ext] || ext}
+                class={"code-block " + encodeURIComponent(file.fullPath)}
+                preserveIndent={!PRESERVE_INDENT_IGNORE_LIST[ext]}
+              />
+            );
+          })
+        }
+
+        <div class="no-file-open">
+          <Icon name="information" />
+          Please open file to view its content
+        </div>
+      </div>
+    </div>
+  </Frame>
+</demo-code>
+
+<script>
+  import { FileTreeElement, TreeSelectionChangeEvent } from "@/components/FileTree/FileTreeElement";
+  import { BaseComponent } from "@/components/BaseComponent";
+
+  class DemoCodeElement extends BaseComponent {
+    init() {
+      const tree = this.getElementsByTagName("file-tree")[0];
+
+      if (!(tree instanceof FileTreeElement)) {
+        throw new Error("Tree is not FileTreeElement");
+      }
+
+      const noFileOpenEl = this.getElementsByClassName("no-file-open")[0];
+
+      if (!(noFileOpenEl instanceof HTMLElement)) {
+        throw new Error('Expected subtree to contain a div element with class name "no-file-open"');
+      }
+
+      const codeWrapper = this.getElementsByClassName("code-wrapper")[0];
+
+      if (!(codeWrapper instanceof HTMLElement)) {
+        throw new Error('Expected subtree to contain a div element with class name "code-wrapper"');
+      }
+
+      let isMobile: boolean | undefined = undefined;
+
+      // Code state management
+
+      let shownCodeEl: HTMLElement | undefined;
+
+      const onSelectionChange = (filePath: string) => {
+        if (shownCodeEl) {
+          shownCodeEl.style.display = "none";
+        }
+
+        const el = this.getElementsByClassName(encodeURIComponent(filePath))[0];
+
+        if (!(el instanceof HTMLElement)) {
+          if (filePath) {
+            console.error(`No element matching path "${filePath}" found`);
+          }
+
+          shownCodeEl = undefined;
+          noFileOpenEl.style.display = "";
+          return;
+        }
+
+        shownCodeEl = el;
+        shownCodeEl.style.display = "flex";
+        noFileOpenEl.style.display = "none";
+
+        if (isMobile) {
+          tree.style.display = "none";
+        }
+
+        codeWrapper.scrollTop = 0;
+        codeWrapper.scrollLeft = 0;
+      };
+
+      tree.addEventListener("treeselectionchange", (e) => {
+        if (e instanceof TreeSelectionChangeEvent) {
+          onSelectionChange(e.filePath);
+        }
+      });
+
+      onSelectionChange(tree.selectedPath);
+
+      // Mobile view
+
+      const toggleTreeButtonClass = "toggle-files-button";
+      const toggleTreeButton = this.getElementsByClassName(toggleTreeButtonClass)[0];
+
+      if (!(toggleTreeButton instanceof HTMLButtonElement)) {
+        throw new Error(`Missing toggle tree button with class "${toggleTreeButtonClass}"`);
+      }
+
+      toggleTreeButton.addEventListener("click", () => {
+        tree.style.display = tree.style.display === "none" ? "" : "none";
+      });
+
+      // Adaptive layout
+
+      const onResize = () => {
+        // Mobile view
+
+        const wasMobile = isMobile;
+        isMobile = this.clientWidth <= 800;
+
+        if (wasMobile !== isMobile) {
+          if (isMobile) {
+            tree.style.display = "none";
+            toggleTreeButton.style.display = "";
+            this.classList.add("mobile");
+          } else {
+            tree.style.display = "";
+            toggleTreeButton.style.display = "none";
+            this.classList.remove("mobile");
+          }
+        }
+
+        // Full width tree on mobile
+
+        this.classList.remove("full-width-tree");
+
+        if (isMobile && this.clientWidth - (tree.offsetLeft + tree.clientWidth) <= 40) {
+          this.classList.add("full-width-tree");
+        }
+      };
+
+      const observer = new ResizeObserver(onResize);
+      observer.observe(this);
+      onResize();
+    }
+  }
+
+  customElements.define("demo-code", DemoCodeElement);
+</script>
+
+<style lang="scss">
+  demo-code {
+    display: block;
+    overflow: hidden;
+
+    :global(.title) {
+      position: relative;
+      z-index: 2;
+    }
+
+    &.mobile :global(.title-icon) {
+      display: none;
+    }
+  }
+
+  .toggle-files-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: stretch;
+    width: var(--frame-title-min-height);
+    margin: calc(-1 * var(--frame-title-vertical-padding)) calc(-1 * var(--frame-title-horizontal-padding));
+    margin-right: 6px;
+    background-color: var(--sl-color-text-accent);
+    outline: 1px solid var(--sl-color-text-accent); // Mask title border
+    color: var(--sl-color-text-invert);
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+
+    &:focus-visible {
+      box-shadow: inset 0px 0px 0px 4px var(--sl-color-accent-low);
+    }
+  }
+
+  .code-viewer {
+    position: relative;
+    display: flex;
+    height: min(700px, 70vh);
+    max-height: max-content;
+    margin: 0;
+  }
+
+  .demo-code-tree {
+    width: 100%;
+    max-width: fit-content;
+    border-right: 1px solid var(--sl-color-gray-5);
+
+    demo-code.mobile & {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 12px;
+      width: unset;
+      height: unset;
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.3);
+      z-index: 1;
+    }
+
+    demo-code.full-width-tree & {
+      width: 100%;
+      max-width: unset;
+      box-shadow: none;
+      border-right: none;
+    }
+  }
+
+  .code-wrapper {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--sl-color-gray-7);
+    overflow: auto;
+  }
+
+  .code-block {
+    display: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+
+    :global(.copy) {
+      display: none;
+    }
+
+    :global(.frame) {
+      flex: 1 1;
+    }
+
+    :global(pre) {
+      min-height: 100%;
+      border: none;
+    }
+  }
+
+  .no-file-open {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+    font-size: 24px;
+  }
+</style>

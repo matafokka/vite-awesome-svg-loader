@@ -1,0 +1,68 @@
+---
+title: T
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+The recommended solution is to use CSS variables in SVG images. This way, we won't need to replace whole images set when
+only one color in the palette changes.
+
+This method allows designers and developers to work seamlessly and share same icon sets without any additional manual
+modifications.
+
+<Aside>
+  If your design system supports CSS variables and exports images with the variables, skip this guide because you
+  already have a solid solution. Just create a wrapper around `SvgImage` and/or `SvgIcon`, so colors would be controlled
+  in a centralized manner.
+</Aside>
+
+`vite-awesome-svg-loader` allows you to map a set of predefined colors (or any values for that matter) to a set of CSS
+variables (or any other values) via
+[replaceColorsList](/loader-api-reference/interfaces/svgloaderoptions/#replacecolorslist) option:
+
+```ts
+// vite.config.ts
+
+export default defineConfig({
+  plugins: [
+    viteAwesomeSvgLoader({
+      replaceColorsList:
+        // Global map of color replacements. Key is an original color, value is its replacement. Both can be any values:
+        // HEX, name, rgb() or arbitrary custom values. Applied to all files.
+        {
+          "#003147": "red",
+          "rgb(0, 49, 71)": "#003147",
+          "myCustomColor": "var(--some-color-var)",
+        },
+
+        // Map of color replacements per files
+        {
+          files: ["vars.svg"], // File names or regexes
+
+          // Replacements, same format as above
+          replacements: {
+            red: "var(--primary-color)",
+            green: "var(--secondary-color)",
+            blue: "var(--tertiary-color)",
+          },
+
+          // Default value for colors that are not in replacements map. Set an empty string to preserve original colors.
+          // Default value is "currentColor",
+          default: "currentColor"
+        },
+    }),
+  ],
+});
+```
+
+<Aside>
+  You may have noticed that we've passed a list of file to the
+  [replaceColorsList](/loader-api-reference/interfaces/svgloaderoptions/#replacecolorslist).
+  You may freely combine files and color maps.
+</Aside>
+
+
+<Aside type="tip">
+  It's recommended to create a wrapper around `SvgImage` and/or `SvgIcon`, so colors would be controlled in
+  a centralized manner.
+</Aside>

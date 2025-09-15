@@ -44,11 +44,23 @@ export interface SvgLoaderOptions {
    * This option is primarily for icons and line art.
    *
    * This also can be done in an import: `import imageSrc from "./path/to/image.svg?preserve-line-width"`.
+   *
+   * @example
+   *
+   * viteAwesomeSvgLoader({
+   *   preserveLineWidthList: [/some\/pattern\//, "some/directory", "some/file.svg"],
+   * })
    */
   preserveLineWidthList?: (string | RegExp)[];
 
   /**
    * A list of files or directories to disable preserving line width of. Overrides {@link preserveLineWidthList}.
+   *
+   * @example
+   *
+   * viteAwesomeSvgLoader({
+   *   skipPreserveLineWidthList: [/some\/pattern\//, "some/directory", "some/file.svg"],
+   * })
    */
   skipPreserveLineWidthList?: (string | RegExp)[];
 
@@ -59,6 +71,21 @@ export interface SvgLoaderOptions {
    * Can be a list of selectors or selectors-per-files specifiers.
    *
    * Unlike {@link skipSetCurrentColorSelectors} and {@link skipTransformsSelectors}, doesn't impact build performance.
+   *
+   * @example
+   *
+   * viteAwesomeSvgLoader({
+   *   skipPreserveLineWidthSelectors: [
+   *     // It can be a list of CSS selectors like this one. Every element in every file will be checked against it.
+   *     '*[data-original-line-width="true"], *[data-original-line-width="true"] *',
+   *
+   *     // Or it can be configured on per-file basis:
+   *     {
+   *       files: [/ignore-elements\.svg/, /some-other-file\.svg/],
+   *       selectors: ['*[data-original-line-width="true"], *[data-original-line-width="true"] *'],
+   *     },
+   *   ],
+   * })
    */
   skipPreserveLineWidthSelectors?: (string | SelectorsPerFiles)[];
 
@@ -83,11 +110,53 @@ export interface SvgLoaderOptions {
    * 1. {@link ColorMapPerFiles}
    * 1. {@link ColorMap}
    * 1. `string | RegExp`
+   *
+   * @example
+   *
+   * viteAwesomeSvgLoader({
+   *   replaceColorsList: [
+   *     // File names
+   *     "some-file.svg",
+   *
+   *     // Regexes that are checked against whole path and file name with extension
+   *     /some\/pattern\//,
+   *
+   *     // Map of color replacements. Key is an original color, value is its replacement. Both can be any values:
+   *     // HEX, name, rgb() or arbitrary custom values. Applied to all files.
+   *     {
+   *       "#003147": "red",
+   *       "rgb(0, 49, 71)": "#003147",
+   *       "myCustomColor": "var(--some-color-var)",
+   *     },
+   *
+   *     // Map of color replacements per files
+   *     {
+   *       files: ["vars.svg"], // File names or regexes, same format as above
+   *
+   *       // Replacements, same format as above
+   *       replacements: {
+   *         red: "var(--primary-color)",
+   *         green: "var(--secondary-color)",
+   *         blue: "var(--tertiary-color)",
+   *       },
+   *
+   *       // Default value for colors that are not in replacements map. Set an empty string to preserve original colors.
+   *       // Default value is "currentColor",
+   *       default: "currentColor"
+   *     },
+   *   ],
+   * })
    */
   replaceColorsList?: (string | RegExp | ColorMap | ColorMapPerFiles)[];
 
   /**
    * A list of files or directories to disable color replacements of. Overrides {@link replaceColorsList}.
+   *
+   * @example
+   *
+   * viteAwesomeSvgLoader({
+   *   skipReplaceColorsList: [/some\/pattern\//, "some/directory", "some/file.svg"],
+   * })
    */
   skipReplaceColorsList?: (string | RegExp)[];
 
@@ -101,16 +170,37 @@ export interface SvgLoaderOptions {
    * in the demos may help you.
    *
    * **Heavy usage may significantly slow down build time.** Limit selectors to specific files to improve performance.
+   *
+   * @example
+   *
+   * viteAwesomeSvgLoader({
+   *   skipReplaceColorsSelectors: [
+   *     // It can be a list of CSS selectors like this one. Every element in every file will be checked against it.
+   *     '*[data-original-colors="true"], *[data-original-colors="true"] *',
+   *
+   *     // Or it can be configured on per-file basis:
+   *     {
+   *       files: [/ignore-elements\.svg/, /some-other-file\.svg/],
+   *       selectors: ['*[data-original-colors="true"], *[data-original-colors="true"] *'],
+   *     },
+   *   ],
+   * })
    */
   skipReplaceColorsSelectors?: (string | SelectorsPerFiles)[];
 
   /**
-   * A list of files to skip while transforming.
+   * A list of files to skip while transforming. Applies to any transformation except SVGO.
    *
    * For example, if you add a directory to {@link preserveLineWidthList} and add a file in that directory to this list,
    * line width of added file won't be preserved.
    *
    * SVGO is still applied to the added files.
+   *
+   * @example
+   *
+   * viteAwesomeSvgLoader({
+   *   skipTransformsList: [/some\/pattern\//, "some/directory", "some/file.svg"],
+   * })
    */
   skipTransformsList?: (string | RegExp)[];
 
@@ -123,13 +213,34 @@ export interface SvgLoaderOptions {
    * in the demos may help you.
    *
    * **Heavy usage may significantly slow down build time.** Limit selectors to specific files to improve performance.
+   *
+   * @example
+   *
+   * viteAwesomeSvgLoader({
+   *   skipTransformsSelectors: [
+   *     // It can be a list of CSS selectors like this one. Every element in every file will be checked against it.
+   *     '*[data-no-transforms="true"], *[data-no-transforms="true"] *',
+   *
+   *     // Or it can be configured on per-file basis:
+   *     {
+   *       files: [/ignore-elements\.svg/, /some-other-file\.svg/],
+   *       selectors: ['*[data-no-transforms="true"], *[data-no-transforms="true"] *'],
+   *     },
+   *   ],
+   * })
    */
   skipTransformsSelectors?: (string | SelectorsPerFiles)[];
 
   /**
-   * A list of files to skip loading of. Useful for passing original files to another loader.
+   * A list of files to skip loading of. Files will be passed to another loader.
    *
    * This also can be done in an import: `import imageSrc from "./path/to/image.svg?skip-transforms"`.
+   *
+   * @example
+   *
+   * viteAwesomeSvgLoader({
+   *   skipFilesList: [/some\/pattern\//, "some/directory", "some/file.svg"],
+   * })
    */
   skipFilesList?: (string | RegExp)[];
 
@@ -215,8 +326,14 @@ export interface SvgLoaderOptions {
   urlImportsInLibraryMode?: UrlImportsInLibraryMode;
 }
 
+/**
+ * SVG import type, see {@link SvgLoaderOptions.defaultImport}
+ */
 export type ImportType = "url" | "source" | "source-data-uri" | "base64" | "base64-data-uri";
 
+/**
+ * See {@link SvgLoaderOptions.urlImportsInLibraryMode}
+ */
 export type UrlImportsInLibraryMode = "emit-files" | "source-data-uri" | "base64-data-uri";
 
 /**
