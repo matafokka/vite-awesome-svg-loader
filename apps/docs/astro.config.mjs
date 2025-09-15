@@ -12,6 +12,7 @@ const frameworks = ["React", "Vue"];
 
 // https://astro.build/config
 export default defineConfig({
+  base: process.env.DOCS_BASE_URL,
   integrations: [
     starlight({
       title: "Vite Awesome SVG Loader",

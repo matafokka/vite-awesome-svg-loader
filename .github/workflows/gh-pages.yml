@@ -7,6 +7,9 @@ on:
     types: [created]
   workflow_dispatch:
 
+env:
+  DOCS_BASE_URL: "/vite-awesome-svg-loader"
+
 jobs:
   deploy:
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
