@@ -4,6 +4,7 @@
   "concurrency": "1000",
   "tasks": {
     "build": {
+      "env": ["DOCS_BASE_URL"],
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },

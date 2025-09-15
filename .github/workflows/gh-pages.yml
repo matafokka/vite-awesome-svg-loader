@@ -11,12 +11,6 @@ env:
   DOCS_BASE_URL: /vite-awesome-svg-loader
 
 jobs:
-  echo-base-url:
-    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "$DOCS_BASE_URL"
-
   deploy:
     concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
     runs-on: ubuntu-latest
