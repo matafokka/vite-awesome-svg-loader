@@ -5,6 +5,7 @@ import vue from "@astrojs/vue";
 import react from "@astrojs/react";
 import { createStarlightTypeDocPlugin } from "starlight-typedoc";
 import {defaultHandlers} from "mdast-util-to-hast"
+import { prefixUrl } from "./src/utils/prefixUrl.mjs";
 
 const [loaderTypeDoc, loaderTypeDocGroup] = createStarlightTypeDocPlugin();
 const [vanillaTypeDoc, vanillaTypeDocGroup] = createStarlightTypeDocPlugin();
@@ -121,8 +122,8 @@ export default defineConfig({
       handlers: {
         // Append base URL to markdown links
         link: (state, node) => {
-          if (baseUrl && node.url?.startsWith("/")) {
-            node.url = baseUrl + node.url.substring(1);
+          if (baseUrl && node.url) {
+            node.url = prefixUrl(baseUrl, node.url);
           }
 
           return defaultHandlers.link(state, node);

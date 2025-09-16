@@ -1,13 +1,13 @@
 ---
 import { LinkCard as Default } from "@astrojs/starlight/components";
-import { BASE_URL } from "@/const";
+import { addBasePathIfNeeded } from "@/utils/misc";
 
 type Props = Parameters<typeof Default>[0];
 
 let href = Astro.props.href || "";
 
-if (typeof href === "string" && href.startsWith("/")) {
-  href = BASE_URL + href.substring(1);
+if (typeof href === "string") {
+  href = addBasePathIfNeeded(href);
 }
 ---
 
