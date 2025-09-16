@@ -67,7 +67,9 @@ export default defineConfig({
           autogenerate: { directory: "additional-information" },
         },
 
-        { label: "Configuration options", link: "/configuration" },
+        // No idea how this works, but appending trailing slash makes it point to the actual page and not make this item
+        // "main". The final result doesn't require redirects, page doesn't flash, it works like a charm.
+        { label: "Configuration options", slug: "loader-api-reference/interfaces/svgloaderoptions/" },
 
         loaderTypeDocGroup,
 
@@ -116,9 +118,6 @@ export default defineConfig({
     vue(),
     react(),
   ],
-  redirects: {
-    "/configuration": (baseUrl || "/") + "loader-api-reference/interfaces/svgloaderoptions/",
-  },
   markdown: {
     remarkRehype: {
       handlers: {
