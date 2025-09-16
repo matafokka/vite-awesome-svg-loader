@@ -88,6 +88,7 @@ const PRESERVE_INDENT_IGNORE_LIST: Record<string, true | undefined> = {
 <script>
   import { FileTreeElement, TreeSelectionChangeEvent } from "@/components/FileTree/FileTreeElement";
   import { BaseComponent } from "@/components/BaseComponent";
+  import { isChildOfOrEqual } from "@/utils/dom";
 
   class DemoCodeElement extends BaseComponent {
     init() {
@@ -110,6 +111,18 @@ const PRESERVE_INDENT_IGNORE_LIST: Record<string, true | undefined> = {
       }
 
       let isMobile: boolean | undefined = undefined;
+
+      // Tree state
+
+      const hideTree = () => {
+        tree.style.display = "none";
+      };
+
+      const showTree = () => {
+        tree.style.display = "";
+      };
+
+      const isTreeShown = () => !tree.style.display;
 
       // Code state management
 
@@ -137,7 +150,7 @@ const PRESERVE_INDENT_IGNORE_LIST: Record<string, true | undefined> = {
         noFileOpenEl.style.display = "none";
 
         if (isMobile) {
-          tree.style.display = "none";
+          hideTree();
         }
 
         codeWrapper.scrollTop = 0;
@@ -161,9 +174,7 @@ const PRESERVE_INDENT_IGNORE_LIST: Record<string, true | undefined> = {
         throw new Error(`Missing toggle tree button with class "${toggleTreeButtonClass}"`);
       }
 
-      toggleTreeButton.addEventListener("click", () => {
-        tree.style.display = tree.style.display === "none" ? "" : "none";
-      });
+      toggleTreeButton.addEventListener("click", () => (isTreeShown() ? hideTree() : showTree()));
 
       // Adaptive layout
 
@@ -175,11 +186,11 @@ const PRESERVE_INDENT_IGNORE_LIST: Record<string, true | undefined> = {
 
         if (wasMobile !== isMobile) {
           if (isMobile) {
-            tree.style.display = "none";
+            hideTree();
             toggleTreeButton.style.display = "";
             this.classList.add("mobile");
           } else {
-            tree.style.display = "";
+            showTree();
             toggleTreeButton.style.display = "none";
             this.classList.remove("mobile");
           }
@@ -192,6 +203,19 @@ const PRESERVE_INDENT_IGNORE_LIST: Record<string, true | undefined> = {
         if (isMobile && this.clientWidth - (tree.offsetLeft + tree.clientWidth) <= 40) {
           this.classList.add("full-width-tree");
         }
+
+        // Hide tree on click outside
+        document.addEventListener("click", (e) => {
+          if (
+            isMobile &&
+            e.target instanceof Element &&
+            isTreeShown() &&
+            !isChildOfOrEqual(e.target, tree) &&
+            !isChildOfOrEqual(e.target, toggleTreeButton)
+          ) {
+            hideTree();
+          }
+        });
       };
 
       const observer = new ResizeObserver(onResize);
