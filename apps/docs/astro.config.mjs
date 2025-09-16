@@ -4,16 +4,16 @@ import starlight from "@astrojs/starlight";
 import vue from "@astrojs/vue";
 import react from "@astrojs/react";
 import { createStarlightTypeDocPlugin } from "starlight-typedoc";
-import {defaultHandlers} from "mdast-util-to-hast"
+import { defaultHandlers } from "mdast-util-to-hast";
 import { prefixUrl } from "./src/utils/prefixUrl.mjs";
 
 const [loaderTypeDoc, loaderTypeDocGroup] = createStarlightTypeDocPlugin();
 const [vanillaTypeDoc, vanillaTypeDocGroup] = createStarlightTypeDocPlugin();
 
-let baseUrl = process.env.DOCS_BASE_URL
+let baseUrl = process.env.DOCS_BASE_URL;
 
 if (baseUrl && !baseUrl?.endsWith("/")) {
-  baseUrl += "/"
+  baseUrl += "/";
 }
 
 const frameworks = ["React", "Vue"];
@@ -118,13 +118,22 @@ export default defineConfig({
   markdown: {
     remarkRehype: {
       handlers: {
-        // Append base URL to markdown links
         link: (state, node) => {
+          // Add base URL to markdown links
+
           if (baseUrl && node.url) {
             node.url = prefixUrl(baseUrl, node.url);
           }
 
-          return defaultHandlers.link(state, node);
+          const htmlLink = defaultHandlers.link(state, node);
+
+          // Make external links open in a new tab
+
+          if (node.url && (node.url.startsWith("http://") || node.url.startsWith("https://"))) {
+            htmlLink.properties.target = "_blank";
+          }
+
+          return htmlLink;
         },
       },
     },
