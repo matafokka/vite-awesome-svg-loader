@@ -42,7 +42,7 @@ export default function App() {
         <div
           dangerouslySetInnerHTML={{ __html: imageSrc }}
           onClick={onClick}
-          className="image"
+          className="standalone-image"
         />
       </div>
     </Fragment>
