@@ -1,0 +1,76 @@
+---
+import MobileTableOfContents from "@astrojs/starlight/components/MobileTableOfContents.astro";
+---
+
+<div class="no-sidebar-toc-wrapper">
+  <MobileTableOfContents />
+</div>
+
+<style is:global lang="scss">
+  // Magic numbers are taken from the original markup
+
+  :root {
+    --sl-mobile-toc-height: 2rem;
+  }
+
+  mobile-starlight-toc {
+    // Hide current heading because the component can't initialize itself properly, so current heading will be empty
+    // after page load.
+    //
+    // Note: TOC couldn't have width: fit-content because menu width will jump while scrolling, so it should be hidden
+    // when moved to the header.
+    .display-current {
+      display: none;
+    }
+
+    summary {
+      width: fit-content;
+      margin: 0.5rem 1rem;
+      padding: 0;
+      border: unset;
+    }
+  }
+
+  // Move TOC to the header by removing the original component and hacking its duplicate into oblivion.
+
+  .no-sidebar-toc-wrapper {
+    display: block;
+
+    @media screen and (min-width: 50rem) {
+      display: none;
+    }
+
+    @media screen and (max-width: 19rem) {
+      display: none;
+    }
+
+    nav {
+      top: 10px; // Picked by hand, looks centered enough
+      left: 64px;
+      // Dropdown doesn't reserve space for the checkbox, so it can't have dynamic width. Make it 100%-ish instead.
+      right: 120px;
+      border: unset;
+    }
+
+    summary {
+      height: unset;
+      margin: unset;
+    }
+  }
+
+  .right-sidebar mobile-starlight-toc {
+    display: none;
+
+    @media screen and (min-width: 50rem) {
+      display: block;
+    }
+  }
+
+  // Fix content spacing
+
+  body > .page > .main-frame {
+    @media screen and (max-width: 50rem) {
+      padding-top: calc(var(--sl-nav-height));
+    }
+  }
+</style>

@@ -1,5 +1,8 @@
 ---
 import Logo from "@/assets/logo.svg";
+
+// Mobile TOC goes here because there's no slot after SiteTitle
+import MobileToc from "@/components/MobileToc.astro";
 ---
 
 <a
@@ -8,6 +11,8 @@ import Logo from "@/assets/logo.svg";
 >
   <Logo class="logo" />
 </a>
+
+<MobileToc />
 
 <style lang="scss">
   a {
