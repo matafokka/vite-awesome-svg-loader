@@ -102,6 +102,7 @@ export default defineConfig({
           entryPoints: ["../../packages/loader/src/index.ts"],
           tsconfig: "../../packages/loader/tsconfig.json",
           sidebar: { label: "Loader API reference", collapsed: true },
+          pagination: true,
         }),
 
         vanillaTypeDoc({
@@ -109,6 +110,7 @@ export default defineConfig({
           entryPoints: ["../../packages/vanilla-integration/src/index.ts"],
           tsconfig: "../../packages/vanilla-integration/tsconfig.json",
           sidebar: { label: "API reference", collapsed: true },
+          pagination: true,
         }),
       ],
     }),
