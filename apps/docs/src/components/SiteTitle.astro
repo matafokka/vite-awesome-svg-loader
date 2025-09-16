@@ -1,8 +1,11 @@
 ---
-import Logo from "@/assets/logo.svg"
+import Logo from "@/assets/logo.svg";
 ---
 
-<a href="/" title="Home">
+<a
+  href={Astro.locals.starlightRoute.siteTitleHref}
+  title="Home"
+>
   <Logo class="logo" />
 </a>
 
