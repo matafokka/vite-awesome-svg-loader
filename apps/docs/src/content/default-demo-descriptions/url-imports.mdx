@@ -3,17 +3,17 @@ title: T
 ---
 
 SVGs may be imported as URLs and passed to the standard `<img>` element
-(see [main article](/guides/svg-loading-methods/#link-as-an-image)). This is done by appending `?url` to the import:
+(see [main article](./guides/svg-loading-methods/#link-as-an-image)). This is done by appending `?url` to the import:
 
 ```ts
 import imageUrl from "./image.svg?url";
 ```
 
-A line width of an image may be [preserved](/guides/available-transformations/#preserve-line-width)
+A line width of an image may be [preserved](./guides/available-transformations/#preserve-line-width)
 by adding a `preserve-line-width` parameter to the import query:
 
 ```ts
 import imageUrl from "./image.svg?url&preserve-line-width";
 ```
 
-Other transformations may be applied via [configuration](/loader-api-reference/interfaces/svgloaderoptions).
+Other transformations may be applied via [configuration](./loader-api-reference/interfaces/svgloaderoptions).

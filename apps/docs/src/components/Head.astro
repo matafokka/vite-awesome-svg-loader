@@ -1,0 +1,10 @@
+---
+import Default from "@astrojs/starlight/components/Head.astro";
+import { BASE_URL } from "@/const";
+---
+
+<base href={BASE_URL} />
+
+<Default {...Astro.props}>
+  <slot />
+</Default>
