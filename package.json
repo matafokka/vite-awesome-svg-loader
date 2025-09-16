@@ -5,7 +5,7 @@
     "build:packages": "npm run turbo-run -- build --filter ./packages/*",
     "build:apps": "npm run turbo-run -- build --filter ./apps/*",
     "build:docs": "npm run turbo-run -- build --filter docs",
-    "build:demos": "npm run turbo-run -- build --filter ./demos/*",
+    "build:demos": "npm run turbo-run -- build --filter ./demos/*/*",
     "predev": "npm run build:packages",
     "dev": "turbo run dev",
     "dev:docs:standalone": "turbo run dev --filter docs",
