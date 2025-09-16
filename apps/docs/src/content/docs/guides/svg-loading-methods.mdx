@@ -23,7 +23,6 @@ document.getElementById("image-container")!.innerHtml = imgSrc;
 ```
 
 1. **Advantages:**
-
    1. Simplicity.
    1. Great customization. This is actually the only option, if you need to manipulate the content,
       or need more than just CSS styles.
@@ -72,7 +71,6 @@ document.body.appendChild(img);
 ```
 
 1. **Advantages:**
-
    1. Simplicity.
    1. Great performance thanks to instancing.
 
@@ -81,9 +79,10 @@ document.body.appendChild(img);
       The only thing you can do is [CSS filters](https://developer.mozilla.org/en-US/docs/Web/CSS/filter)
       (see warning above!).
 
-## Symbols
+## SVG Symbols (sprites)
 
-Put all images into a single `<svg>` node and wrap each image with a `<symbol>` element.
+Put all images into a single `<svg>` node (sprite sheet) and wrap each image with a `<symbol>` element.
+This improves performance by reducing DOM tree size and enabling instancing.
 
 ```html
 <!-- Create sprite sheet -->
@@ -115,8 +114,7 @@ and passing the result to the `<SvgImage>` or `<Svg Icon>` component provided by
 See examples for your framework.
 
 1. **Advantages:**
-
-   1. Performance is way better than when using whole SVG each time.
+   1. Performance is way better than when using whole SVG each time thanks to smaller DOM tree size and instancing.
    1. Images can be customized via CSS, for example, you can set custom stroke and fill colors.
 
 1. **Disadvantages:**
@@ -158,7 +156,6 @@ for (const uri of uris) {
 ```
 
 1. **Advantages:**
-
    1. Great performance, although a tiny bit worse than when linking an image.
 
 2. **Disadvantages:**
