@@ -3,9 +3,10 @@
  *
  * **Paths**
  *
- * Both file name and its path relative to the project's root with leading slash will be compared.
+ * If an option accepts a path, both file name and the path relative to the project's root with leading slash are
+ * compared against the matchers.
  *
- * For example, if you have a file `/src/assets/icons/menu.svg` then following strings will be checked:
+ * For example, for a file `/src/assets/icons/menu.svg` following strings will be compared:
  *
  * 1. `/assets/icons/menu.svg` - note that it doesn't start with `/src`
  * 2. `menu.svg`
@@ -14,20 +15,18 @@
  *
  * Examples:
  *
- * ```js
- * plugins: [
- *   viteReBinSvgLoader({
- *     preserveLineWidthList: [
- *       // Recommended formats:
- *       /\/img\/icons/, // Matches all paths containing "/img/line-art/"
- *       "/assets/img/logo.svg", // Matches single file "/assets/img/logo.svg".
+ * ```ts
+ * viteAwesomeSvgLoader({
+ *   preserveLineWidthList: [
+ *     // Recommended formats:
+ *     new RegExp("\\/img\\/icons"), // Matches all paths containing "/img/line-art/"
+ *     "/assets/img/logo.svg", // Matches single file "/assets/img/logo.svg"
  *
- *       // Not recommended formats:
- *       "splash.svg", // Matches all files named "splash.svg"
- *       /\/icons\/plus\.svg/, // Matches all paths containing "/icons/plus.svg"
- *     ],
- *   }),
- * ],
+ *     // Not recommended formats:
+ *     "splash.svg", // Matches all files named "splash.svg"
+ *     new RegExp("\\/icons\\/plus\\.svg", // Matches all paths containing "/icons/plus.svg"
+ *   ],
+ * })
  * ```
  */
 export interface SvgLoaderOptions {
@@ -48,7 +47,7 @@ export interface SvgLoaderOptions {
    * @example
    *
    * viteAwesomeSvgLoader({
-   *   preserveLineWidthList: [/some\/pattern\//, "some/directory", "some/file.svg"],
+   *   preserveLineWidthList: [new RegExp("some\\/pattern\\/"), "some/directory", "some/file.svg"],
    * })
    */
   preserveLineWidthList?: (string | RegExp)[];
@@ -59,7 +58,7 @@ export interface SvgLoaderOptions {
    * @example
    *
    * viteAwesomeSvgLoader({
-   *   skipPreserveLineWidthList: [/some\/pattern\//, "some/directory", "some/file.svg"],
+   *   skipPreserveLineWidthList: [new RegExp("some\\/pattern\\/"), "some/directory", "some/file.svg"],
    * })
    */
   skipPreserveLineWidthList?: (string | RegExp)[];
@@ -119,7 +118,7 @@ export interface SvgLoaderOptions {
    *     "some-file.svg",
    *
    *     // Regexes that are checked against whole path and file name with extension
-   *     /some\/pattern\//,
+   *     new RegExp("some\\/pattern\\/"),
    *
    *     // Map of color replacements. Key is an original color, value is its replacement. Both can be any values:
    *     // HEX, name, rgb() or arbitrary custom values. Applied to all files.
@@ -155,7 +154,7 @@ export interface SvgLoaderOptions {
    * @example
    *
    * viteAwesomeSvgLoader({
-   *   skipReplaceColorsList: [/some\/pattern\//, "some/directory", "some/file.svg"],
+   *   skipReplaceColorsList: [new RegExp("some\\/pattern\\/"), "some/directory", "some/file.svg"],
    * })
    */
   skipReplaceColorsList?: (string | RegExp)[];
@@ -199,7 +198,7 @@ export interface SvgLoaderOptions {
    * @example
    *
    * viteAwesomeSvgLoader({
-   *   skipTransformsList: [/some\/pattern\//, "some/directory", "some/file.svg"],
+   *   skipTransformsList: [new RegExp("some\\/pattern\\/"), "some/directory", "some/file.svg"],
    * })
    */
   skipTransformsList?: (string | RegExp)[];
@@ -239,7 +238,7 @@ export interface SvgLoaderOptions {
    * @example
    *
    * viteAwesomeSvgLoader({
-   *   skipFilesList: [/some\/pattern\//, "some/directory", "some/file.svg"],
+   *   skipFilesList: [new RegExp("some\\/pattern\\/"), "some/directory", "some/file.svg"],
    * })
    */
   skipFilesList?: (string | RegExp)[];
@@ -361,7 +360,7 @@ export type ColorMap = Record<string, string>;
  *
  * @example
  *
- * {
+ * const map = {
  *   // Optional list of files to apply replacements to.
  *   files: ["my-file.svg", /icon\-*.\.svg/],
  *
