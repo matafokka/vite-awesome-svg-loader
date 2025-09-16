@@ -67,8 +67,7 @@ export default defineConfig({
           autogenerate: { directory: "additional-information" },
         },
 
-        // FIXME: This should point to API reference, not the other way around
-        { label: "Configuration options", slug: "loader-api-reference/interfaces/svgloaderoptions" },
+        { label: "Configuration options", link: "/configuration" },
 
         loaderTypeDocGroup,
 
@@ -117,6 +116,9 @@ export default defineConfig({
     vue(),
     react(),
   ],
+  redirects: {
+    "/configuration": "/loader-api-reference/interfaces/svgloaderoptions/",
+  },
   markdown: {
     remarkRehype: {
       handlers: {
