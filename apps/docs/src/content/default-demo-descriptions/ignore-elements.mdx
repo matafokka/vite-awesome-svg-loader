@@ -14,15 +14,15 @@ Think of the other ways to solve your problem. See the demos for the tips.
 </Aside>
 
 It's possible to skip transforms on per-element or per-element-per-file basis via following
-[configuration options](./loader-api-reference/interfaces/svgloaderoptions):
+[configuration options](/loader-api-reference/interfaces/svgloaderoptions):
 
-1. [skipPreserveLineWidthSelectors](./loader-api-reference/interfaces/svgloaderoptions/#skiptransformsselectors) -
+1. [skipPreserveLineWidthSelectors](/loader-api-reference/interfaces/svgloaderoptions/#skiptransformsselectors) -
 a list of selectors to skip while preserving line width.
 
-1. <Badge variant="caution" text="Build time impact" /> [skipReplaceColorsSelectors](./loader-api-reference/interfaces/svgloaderoptions/#skipreplacecolorsselectors) -
+1. <Badge variant="caution" text="Build time impact" /> [skipReplaceColorsSelectors](/loader-api-reference/interfaces/svgloaderoptions/#skipreplacecolorsselectors) -
 a list of selectors to skip while replacing colors.
 
-1. <Badge variant="caution" text="Build time impact" /> [skipTransformsSelectors](./loader-api-reference/interfaces/svgloaderoptions/#skiptransformsselectors)
+1. <Badge variant="caution" text="Build time impact" /> [skipTransformsSelectors](/loader-api-reference/interfaces/svgloaderoptions/#skiptransformsselectors)
 - a list of selectors to skip while transforming.
 
 The demo below utilizes all these options. Make sure to check out `vite.config.ts` and `src/assets/ignore-elements.svg`

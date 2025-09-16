@@ -4,15 +4,22 @@ import starlight from "@astrojs/starlight";
 import vue from "@astrojs/vue";
 import react from "@astrojs/react";
 import { createStarlightTypeDocPlugin } from "starlight-typedoc";
+import {defaultHandlers} from "mdast-util-to-hast"
 
 const [loaderTypeDoc, loaderTypeDocGroup] = createStarlightTypeDocPlugin();
 const [vanillaTypeDoc, vanillaTypeDocGroup] = createStarlightTypeDocPlugin();
+
+let baseUrl = process.env.DOCS_BASE_URL
+
+if (baseUrl && !baseUrl?.endsWith("/")) {
+  baseUrl += "/"
+}
 
 const frameworks = ["React", "Vue"];
 
 // https://astro.build/config
 export default defineConfig({
-  base: process.env.DOCS_BASE_URL,
+  base: baseUrl,
   integrations: [
     starlight({
       title: "Vite Awesome SVG Loader",
@@ -44,7 +51,6 @@ export default defineConfig({
       },
 
       components: {
-        Head: "./src/components/Head.astro",
         SiteTitle: "./src/components/SiteTitle.astro",
       },
 
@@ -110,6 +116,20 @@ export default defineConfig({
     vue(),
     react(),
   ],
+  markdown: {
+    remarkRehype: {
+      handlers: {
+        // Append base URL to markdown links
+        link: (state, node) => {
+          if (baseUrl && node.url?.startsWith("/")) {
+            node.url = baseUrl + node.url.substring(1);
+          }
+
+          return defaultHandlers.link(state, node);
+        },
+      },
+    },
+  },
   vite: {
     build: {
       assetsInlineLimit: 1,

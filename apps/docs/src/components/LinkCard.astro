@@ -1,0 +1,17 @@
+---
+import { LinkCard as Default } from "@astrojs/starlight/components";
+import { BASE_URL } from "@/const";
+
+type Props = Parameters<typeof Default>[0];
+
+let href = Astro.props.href || "";
+
+if (typeof href === "string" && href.startsWith("/")) {
+  href = BASE_URL + href.substring(1);
+}
+---
+
+<Default
+  {...Astro.props}
+  href={href}
+/>

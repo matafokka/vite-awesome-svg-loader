@@ -13,7 +13,7 @@ These are possible loading methods and their tradeoffs
 Put whole SVG source code into the DOM every time image is displayed. This is the most popular method.
 
 This is implemented by importing images with `?source` query parameter _(or `source`
-[default import option](./loader-api-reference/interfaces/svgloaderoptions/#defaultimport))_
+[default import option](/loader-api-reference/interfaces/svgloaderoptions/#defaultimport))_
 and inserting the result directly into the DOM:
 
 ```ts
@@ -61,7 +61,7 @@ Or load via `background-image` CSS property:
 ```
 
 This is implemented via `?url` import and `url`
-[default import option](./loader-api-reference/interfaces/svgloaderoptions/#defaultimport):
+[default import option](/loader-api-reference/interfaces/svgloaderoptions/#defaultimport):
 
 ```ts
 import imgUrl from "./image.svg?url";
@@ -110,7 +110,7 @@ Put all images into a single `<svg>` node and wrap each image with a `<symbol>` 
 ```
 
 This is implemented by importing images with `?source` query parameter _(or `source`
-[default import option](./loader-api-reference/interfaces/svgloaderoptions/#defaultimport))_
+[default import option](/loader-api-reference/interfaces/svgloaderoptions/#defaultimport))_
 and passing the result to the `<SvgImage>` or `<Svg Icon>` component provided by the integrations.
 See examples for your framework.
 
@@ -142,7 +142,7 @@ Or load via `background-image` CSS property:
 ```
 
 Implemented via `?source-data-uri` and `base64-data-uri` imports, `source-data-uri` and `base64-data-uri`
-[default import options](./loader-api-reference/interfaces/svgloaderoptions/#defaultimport).
+[default import options](/loader-api-reference/interfaces/svgloaderoptions/#defaultimport).
 
 ```ts
 import srcDataUri from "./image.svg?source-data-uri";

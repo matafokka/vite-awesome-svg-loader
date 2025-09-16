@@ -27,7 +27,10 @@ This pattern avoids necessity for the running multiple web servers.
 
 ## Caveats
 
-1. All relative internal Markdown links are treated as absolute. This is because Starlight doesn't add base path to
-the absolute links, so it's impossible to deploy to a subpath. It's been decided to adhere to the default Starlight's
-behavior (at least for now) and resolve the problem by adding a `<base>` element to the `<head>` and using relative
-paths in the Markdown.
+### Starlight doesn't add base path to the absolute links
+
+In the Markdown, this is solved by prepending a base path via a `remark-rehype` handler.
+
+The default Starlight components should be wrapped to prepend a base path to the links.
+
+Custom components should account for this behavior too.

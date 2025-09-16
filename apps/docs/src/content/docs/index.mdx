@@ -14,28 +14,29 @@ sidebar:
   label: Home
 ---
 
-import { CardGrid, LinkCard, Aside } from "@astrojs/starlight/components";
+import LinkCard from "@/components/LinkCard.astro";
+import { CardGrid, Aside } from "@astrojs/starlight/components";
 
 ## What is this?
 
 This is a Vite plugin that:
 
-1. Can [import SVGs](./guides/svg-loading-methods/) as:
+1. Can [import SVGs](/guides/svg-loading-methods/) as:
    1. Source code (default import type).
    1. URL to a static asset.
    1. Source code [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
    1. Source code base64.
    1. Source code base64 [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
-1. Can [preserve line width](./guides/available-transformations/#preserve-line-width), i.e. make icons and line art
+1. Can [preserve line width](/guides/available-transformations/#preserve-line-width), i.e. make icons and line art
 have same line width when scaling.
-1. Can replace colors with [currentColor](./guides/available-transformations/#replace-all-colors-with-currentcolor-value)
-or a [custom color via configuration](./guides/available-transformations/#replace-colors-with-custom-values).
+1. Can replace colors with [currentColor](/guides/available-transformations/#replace-all-colors-with-currentcolor-value)
+or a [custom color via configuration](/guides/available-transformations/#replace-colors-with-custom-values).
 1. Automatically minimizes your SVGs with [SVGO](https://github.com/svg/svgo).
-1. Allows you to create [SVG sprites](./guides/svg-loading-methods/#symbols) using provided integrations.
+1. Allows you to create [SVG sprites](/guides/svg-loading-methods/#symbols) using provided integrations.
 
 `vite-awesome-svg-loader` is framework-agnostic. All integrations are done as subpath imports
 (for example, `vite-awesome-svg-loader/vue-integration`). This means that you'll get only what you need in your
-app bundle. This also means that you can [develop your own integration](./guides/custom-integrations)
+app bundle. This also means that you can [develop your own integration](/guides/custom-integrations)
 using `vite-awesome-svg-loader/integration-utils` import.
 
 ## Great! How do I use it?
