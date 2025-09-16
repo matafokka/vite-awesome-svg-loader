@@ -117,7 +117,7 @@ export default defineConfig({
     react(),
   ],
   redirects: {
-    "/configuration": "/loader-api-reference/interfaces/svgloaderoptions/",
+    "/configuration": (baseUrl || "/") + "loader-api-reference/interfaces/svgloaderoptions/",
   },
   markdown: {
     remarkRehype: {
