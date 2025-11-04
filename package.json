@@ -54,7 +54,8 @@
     "apps/*",
     "packages/*",
     "scripts/*",
-    "demos/*/*"
+    "demos/*/*",
+    "demos/all"
   ],
   "dependencies": {
     "debounce": "^1.2.1",

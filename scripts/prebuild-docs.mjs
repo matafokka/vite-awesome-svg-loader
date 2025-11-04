@@ -1,14 +1,15 @@
 import { fileURLToPath } from "url";
 import path from "path";
 import fse from "fs-extra";
-import docsPackageJson from "../apps/docs/package.json" with { type: "json" };
+import allDemosPackageJson from "../demos/all/package.json" with { type: "json" };
 
 // Problem:
 //   Turborepo provides no way to build arbitrary projects via wildcards or regexes before another project is built.
 //   See related issue: https://github.com/vercel/turborepo/issues/1771
 //
 // Solution:
-//   Before running Turborepo, update package.json with the required dependencies.
+//   Create a "metapackage" for the demo that depends on all demos. Before running Turborepo, update metapackage's
+//   package.json with the required dependencies.
 //
 // This script solves the listed problem.
 
@@ -16,19 +17,26 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoBaseDir = path.join(__dirname, "..");
 const demosDir = path.join(repoBaseDir, "demos");
 
+const DEMOS_TO_IGNORE = { all: true }
+
 export default async function main() {
-  console.log("Updating docs package.json...");
+  const packageJsonPath = path.join(demosDir, "all", "package.json");
+
+  console.log(`Updating "${packageJsonPath}"...`);
+
   const frameworks = fse.readdirSync(demosDir);
   const promises = [];
 
   for (const framework of frameworks) {
+    if (DEMOS_TO_IGNORE[framework]) {
+      continue
+    }
+
     promises.push(processFramework(framework));
   }
 
   await Promise.all(promises);
-
-  const packageJsonPath = path.join(repoBaseDir, "apps", "docs", "package.json");
-  await fse.writeFile(packageJsonPath, JSON.stringify(docsPackageJson, undefined, 2));
+  await fse.writeFile(packageJsonPath, JSON.stringify(allDemosPackageJson, undefined, 2));
 }
 
 /** @param {string} framework */
@@ -68,5 +76,5 @@ async function processDemo(demoPath) {
     throw new Error(`"${demoPath}" lacks "name" property`);
   }
 
-  docsPackageJson.dependencies[demoName] = "*";
+  allDemosPackageJson.dependencies[demoName] = "*";
 }
