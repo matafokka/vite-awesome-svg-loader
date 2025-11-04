@@ -4,53 +4,62 @@ demo-checkbox {
   line-height: normal;
 
   label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    display: block;
     width: fit-content;
     user-select: none;
     cursor: pointer;
 
+    $size: 22px;
+    $padding: 8px;
     $input: 'input[type="checkbox"]';
+    $check-mark: "span::before";
 
     #{$input} {
-      $size: 22px;
-      $padding: 8px;
-
       width: 0;
       height: 0;
+      opacity: 0;
       display: flex;
       align-items: center;
       margin-right: $size;
+    }
 
-      &::after {
-        content: "✔";
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: $size;
-        width: $size;
-        height: $size;
-        font-size: $size - $padding;
-        line-height: $size;
-        border-radius: 6px;
-        border: 2px solid var(--sl-color-text-accent);
-        background-color: var(--sl-color-bg);
-        color: transparent;
-        cursor: pointer;
-        font-family: initial;
-      }
+    #{$check-mark} {
+      content: "✔";
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: $size;
+      width: $size;
+      height: $size;
+      font-size: $size - $padding;
+      line-height: $size;
+      border-radius: 6px;
+      border: 2px solid var(--sl-color-text-accent);
+      background-color: var(--sl-color-bg);
+      color: transparent;
+      cursor: pointer;
+      font-family: initial;
+      font-weight: initial;
+    }
 
-      &:checked::after {
-        color: var(--sl-color-text-accent);
+    #{$input}:checked + #{$check-mark} {
+      color: var(--sl-color-text-accent);
+    }
+
+    #{$input}:focus-visible {
+      & + #{$check-mark} {
+        outline: 2px solid var(--sl-color-text-accent);
       }
     }
 
-    &:hover #{$input}::after {
+    &:hover #{$check-mark} {
       background-color: var(--sl-color-accent-low);
     }
 
     span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-weight: 600;
     }
   }
