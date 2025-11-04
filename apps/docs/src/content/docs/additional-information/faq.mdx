@@ -10,10 +10,12 @@ Yes, load an image as a source code and insert that code into the DOM like shown
 
 ## Should I always import my images like shown in the examples? Can I simplify this?
 
-Yes, use `import.meta.glob()` like shown in the demos.
+Use `import.meta.glob()` to import images in bulk. See "Named icons" demos for your framework for the details.
 
-Such components are not present in the integrations because glob imports do not support variable interpolation.
-See: https://vitejs.dev/guide/features#glob-import
+"Named image/icon" components are not present in the integrations because glob imports do not support variable
+interpolation.
+
+For more detail on glob import see: https://vitejs.dev/guide/features#glob-import
 
 ## Does it support legacy browsers?
 

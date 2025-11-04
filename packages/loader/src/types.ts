@@ -165,8 +165,7 @@ export interface SvgLoaderOptions {
    *
    * Can be a list of selectors or selectors-per-files specifiers.
    *
-   * **You probably don't need this option.** Think of other ways to solve your problem. "Recipes" section
-   * in the demos may help you.
+   * **You probably don't need this option.** Think about other solutions to your problem. See the demos for the tips.
    *
    * **Heavy usage may significantly slow down build time.** Limit selectors to specific files to improve performance.
    *
@@ -208,8 +207,7 @@ export interface SvgLoaderOptions {
    *
    * Can be a list of selectors or selectors-per-files specifiers.
    *
-   * **You probably don't need this option.** Think of other ways to solve your problem. "Recipes" section
-   * in the demos may help you.
+   * **You probably don't need this option.** Think about other solutions to your problem. See the demos for the tips.
    *
    * **Heavy usage may significantly slow down build time.** Limit selectors to specific files to improve performance.
    *

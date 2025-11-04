@@ -16,14 +16,17 @@ The documentation is built with [Astro Starlight](https://starlight.astro.build/
       - `styles` - website styles.
    - `utils` - various utilities.
 
+The website renders demos directly into the docs pages.
+
 ## Build process
 
-This website renders demos directly into the docs pages. Dependencies in `package.json` are built when
-`npm run built` is ran. It is not required for the `dev` mode because imports are handled by globs.
-Demos themselves are built in [Vite library mode](https://vite.dev/guide/build.html#library-mode) and rebuilt whenever
-a change occurs.
+The docs website depends on `all-demos` package which is "metapackage" for all demos.
 
-This pattern avoids necessity for the running multiple web servers.
+The `package.json` file of `all-demos` package is generated before any command is executed.
+This is required for Turborepo to build the demos before building the docs website.
+
+Demos themselves are built in [Vite library mode](https://vite.dev/guide/build.html#library-mode) and rebuilt whenever
+a change occurs. This avoids the necessity for running multiple Vite servers (one for each demo).
 
 ## Caveats
 
