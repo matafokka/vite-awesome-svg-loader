@@ -62,6 +62,14 @@
 
 // Starlight markup
 
+html {
+  overflow-y: scroll; // So no blank space would be visible
+}
+
+#starlight__sidebar {
+  scrollbar-gutter: stable; // Blank space looks ok. overflow-y: scroll is ugly here.
+}
+
 .main-pane {
   flex: 1;
 
