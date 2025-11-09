@@ -6,15 +6,29 @@ import react from "@astrojs/react";
 import { createStarlightTypeDocPlugin } from "starlight-typedoc";
 import { defaultHandlers } from "mdast-util-to-hast";
 import { prefixUrl } from "./src/utils/prefixUrl.mjs";
+import packageJson from "../../packages/vite-awesome-svg-loader/package.json";
 
 const [loaderTypeDoc, loaderTypeDocGroup] = createStarlightTypeDocPlugin();
 const [vanillaTypeDoc, vanillaTypeDocGroup] = createStarlightTypeDocPlugin();
 
 let baseUrl = process.env.DOCS_BASE_URL;
 
-if (baseUrl && !baseUrl?.endsWith("/")) {
-  baseUrl += "/";
+if (baseUrl) {
+  baseUrl = addTrailingSlash(baseUrl);
 }
+
+// TODO: Replace with env variable? Astro config should also use that variable.
+const host = addTrailingSlash(packageJson.homepage || "/");
+const title = "Vite Awesome SVG Loader";
+
+const description = [
+  "Vite Awesome SVG Loader documentation website. This loader:",
+  "imports SVGs as source code, base64 and data URI;",
+  "preserves stroke width;",
+  "replaces colors with currentColor or custom colors;",
+  "optimizes SVGs with SVGO;",
+  "creates SVG sprites.",
+].join(" ");
 
 const frameworks = ["React", "Vue"];
 
@@ -23,20 +37,21 @@ export default defineConfig({
   base: baseUrl,
   integrations: [
     starlight({
-      title: "Vite Awesome SVG Loader",
+      title,
+      description,
       customCss: ["./src/styles/global.scss"],
       favicon: "/favicon.svg",
 
-      head: ["png", "ico"].map((ext) => {
-        return {
-          tag: "link",
-          attrs: {
-            rel: "icon",
-            href: `/favicon.${ext}`,
-            sizes: "192x192",
-          },
-        };
-      }),
+      head: [
+        ...headFavicon(),
+        ...headOgImage(),
+        ...headMetaWithNameList(
+          ["robots", "all"],
+          ["twitter:card", "summary"],
+          ["twitter:title", title],
+          ["twitter:description", description],
+        ),
+      ],
 
       logo: {
         src: "./src/assets/logo.svg",
@@ -147,3 +162,80 @@ export default defineConfig({
     },
   },
 });
+
+/**
+ * Generates meta tag: `<meta property="..." content="..." />`
+ * @param {string} property Property name
+ * @param {string} content Property content (value)
+ * @returns Meta element
+ */
+function headMetaWithContent(property, content) {
+  return {
+    /** @type {'meta'} */
+    tag: "meta",
+    attrs: { property, content },
+  };
+}
+
+/**
+ * Generates meta tag: `<meta name="..." content="..." />`
+ * @param {string} name Property name
+ * @param {string} content Property content (value)
+ * @returns Meta element
+ */
+function headMetaWithName(name, content) {
+  return {
+    /** @type {'meta'} */
+    tag: "meta",
+    attrs: { name, content },
+  };
+}
+
+/**
+ * {@link headMetaWithName} but for a list of entries
+ * @param  {...[string, string]} entries `[name, content]` pairs
+ */
+function headMetaWithNameList(...entries) {
+  return entries.map((entry) => headMetaWithName(...entry));
+}
+
+function headOgImage() {
+  const url = host + "splash.png";
+
+  /** @type {ReturnType<typeof headMetaWithContent>[]} */
+  const meta = [];
+
+  for (const graph of ["og", "twitter"]) {
+    const prefix = graph + ":image";
+    /** @type {typeof headMetaWithContent} */
+    const headMetaWithPrefix = (param, content) => headMetaWithContent(prefix + ":" + param, content);
+
+    meta.push(
+      headMetaWithContent(prefix, url),
+      headMetaWithPrefix("type", "image/png"),
+      headMetaWithPrefix("width", "1200"),
+      headMetaWithPrefix("height", "600"),
+    );
+  }
+
+  return meta;
+}
+
+function headFavicon() {
+  return ["png", "ico"].map((ext) => ({
+    /** @type {"link"} */
+    tag: "link",
+    attrs: {
+      rel: "icon",
+      href: `/favicon.${ext}`,
+      sizes: "192x192",
+    },
+  }));
+}
+
+/**
+ * @param {string} str String to add slash to
+ */
+function addTrailingSlash(str) {
+  return str.endsWith("/") ? str : str + "/";
+}
