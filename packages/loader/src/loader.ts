@@ -7,7 +7,7 @@ import { XastChild } from "svgo/lib/types";
 // @ts-expect-error
 import { querySelectorAll } from "svgo/lib/xast.js";
 import MurmurHash3 from "imurmurhash";
-import { ColorMap, ColorMapPerFiles, ImportType, SvgLoaderOptions } from "./types";
+import { ColorMap, ColorMapPerFiles, SvgLoaderOptions } from "./types";
 import {
   escapeBackticks,
   matchesPath,
@@ -92,7 +92,6 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
   let isLibraryMode = false;
   let root = "";
   let base = "";
-  let oldViteRoot = "";
 
   const replaceColorsList = options.setCurrentColorList || mergedOptions.replaceColorsList;
 
@@ -147,10 +146,9 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
     },
 
     configResolved(config) {
-      isLibraryMode = !!config.build.lib
+      isLibraryMode = !!config.build.lib;
       root = normalizeBaseDir(config.root);
       base = normalizeBaseDir(config.base);
-      oldViteRoot = root[1] === ":" ? root.substring(2) : root;
     },
 
     configureServer(server) {
@@ -161,35 +159,6 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
       });
     },
 
-    resolveId(source, importer) {
-      if (source.indexOf(".svg") === -1) {
-        return null;
-      }
-
-      // Resolve ID to an absolute path
-
-      // Vite 2.0.0-ish compatibility. It can pass following strings:
-      // 1. /@fs/<rest of the path from root>
-      // 1. /<fs root, i.e. slash or Windows drive letter (C:, D:, etc)>/<rest of the path>
-      // 1. /<relative path>
-      // Newer versions pass either absolute path (with a drive letter on Windows) or relative path.
-
-      if (source.startsWith(oldViteRoot)) {
-        return root + source.substring(oldViteRoot.length);
-      }
-
-      if (!source.startsWith(".")) {
-        return source;
-      }
-
-      if (!importer) {
-        return null;
-      }
-
-      // When dynamic imports are used, Vite doesn't pass absolute path for some reason
-      return path.join(path.dirname(importer), source);
-    },
-
     load(id: string) {
       const ext = ".svg";
       const indexOfSvg = id.indexOf(ext);
@@ -198,7 +167,7 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
         return null;
       }
 
-      // Normalize file path
+      // Normalize file path. Vite seems to always pass absolute path, but let's be safe.
 
       let relPathWithSlash = id.substring(0, indexOfSvg + ext.length).replaceAll("\\", "/");
 
@@ -394,7 +363,7 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
       }
 
       if (isLibraryMode && importType === "url" && mergedOptions.urlImportsInLibraryMode !== "emit-files") {
-        importType = mergedOptions.urlImportsInLibraryMode
+        importType = mergedOptions.urlImportsInLibraryMode;
       }
 
       /**
