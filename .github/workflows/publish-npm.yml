@@ -14,11 +14,11 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 24
           registry-url: https://registry.npmjs.org/
-      - run: npm install
+      - run: npm install --verbose
       - run: npm run build
-      - run: npm publish
-        working-directory: ./packages/vite-awesome-svg-loader/dist
+      - run: npm publish --verbose
+        working-directory: packages/vite-awesome-svg-loader/dist
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
