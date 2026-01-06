@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, type SVGAttributes } from "react";
-import { SvgImageProps as SvgImagePropsRaw } from "types";
-import { onSrcUpdate as onSrcUpdateRaw, onUnmount } from "integration-utils";
+import { onSrcUpdate as onSrcUpdateRaw, onUnmount, SvgImageProps as SvgImagePropsRaw } from "integration-utils";
 
 export interface SvgImageProps extends SVGAttributes<SVGElement>, SvgImagePropsRaw {}
 

@@ -3,16 +3,16 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
-import dts from "vite-plugin-dts";
+import dts from "unplugin-dts/vite";
+import pkgJson from "./package.json";
+import rootPkgJson from "../../package.json";
 
 export default defineConfig({
   plugins: [
     vue(),
     cssInjectedByJsPlugin(),
-    dts({
-      rollupTypes: true,
-      bundledPackages: ["types"],
-    }),
+    // externalizeDeps({useFile: join(process.cwd(), 'package.json')}),
+    dts({ tsconfigPath: "./tsconfig.app.json", processor: "vue" }),
   ],
   resolve: {
     alias: {
@@ -29,7 +29,7 @@ export default defineConfig({
     },
 
     rollupOptions: {
-      external: ["vue"],
+      external: ["vue", ...Object.keys(pkgJson.dependencies), ...Object.keys(rootPkgJson.dependencies)],
       output: {
         globals: {
           vue: "Vue",

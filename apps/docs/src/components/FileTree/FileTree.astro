@@ -11,7 +11,7 @@ interface Props extends HTMLAttributes<"div"> {
   isRoot?: boolean;
 }
 
-const { isRoot: isRootRaw, tree, ...attrs } = Astro.props;
+const { isRoot: isRootRaw } = Astro.props;
 const classList = getClasses(Astro.props);
 
 const isRoot = isRootRaw ?? true;

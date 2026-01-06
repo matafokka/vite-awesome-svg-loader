@@ -1,0 +1,13 @@
+.demo-button {
+  padding: 4px 12px;
+  border-radius: 0.5rem;
+  color: var(--sl-color-text-invert);
+  background-color: var(--sl-color-text-accent);
+  border: none;
+  cursor: pointer;
+
+  &:disabled {
+    background-color: var(--sl-color-accent-low);
+    cursor: not-allowed;
+  }
+}

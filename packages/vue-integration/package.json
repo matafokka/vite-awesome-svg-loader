@@ -13,8 +13,7 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false"
   },
   "dependencies": {
-    "integration-utils": "*",
-    "types": "*"
+    "integration-utils": "*"
   },
   "devDependencies": {
     "@babel/types": "^7.23.0"

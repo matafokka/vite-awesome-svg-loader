@@ -1,0 +1,15 @@
+{
+  "extends": ["../../tsconfig.json"],
+  "compilerOptions": {
+    "types": ["node"],
+    "outDir": "./dist",
+    "module": "ESNext",
+    "target": "ES6",
+    "lib": ["ESNext"],
+    "esModuleInterop": true,
+    "emitDeclarationOnly": true,
+    "allowImportingTsExtensions": true
+  },
+  "include": ["./tsdown.config.mts", "src/*", "../../modules.d.ts"],
+  "exclude": ["node_modules"],
+}

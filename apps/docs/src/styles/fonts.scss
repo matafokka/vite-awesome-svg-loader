@@ -1,0 +1,37 @@
+@font-face {
+  font-family: "Roboto";
+  font-style: italic;
+  font-weight: 100 900;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(/fonts/roboto-italic-variable.ttf);
+}
+
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(/fonts/roboto-regular-variable.ttf);
+}
+
+@font-face {
+  font-family: "Roboto Static";
+  font-style: normal;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(/fonts/roboto-regular-static.ttf);
+}
+
+@font-face {
+  font-family: "Hack";
+  font-style: normal;
+  font-display: swap;
+  src: url(/fonts/hack.ttf);
+}
+
+:root {
+  --sl-font: Roboto, "Roboto Static", sans-serif;
+  --sl-font-mono: Hack, "Roboto Mono", "Roboto Mono Static", monospace;
+}

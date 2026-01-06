@@ -1,0 +1,30 @@
+---
+title: Other frameworks quick start guide
+tableOfContents: false
+sidebar:
+  order: 0
+  label: Quick start
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+You can integrate `vite-awesome-svg-loader` with any framework by using `vite-awesome-svg-loader/integration-utils`
+package. It provides two main functions:
+
+1. [onSrcUpdate](/other-frameworks/api-reference/functions/onsrcupdate/) - should be called when component is mounted, or source code is updated
+1. [onUnmount](/other-frameworks/api-reference/functions/onunmount/) - should be called when component is unmounted
+
+<Aside>
+  See [API reference](/other-frameworks/api-reference/) for all available symbols
+</Aside>
+
+Knowing that, use any existing integration as an example:
+
+1. [React](https://github.com/matafokka/vite-awesome-svg-loader/tree/main/packages/react-integration)
+1. [Vue](https://github.com/matafokka/vite-awesome-svg-loader/tree/main/packages/vue-integration)
+1. [Vanilla JS](https://github.com/matafokka/vite-awesome-svg-loader/tree/main/packages/vanilla-integration)
+
+____
+
+To help `vite-awesome-svg-loader` grow, please submit your integration via pull request or just create an issue
+and provide the source code if you don't have time or don't want to deal with this project's development process.

@@ -1,5 +1,5 @@
 import type { ConfigEnv, Plugin, UserConfig } from "vite";
-import fs from "fs-extra";
+import { readFile, rm, writeFile } from "node:fs/promises";
 import path from "path";
 import { optimize } from "svgo";
 import { XastChild } from "svgo/lib/types";
@@ -152,14 +152,14 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
     },
 
     configureServer(server) {
-      server.httpServer?.on("close", () => {
+      server.httpServer?.on("close", async () => {
         if (!isBuildMode) {
-          fs.removeSync(root + mergedOptions.tempDir);
+          await rm(root + mergedOptions.tempDir, { force: true, recursive: true });
         }
       });
     },
 
-    load(id: string) {
+    async load(id: string) {
       const ext = ".svg";
       const indexOfSvg = id.indexOf(ext);
 
@@ -295,7 +295,7 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
       const assetRelPath = path.dirname(relPathWithSlash) + "/" + assetFileName;
 
       const fullPath = root + relPathWithSlash;
-      let code = fs.readFileSync(fullPath).toString();
+      let code = (await readFile(fullPath)).toString();
       let isFillSetOnRoot = false;
 
       const nodesWithOrigColors: XastChild[] = [];
@@ -393,7 +393,7 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
 
       if (!isBuildMode) {
         const assetUrl = mergedOptions.tempDir + assetRelPath;
-        fs.outputFileSync(root + assetUrl, code);
+        await writeFile(root + assetUrl, code);
         return getExports(`"${base + assetUrl}"`);
       }
 

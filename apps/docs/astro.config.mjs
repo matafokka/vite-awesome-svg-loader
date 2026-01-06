@@ -10,6 +10,7 @@ import packageJson from "../../packages/vite-awesome-svg-loader/package.json";
 
 const [loaderTypeDoc, loaderTypeDocGroup] = createStarlightTypeDocPlugin();
 const [vanillaTypeDoc, vanillaTypeDocGroup] = createStarlightTypeDocPlugin();
+const [integrationUtilsTypeDoc, integrationUtilsTypeDocGroup] = createStarlightTypeDocPlugin();
 
 let baseUrl = process.env.DOCS_BASE_URL;
 
@@ -32,14 +33,24 @@ const description = [
 
 const frameworks = ["React", "Vue"];
 
-// https://astro.build/config
+/** @type {Partial<import('starlight-typedoc').StarlightTypeDocOptions>} */
+const typeDocOptions = {
+  pagination: true,
+  typeDoc: {
+    excludeProtected: false,
+    entryFileName: "index",
+  },
+};
+
 export default defineConfig({
   base: baseUrl,
+  site: host,
+
   integrations: [
     starlight({
       title,
       description,
-      customCss: ["./src/styles/global.scss"],
+      customCss: ["./src/styles/index.scss"],
       favicon: "/favicon.svg",
 
       head: [
@@ -110,23 +121,37 @@ export default defineConfig({
             vanillaTypeDocGroup,
           ],
         },
+
+        {
+          label: "Other frameworks",
+          collapsed: true,
+          items: ["other-frameworks/quick-start", integrationUtilsTypeDocGroup],
+        },
       ],
 
       plugins: [
         loaderTypeDoc({
+          ...typeDocOptions,
           output: "loader-api-reference",
           entryPoints: ["../../packages/loader/src/index.ts"],
           tsconfig: "../../packages/loader/tsconfig.json",
           sidebar: { label: "Loader API reference", collapsed: true },
-          pagination: true,
         }),
 
         vanillaTypeDoc({
+          ...typeDocOptions,
           output: "vanilla-js/api-reference",
           entryPoints: ["../../packages/vanilla-integration/src/index.ts"],
           tsconfig: "../../packages/vanilla-integration/tsconfig.json",
           sidebar: { label: "API reference", collapsed: true },
-          pagination: true,
+        }),
+
+        integrationUtilsTypeDoc({
+          ...typeDocOptions,
+          output: "other-frameworks/api-reference",
+          entryPoints: ["../../packages/integration-utils/src/index.ts"],
+          tsconfig: "../../packages/integration-utils/tsconfig.json",
+          sidebar: { label: "API reference", collapsed: true },
         }),
       ],
     }),

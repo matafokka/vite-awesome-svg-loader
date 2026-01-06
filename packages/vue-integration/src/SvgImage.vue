@@ -6,8 +6,7 @@
 
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref, watch } from "vue";
-import { onSrcUpdate as onSrcUpdateRaw, onUnmount as onUnmountRaw } from "integration-utils";
-import { SvgImageProps } from "types";
+import { onSrcUpdate as onSrcUpdateRaw, onUnmount as onUnmountRaw, SvgImageProps } from "integration-utils";
 
 defineOptions({
   inheritAttrs: false,

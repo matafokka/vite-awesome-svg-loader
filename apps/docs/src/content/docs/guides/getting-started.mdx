@@ -5,6 +5,7 @@ sidebar:
 ---
 
 import LinkCard from "@/components/LinkCard.astro";
+import Spoiler from "@/components/Spoiler.astro";
 import { Badge, Steps, Aside } from "@astrojs/starlight/components";
 
 ## Install `vite-awesome-svg-loader`
@@ -44,7 +45,51 @@ Unfortunately, it's not possible to generate all import types, so only some will
 You can still suppress errors by using `//@ts-ignore` comments.
 </Aside>
 
-This will make TypeScript happy with URL parameters.
+This step is needed if you plan to import SVGs with query parameters, for example: `import "@/assets/image.svg?source"`.
+
+There are two methods *(without any practical difference between them)* to register import types:
+
+<Spoiler open>
+  <Fragment slot="title">
+    <span>1\.</span>
+
+    <Badge text="Recommended" size="small" style="margin: 4px " />
+
+    <span>
+      Using [types](https://www.typescriptlang.org/tsconfig/#types) compiler option
+    </span>
+  </Fragment>
+
+Recommended for new projects because this is what modern Vite presets do.
+
+<Steps>
+
+1. Open `tsconfig.json` file. Some Vite presets use `tsconfig.app.json`, so if you have this one, open it instead of
+`tsconfig.json`.
+
+1. Locate or create [types](https://www.typescriptlang.org/tsconfig/#types) compiler option.
+
+1. Add `vite-awesome-svg-loader` to it:
+
+   ```json
+   {
+     "compilerOptions": {
+       "types": [
+         "vite/client", // Already present in modern Vite presets
+         "vite-awesome-svg-loader" // Add this entry
+       ]
+     }
+   }
+   ```
+</Steps>
+</Spoiler>
+
+<Spoiler>
+  <Fragment slot="title">
+    2\. Using [triple slash directives](https://www.typescriptlang.org/docs/handbook/triple-slash-directives.html)
+  </Fragment>
+
+Recommended for projects that were set up using old Vite presets.
 
 <Steps>
 1. Create `env.d.ts` file or use existing file where you store
@@ -56,12 +101,14 @@ This will make TypeScript happy with URL parameters.
    /// <reference types="vite-awesome-svg-loader" />
    ```
 
-1. Open `tsconfig.json` and add `env.d.ts` to the `include` property:
+1. If you've created `env.d.ts` by yourself, open `tsconfig.json` (or `tsconfig.app.json`, if your preset has one)
+and add `env.d.ts` to the `include` property:
 
    ```json
    { "include": ["env.d.ts"] }
    ```
 </Steps>
+</Spoiler>
 
 ## <Badge text="Optional" /> Configure loader
 

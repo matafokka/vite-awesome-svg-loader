@@ -1,0 +1,8 @@
+@import url("vite-awesome-svg-loader/integration-utils/styles.css"); // Astro looses client-only styles upon navigation
+@import url("./fonts.scss");
+@import url("./dark-theme.scss");
+@import url("./light-theme.scss");
+@import url("./markup.scss");
+@import url("./code.scss");
+@import url("./details.scss");
+@import url("./demos/index.scss");

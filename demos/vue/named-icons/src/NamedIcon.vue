@@ -1,7 +1,7 @@
 <template>
   <SvgIcon
-    :src="src"
     v-bind="props"
+    :src
   />
 </template>
 

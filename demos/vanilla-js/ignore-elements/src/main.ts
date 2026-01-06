@@ -17,6 +17,7 @@ export function main() {
   `;
 
   const image = new SvgImage(imageSrc, "#images");
+  image.getSvgEl().classList.add("standalone-image");
 
   document
     .getElementById("checkbox")!

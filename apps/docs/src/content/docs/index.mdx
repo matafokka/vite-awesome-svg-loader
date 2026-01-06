@@ -33,10 +33,16 @@ or a [custom color via configuration](/guides/available-transformations/#replace
 1. Allows you to create [SVG sprites via symbols](/guides/svg-loading-methods/#svg-symbols-sprites) using provided
 integrations.
 
-`vite-awesome-svg-loader` is framework-agnostic. All integrations are done as subpath imports
-(for example, `vite-awesome-svg-loader/vue-integration`). This means that you'll get only what you need in your
-app bundle. This also means that you can [develop your own integration](/guides/custom-integrations)
-using `vite-awesome-svg-loader/integration-utils` import.
+`vite-awesome-svg-loader` is framework-agnostic.
+
+However, to create SVG symbols, some boilerplate code in form of components is required. These components are provided
+in the integrations.
+
+All integrations are provided as ES modules in separate subpath imports
+(for example, `vite-awesome-svg-loader/vue-integration`), so your app will contain only required code.
+
+You can integrate `vite-awesome-svg-loader` with [any framework](/other-frameworks/quick-start/)
+using `vite-awesome-svg-loader/integration-utils` package.
 
 ## Great! How do I use it?
 
@@ -56,5 +62,5 @@ using `vite-awesome-svg-loader/integration-utils` import.
   <LinkCard title="React" href="/react/quick-start" />
   <LinkCard title="Vue" href="/vue/quick-start" />
   <LinkCard title="Vanilla JS" href="/vanilla-js/quick-start" />
-  <LinkCard title="Custom framework" href="/guides/custom-integrations" />
+  <LinkCard title="Other frameworks" href="/other-frameworks/quick-start" />
 </CardGrid>

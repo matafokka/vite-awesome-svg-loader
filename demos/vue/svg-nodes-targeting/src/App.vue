@@ -23,7 +23,7 @@ const createColorGetter = (colors: string[]) => {
       index = 0;
     }
 
-    return colors[index];
+    return colors[index]!;
   };
 };
 

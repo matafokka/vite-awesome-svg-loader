@@ -8,26 +8,30 @@ import { Aside } from "@astrojs/starlight/components";
 
 ## Architecture
 
-This project uses [Turborepo](https://turbo.build/) to manage build process.
-
 ### Project structure
+
+This project is a monorepo with the following structure:
 
 - `apps` - applications.
   - `docs` - documentation website.
 - `demos` - demos.
-  - `all` - metapackage for all demos.
+  - `all` - meta-package for all demos.
   - `inline` - inline demos for various pages outside of specific framework context.
   - `*` - demos for each supported framework.
 - `packages` - loader itself, integrations and internal utilities.
   - `integration-utils` - utility functions and constants for integrations. Bundled with the loader to allow users to write their own integrations.
   - `loader` - loader's source code.
-  - `types` - types for the integrations.
-  - `utils` - common utilities.
+  - `types` - types for usage throughout the project.
+  - `utils` - various utilities for usage throughout the project.
   - `*-integration` - specific framework integration.
   - `vite-astro-entry-generator` - a plugin that generates an Astro component that loads a script on the client side.
-  - `vite-awesome-svg-loader` - final loader bundle.
+  - `vite-awesome-svg-loader` - final loader bundle (in other words, meta-package).
   - `vite-file-tree-builder` - a plugin that builds a project's file tree.
 - `modules.d.ts` - types for untyped external modules.
+
+### Monorepo management
+
+[Turborepo](https://turbo.build/) is used to manage monorepo.
 
 ### Demos
 
@@ -44,6 +48,7 @@ occurs. This pattern avoids necessity for the running multiple web servers.
 
 ### Scripts
 
+1. `generate-sources` - generates project's source code required for building. Runs automatically before any other build command.
 1. `build` - builds whole project.
 1. `build:packages` - builds all packages. Use this while developing to speed up the build.
 1. `build:apps` - builds all apps.
@@ -54,17 +59,32 @@ This is a lighter alternative to `dev`. The docs are still updated whenever demo
 1. `lint` - lints the code with ESLint.
 1. `format` - formats the code with Prettier.
 
-### Bundle structure
-
-Every project (both in `apps` and `packages` directories) should be bundled into `dist` directory inside project's root.
-
-For example, `packages/utils` bundle should be in `packages/utils/dist` directory.
-
 ### TypeScript and JavaScript
 
 The primary language for this project is TypeScript. TypeScript should be used while developing loader itself, integrations and demos.
 
 However, build scripts are written in JS to simplify development and speed up the build. Typing is not critical for these scripts. Thus, TypeScript is just not worth it.
+
+### Bundlers
+
+Vite is the primary bundler for this project.
+
+Other bundlers may be used, if Vite ecosystem doesn't have a solution, or specific package requires specific tooling.
+Examples:
+
+1. `vite-awesome-svg-loader` meta-package uses `tsdown` because no other tool was able to correctly build types
+for multiple entry points.
+1. `docs` app uses Astro and its tooling (it's Vite internally, but it may change in future).
+
+Custom build scripts and/or plugins may be used in the build process. Ideally, custom additions to the build process
+should be implemented as bundler's plugins or build lifecycle hooks. But plain JS scripts are OK, if it makes
+life easier.
+
+### Bundle structure
+
+Every project (package, demo or app) should be bundled into `dist` directory inside the project's root.
+
+For example, `packages/utils` bundle should be in `packages/utils/dist` directory.
 
 ### Dependencies
 
@@ -76,6 +96,21 @@ Local dependencies should be installed in package or app where they're required.
 
 `vite-awesome-svg-loader` final bundle dependencies always should be in `packages/vite-awesome-svg-loader/package.json` file even if they're duplicated in the root `package.json`.
 
+### Build process
+
+This is how `build` command works:
+
+1. `generate-sources` command is ran, and the source code is generated:
+   1. `vite-awesome-svg-loader` source code is generated:
+     1. Loader and integrations re-exports are added.
+     1. Subpath exports are updated.
+     1. Loader and all integrations are added as dependencies.
+   1. `all-demos` package is generated: all demos are added as dependencies.
+1. All packages are built.
+1. `vite-awesome-svg-loader` package is built.
+1. All demos are built.
+1. Apps are built.
+
 ## Code style
 
 Prettier should be used to format the code. Styles that are left for the user to decide are handled by ESLint rules.
@@ -85,18 +120,16 @@ This project tries to keep the source code clean and readable. Please, try to do
 ## Integrations development
 
 <Aside type="caution">
-  See [custom integrations guide](/guides/custom-integrations/) before developing
+  See [other frameworks guide](/other-frameworks/quick-start/) before developing
 </Aside>
 
 1. Create an issue to notify the community that you'll be working on your integration.
-1. Create integration package using `npx turbo generate workspace` command or by copying an existing integration.
+1. Create an integration package using `npx turbo generate workspace` command or by copying an existing integration.
 1. Develop integration:
    1. Open `package.json` file inside your integration directory.
    1. Add `"integration-utils": "*"` dependency.
    1. Develop your integration.
-1. Update `vite-awesome-svg-loader` package with your integration:
-   1. Open `packages/vite-awesome-svg-loader/package.json`.
-   1. Add your integration to the `exports` and `typesVersions["*"]` fields. Basically copy already existing entry and change directory name. Unfortunately, we can't point to another `package.json` and shouldn't dynamically create a package.
+1. Run `npm run generate-sources` command to regenerate `vite-awesome-svg-loader` source code. Or just run any build or dev command.
 1. Develop demos for your integration:
    1. Duplicate any existing demo and pages in the `/apps/docs/src/content/docs` directory.
    1. Develop your demos.

@@ -1,0 +1,23 @@
+---
+import { getClasses } from "@/utils/props";
+import type { HTMLAttributes } from "astro/types";
+
+export interface Props extends HTMLAttributes<"details"> {
+  title?: string;
+}
+
+const { title, ...attrs } = Astro.props;
+const classList = getClasses(attrs);
+---
+
+<details
+  {...attrs}
+  class:list={{ ...classList, "sl-spoiler": true }}
+>
+  <summary class="sl-spoiler__summary">
+    <slot name="title">
+      {title || "Show content"}
+    </slot>
+  </summary>
+  <slot />
+</details>

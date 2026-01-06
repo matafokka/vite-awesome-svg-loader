@@ -38,16 +38,8 @@ import { ElementOrSelector, mount, setAttrs } from "./utils";
  *
  * Use `constructor()` and {@link SvgImage#mount} to change component markup.
  *
- * Use {@link SvgImage._updateSvgBeforeUserAttrsSet},
- * {@link SvgImage._updateSvgAfterUserAttrsSet},
- * {@link SvgImage._updateUseElBeforeUserAttrsSet},
- * {@link SvgImage._updateUseElAfterUserAttrsSet} hooks to set custom elements attributes.
- *
  * You probably don't need to override required element's attributes. If you actually need to do so, override
  * {@link SvgImage._updateSvgEl}
- *
- * @param src SVG source code
- * @param mountTo Element or selector of an element to mount image to. If not provided, image won't be mounted.
  */
 export class SvgImage {
   /**
@@ -55,8 +47,19 @@ export class SvgImage {
    */
   protected _src: string | undefined;
 
+  /**
+   * Element containing this {@link SvgImage} (element passed to {@link mount})
+   */
   protected _container: Element | undefined;
+
+  /**
+   * `<svg>` element
+   */
   protected readonly _svgEl: SVGElement;
+
+  /**
+   * `<use>` element
+   */
   protected readonly _useEl: SVGUseElement;
 
   /**
@@ -70,10 +73,14 @@ export class SvgImage {
   protected _useElAttrs: Record<string, any> = {};
 
   /**
-   * Last src update result
+   * Last {@link onSrcUpdate} call result
    */
   protected _updateSrcRes: ReturnType<typeof onSrcUpdate> = {};
 
+  /**
+   * @param src SVG source code
+   * @param mountTo Element or selector of an element to mount image to. If not provided, image won't be mounted.
+   */
   constructor(src: string, mountTo?: ElementOrSelector) {
     this._svgEl = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     this._useEl = document.createElementNS("http://www.w3.org/2000/svg", "use");
@@ -123,9 +130,7 @@ export class SvgImage {
    */
   protected _updateSvgEl() {
     setAttrs(this._svgEl, { alt: "" }, true);
-    this._updateSvgBeforeUserAttrsSet();
     setAttrs(this._svgEl, this._svgAttrs);
-    this._updateSvgAfterUserAttrsSet();
 
     if (this._updateSrcRes.attrs) {
       setAttrs(this._svgEl, this._updateSrcRes.attrs);
@@ -133,16 +138,6 @@ export class SvgImage {
 
     return this;
   }
-
-  /**
-   * Called before user-provided attributes are set. You can use this function to set custom SVG element attributes.
-   */
-  protected _updateSvgBeforeUserAttrsSet() {};
-
-  /**
-   * Called after user-provided attributes are set. You can use this function to set custom SVG element attributes.
-   */
-  protected _updateSvgAfterUserAttrsSet() {};
 
   /**
    * Sets `<use>` element attributes. It won't remove id, class and style.
@@ -159,10 +154,7 @@ export class SvgImage {
    * @returns this
    */
   protected _updateUseEl() {
-    setAttrs(this._useEl, {}, true);
-    this._updateUseElBeforeUserAttrsSet();
-    setAttrs(this._useEl, this._useElAttrs);
-    this._updateUseElAfterUserAttrsSet();
+    setAttrs(this._useEl, this._useElAttrs, true);
 
     if (this._updateSrcRes.id) {
       setAttrs(this._useEl, { href: "#" + this._updateSrcRes.id });
@@ -170,16 +162,6 @@ export class SvgImage {
 
     return this;
   }
-
-  /**
-   * Called before user-provided attributes are set. You can use this function to set custom `<use>` element attributes.
-   */
-  protected _updateUseElBeforeUserAttrsSet() {};
-
-  /**
-   * Called after user-provided attributes are set. You can use this function to set custom `<use>` element attributes.
-   */
-  protected _updateUseElAfterUserAttrsSet() {};
 
   /**
    * Sets SVG source code

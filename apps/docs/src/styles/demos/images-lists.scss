@@ -1,0 +1,9 @@
+.images {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden; // Not sure where it comes from
+  user-select: none;
+}

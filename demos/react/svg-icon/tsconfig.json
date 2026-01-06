@@ -23,8 +23,17 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+
+    "types": [
+      // Add types for query imports (for example, "@/some/file.svg?src").
+      // Unfortunately, it's impossible to fully type it. Use plugin configuration instead.
+      "vite-awesome-svg-loader",
+
+      "vite/client", // Vite types
+      "vite-file-tree-builder" // Internal types
+    ]
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

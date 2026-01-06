@@ -1,0 +1,28 @@
+:root {
+  --icons-vertical-spacing-raw: calc(var(--image-size) * 0.4);
+  --icons-vertical-spacing: var(--icons-vertical-spacing-raw);
+  --icons-vertical-spacing: clamp(20px, var(--icons-vertical-spacing-raw), 80px);
+  --image-size: 72px;
+}
+
+// Set fixed images size
+
+.image {
+  min-width: var(--image-size);
+  min-height: var(--image-size);
+  width: var(--image-size);
+  height: var(--image-size);
+  max-width: var(--image-size);
+  max-height: var(--image-size);
+
+  & > svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.skip-elements-image {
+  height: fit-content;
+  max-height: max(200px, var(--image-size));
+  color: red;
+}

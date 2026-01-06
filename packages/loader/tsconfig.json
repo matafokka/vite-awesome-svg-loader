@@ -4,7 +4,11 @@
     "outDir": "./dist",
     "module": "ESNext",
     "target": "ES6",
-    "lib": ["ESNext", "DOM"]
+    "lib": ["ESNext", "DOM"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
   },
   "include": ["src", "../../modules.d.ts"],
   "exclude": ["node_modules"]

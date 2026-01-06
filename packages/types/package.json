@@ -1,6 +1,5 @@
 {
   "name": "types",
   "version": "0.0.0",
-  "private": true,
-  "main": "types.ts"
+  "private": true
 }

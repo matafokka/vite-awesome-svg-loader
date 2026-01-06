@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "vite-awesome-svg-loader",
   "description": "Imports SVGs as source code, base64 and data URI. Preserves stroke width, replaces colors with currentColor or custom colors. Optimizes SVGs with SVGO. Creates SVG sprites.",
   "keywords": [
@@ -27,69 +28,109 @@
     "vite-awesome-svg-loader",
     "svgo"
   ],
-  "version": "3.0.3",
+  "version": "4.0.0",
   "homepage": "https://matafokka.github.io/vite-awesome-svg-loader",
   "repository": "https://github.com/matafokka/vite-awesome-svg-loader",
   "license": "LGPL-2.1-or-later",
   "private": true,
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "dist/loader.cjs",
+  "module": "dist/loader.js",
+  "types": "dist/loader.d.cts",
   "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+    "./integration-utils/styles.css": {
+      "import": "./dist/integration-utils-styles.css",
+      "require": "./dist/integration-utils-styles.css"
     },
     "./integration-utils": {
-      "import": "./dist/integration-utils/index.mjs",
-      "require": "./dist/integration-utils/index.js",
-      "types": "./dist/integration-utils/index.d.ts"
+      "import": {
+        "types": "./dist/integration-utils.d.ts",
+        "default": "./dist/integration-utils.js"
+      },
+      "require": {
+        "types": "./dist/integration-utils.d.cts",
+        "default": "./dist/integration-utils.cjs"
+      }
     },
-    "./integration-utils/styles.css": {
-      "import": "./dist/integration-utils/styles.css",
-      "require": "./dist/integration-utils/styles.css"
-    },
-    "./vue-integration": {
-      "import": "./dist/vue-integration/index.js",
-      "require": "./dist/vue-integration/index.cjs",
-      "types": "./dist/vue-integration/index.d.ts"
-    },
-    "./vanilla-integration": {
-      "import": "./dist/vanilla-integration/index.js",
-      "require": "./dist/vanilla-integration/index.cjs",
-      "types": "./dist/vanilla-integration/index.d.ts"
+    ".": {
+      "import": {
+        "types": "./dist/loader.d.ts",
+        "default": "./dist/loader.js"
+      },
+      "require": {
+        "types": "./dist/loader.d.cts",
+        "default": "./dist/loader.cjs"
+      }
     },
     "./react-integration": {
-      "import": "./dist/react-integration/index.js",
-      "require": "./dist/react-integration/index.cjs",
-      "types": "./dist/react-integration/index.d.ts"
+      "import": {
+        "types": "./dist/react-integration.d.ts",
+        "default": "./dist/react-integration.js"
+      },
+      "require": {
+        "types": "./dist/react-integration.d.cts",
+        "default": "./dist/react-integration.cjs"
+      }
+    },
+    "./vanilla-integration": {
+      "import": {
+        "types": "./dist/vanilla-integration.d.ts",
+        "default": "./dist/vanilla-integration.js"
+      },
+      "require": {
+        "types": "./dist/vanilla-integration.d.cts",
+        "default": "./dist/vanilla-integration.cjs"
+      }
+    },
+    "./vue-integration": {
+      "import": {
+        "types": "./dist/vue-integration.d.ts",
+        "default": "./dist/vue-integration.js"
+      },
+      "require": {
+        "types": "./dist/vue-integration.d.cts",
+        "default": "./dist/vue-integration.cjs"
+      }
     }
   },
   "typesVersions": {
     "*": {
       "./integration-utils": [
-        "./dist/integration-utils/index.d.ts"
+        "./dist/integration-utils.d.ts",
+        "./dist/integration-utils.d.cts"
       ],
-      "./vue-integration": [
-        "./dist/vue-integration/index.d.ts"
-      ],
-      "./vanilla-integration": [
-        "./dist/vanilla-integration/index.d.ts"
+      ".": [
+        "./dist/loader.d.ts",
+        "./dist/loader.d.cts"
       ],
       "./react-integration": [
-        "./dist/react-integration/index.d.ts"
+        "./dist/react-integration.d.ts",
+        "./dist/react-integration.d.cts"
+      ],
+      "./vanilla-integration": [
+        "./dist/vanilla-integration.d.ts",
+        "./dist/vanilla-integration.d.cts"
+      ],
+      "./vue-integration": [
+        "./dist/vue-integration.d.ts",
+        "./dist/vue-integration.d.cts"
       ]
     }
   },
   "scripts": {
-    "build": "node src/build.mjs"
+    "build": "tsdown"
+  },
+  "devDependencies": {
+    "integration-utils": "*",
+    "loader": "*",
+    "react-integration": "*",
+    "vanilla-integration": "*",
+    "vue-integration": "*"
   },
   "dependencies": {
-    "loader": "*",
     "integration-utils": "*",
-    "vue-integration": "*",
+    "loader": "*",
+    "react-integration": "*",
     "vanilla-integration": "*",
-    "react-integration": "*"
+    "vue-integration": "*"
   }
 }

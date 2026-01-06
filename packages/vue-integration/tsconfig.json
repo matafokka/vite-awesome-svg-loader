@@ -11,5 +11,9 @@
      "resolveJsonModule": true,
      "allowSyntheticDefaultImports": true
   },
-  "include": ["src", "demo", "tests", "../../modules.d.ts"]
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
 }

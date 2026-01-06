@@ -1,0 +1,21 @@
+.sl-markdown-content details {
+  --padding: 16px;
+  --border: 1px solid var(--sl-color-gray-5);
+
+  padding-inline-start: unset;
+  padding: 0 var(--padding);
+  border: var(--border);
+  border-bottom: 0;
+
+  &[open] {
+    padding-bottom: var(--padding);
+    border-bottom: var(--border);
+  }
+
+  & > summary {
+    margin-left: unset;
+    margin: 0 calc(-1 * var(--padding));
+    background-color: var(--sl-color-gray-7);
+    border-bottom: var(--border);
+  }
+}

@@ -1,7 +1,9 @@
+import "./declarations.d.ts";
+
 import { Plugin } from "vite";
 import { DemoExportFsData, FileTreeNode } from "types/demos";
 import path from "path";
-import fse from "fs-extra";
+import { lstat, readFile, readdir } from "node:fs/promises";
 
 export interface ViteFileTreeBuilderOptions {
   /**
@@ -53,14 +55,14 @@ export function viteFileTreeBuilder(options: ViteFileTreeBuilderOptions = {}): P
 
       const fsPath = path.join(root, ...fullPath.split("/"));
 
-      if ((await fse.lstat(fsPath)).isFile()) {
-        node.content = (await fse.readFile(fsPath)).toString();
+      if ((await lstat(fsPath)).isFile()) {
+        node.content = (await readFile(fsPath)).toString();
         subtree.push(node);
         return;
       }
 
       node.content = [];
-      await processFiles(await fse.readdir(fsPath), fullPath, node.content);
+      await processFiles(await readdir(fsPath), fullPath, node.content);
 
       if (node.content.length) {
         subtree.push(node);
@@ -109,7 +111,7 @@ export function viteFileTreeBuilder(options: ViteFileTreeBuilderOptions = {}): P
 
       // Build file tree
 
-      const rootContent = await fse.readdir(root);
+      const rootContent = await readdir(root);
       await processFiles(rootContent, "", fsData.fileTree);
 
       // Get export

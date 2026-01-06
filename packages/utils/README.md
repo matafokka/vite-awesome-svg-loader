@@ -1,3 +1,3 @@
 # utils
 
-Various utilities used across all packages
+Various utilities for usage throughout the project

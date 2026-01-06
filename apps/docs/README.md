@@ -20,7 +20,7 @@ The website renders demos directly into the docs pages.
 
 ## Build process
 
-The docs website depends on `all-demos` package which is "metapackage" for all demos.
+The docs website depends on `all-demos` package which is meta-package for all demos.
 
 The `package.json` file of `all-demos` package is generated before any command is executed.
 This is required for Turborepo to build the demos before building the docs website.

@@ -1,0 +1,15 @@
+.standalone-image {
+  background-origin: 0 0;
+
+  &,
+  & > svg {
+    width: fit-content;
+    max-height: 200px;
+  }
+}
+
+div.standalone-image {
+  display: flex;
+  width: 100%;
+  max-height: unset;
+}

@@ -24,6 +24,7 @@
     }
   },
   "scripts": {
-    "build": "npx tsup ./src/index.ts --format esm,cjs  --minify --sourcemap && tsc --emitDeclarationOnly --declaration && node src/build.mjs"
-  }
+    "build": "vite build"
+  },
+  "dependencies": {}
 }

@@ -17,22 +17,32 @@ const DEFAULT_COLOR_TRANSITION = "0.3s linear";
  *   .setColor("red") // Set icon color to red
  *   .setColorTransition("0.2s ease-out"); // Change icon color transition
  * ```
- *
- * ### Internal API
- *
- * You can use this API to extend `SvgIcon`. This API is the same as in {@link SvgImage}, but with additional methods.
- *
- * Use {@link SvgIcon._updateWrapperBeforeUserAttrsSet}, {@link SvgIcon._updateWrapperAfterUserAttrsSet} to set custom
- * wrapper (`<span>`) attributes.
- *
- * {@link SvgIcon._updateSvgBeforeUserAttrsSet} should call `super._updateSvgBeforeUserAttrsSet()`.
  */
 export class SvgIcon extends SvgImage {
+  /**
+   * `<span>` element that wraps {@link _svgEl}
+   */
   protected _span: HTMLSpanElement;
-  protected _size: string | undefined;
-  protected _color: string | undefined;
-  protected _colorTransition: string | undefined;
 
+  /**
+   * Icon size
+   */
+  protected _size = "";
+
+  /**
+   * Icon color
+   */
+  protected _color = "";
+
+  /**
+   * Icon color transition
+   */
+  protected _colorTransition = "";
+
+  /**
+   * @param src SVG source code
+   * @param mountTo Element or selector of an element to mount image to. If not provided, image won't be mounted.
+   */
   constructor(src: string, mountTo?: ElementOrSelector) {
     super(src);
     this._span = document.createElement("span");
@@ -57,8 +67,10 @@ export class SvgIcon extends SvgImage {
     return this;
   }
 
-  protected _updateSvgBeforeUserAttrsSet(): void {
+  protected _updateSvgEl(): this {
+    super._updateSvgEl();
     setAttrs(this._svgEl, { "aria-hidden": "true" });
+    return this;
   }
 
   /**
@@ -70,12 +82,7 @@ export class SvgIcon extends SvgImage {
    * @returns this
    */
   setWrapperAttrs(attrs: Record<string, any>) {
-    setAttrs(this._span, {}, true);
-
-    this._updateWrapperBeforeUserAttrsSet();
-    setAttrs(this._span, attrs);
-    this._updateWrapperAfterUserAttrsSet();
-
+    setAttrs(this._span, attrs, true);
     this.setSize(this._size);
     this.setColor(this._color);
     this.setColorTransition(this._colorTransition);
@@ -84,15 +91,8 @@ export class SvgIcon extends SvgImage {
   }
 
   /**
-   * Called before user-provided attributes are set. You can use this function to set custom wrapper (`<span>`) attributes.
+   * Sets wrapper's ({@link _span}) `class` property to match stylesheet
    */
-  protected _updateWrapperBeforeUserAttrsSet() {};
-
-  /**
-   * Called after user-provided attributes are set. You can use this function to set custom wrapper (`<span>`) attributes.
-   */
-  protected _updateWrapperAfterUserAttrsSet() {};
-
   protected _setWrapperClass() {
     this._span.classList.add("awesome-svg-loader-icon", "icon");
   }
@@ -110,12 +110,11 @@ export class SvgIcon extends SvgImage {
    * @returns this
    */
   setSize(size: string | undefined) {
-    this._size = size;
-
     for (const prop of ["width", "minWidth", "maxWidth", "height", "minHeight", "maxHeight"]) {
-      setStyleProperty(this._span, prop, this._size);
+      setStyleProperty(this._span, prop, size);
     }
 
+    this._size = size || "";
     return this;
   }
 
@@ -123,7 +122,7 @@ export class SvgIcon extends SvgImage {
    * @returns Current icon size or empty string, if size is unset
    */
   getSize() {
-    return this._size || "";
+    return this._size;
   }
 
   /**
@@ -132,8 +131,8 @@ export class SvgIcon extends SvgImage {
    * @returns this
    */
   setColor(color: string | undefined) {
-    this._color = color;
     setStyleProperty(this._span, "--icon-color", color);
+    this._color = color || "";
     return this;
   }
 
@@ -141,7 +140,7 @@ export class SvgIcon extends SvgImage {
    * @returns Current icon color or empty string, if color is unset
    */
   getColor() {
-    return this._color || "";
+    return this._color;
   }
 
   /**
@@ -150,8 +149,8 @@ export class SvgIcon extends SvgImage {
    * @returns this
    */
   setColorTransition(transition = DEFAULT_COLOR_TRANSITION) {
-    this._colorTransition = transition;
     setStyleProperty(this._span, "--icon-transition", transition);
+    this._colorTransition = transition || "";
     return this;
   }
 
@@ -159,6 +158,6 @@ export class SvgIcon extends SvgImage {
    * @returns Current icon color transition or empty string, if transition is unset
    */
   getColorTransition() {
-    return this._colorTransition || "";
+    return this._colorTransition;
   }
 }

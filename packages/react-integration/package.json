@@ -8,10 +8,9 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsc && vite build"
+    "build": "vite build"
   },
   "dependencies": {
-    "integration-utils": "*",
-    "types": "*"
+    "integration-utils": "*"
   }
 }

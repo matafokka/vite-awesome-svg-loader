@@ -5,7 +5,11 @@
     "module": "ESNext",
     "target": "ES6",
     "lib": ["ESNext", "DOM"],
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
   },
   "include": ["src", "../../modules.d.ts"],
   "exclude": ["node_modules"]

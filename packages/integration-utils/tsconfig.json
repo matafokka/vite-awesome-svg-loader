@@ -5,7 +5,11 @@
     "module": "ES6",
     "target": "ES5",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
   },
   "include": ["src", "../../modules.d.ts"]
 }

@@ -1,0 +1,11 @@
+:root {
+  &[data-theme="light"],
+  [data-theme="light"] {
+    --sl-color-hairline-light: var(--sl-color-gray-5);
+
+    --sl-badge-default-bg: var(--sl-color-accent);
+    --sl-badge-note-bg: var(--sl-color-blue);
+    --sl-badge-danger-bg: var(--sl-color-red);
+    --sl-badge-tip-bg: var(--sl-color-purple);
+  }
+}

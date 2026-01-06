@@ -1,6 +1,6 @@
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
-import dts from "vite-plugin-dts";
+import dts from "unplugin-dts/vite";
 import { viteAwesomeSvgLoader } from "vite-awesome-svg-loader";
 
 export default defineConfig({
@@ -19,10 +19,7 @@ export default defineConfig({
       ],
       urlImportsInLibraryMode: "emit-files",
     }),
-    dts({
-      rollupTypes: true,
-      bundledPackages: ["types"],
-    }),
+    dts(),
   ],
   resolve: {
     alias: {

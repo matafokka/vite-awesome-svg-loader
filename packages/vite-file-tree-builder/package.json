@@ -6,12 +6,10 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "npx tsup",
-    "postbuild": "node src/postbuild.mjs"
+    "build": "vite build"
   },
   "dependencies": {
-    "fs-extra": "^11.1.1",
-    "vite": "*",
-    "types": "*"
+    "types": "*",
+    "vite": "*"
   }
 }

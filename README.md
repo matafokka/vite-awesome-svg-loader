@@ -13,11 +13,16 @@ A Vite plugin that:
 1. Will automatically minimize your SVGs using [SVGO](https://github.com/svg/svgo).
 1. Allows you to create SVG sprites using provided integrations.
 
-`vite-awesome-svg-loader` is framework-agnostic. All integrations are done as subpath imports
-(for example, `vite-awesome-svg-loader/vue-integration`). This means that you'll get only what you need in your
-app bundle. This also means that you can
-[develop your own integration](https://matafokka.github.io/vite-awesome-svg-loader/guides/custom-integrations)
-using `vite-awesome-svg-loader/integration-utils` import.
+`vite-awesome-svg-loader` is framework-agnostic.
+
+However, to create SVG symbols, some boilerplate code in form of components is required. These components are provided
+in the integrations.
+
+All integrations are provided as ES modules in separate subpath imports
+(for example, `vite-awesome-svg-loader/vue-integration`), so your app will contain only required code.
+
+You can integrate `vite-awesome-svg-loader` with [any framework](https://matafokka.github.io/vite-awesome-svg-loader/other-frameworks/quick-start)
+using `vite-awesome-svg-loader/integration-utils` package.
 
 ## Installation
 
@@ -40,4 +45,4 @@ npm i vite-awesome-svg-loader
 - [React](https://matafokka.github.io/vite-awesome-svg-loader/react/quick-start/)
 - [Vue](https://matafokka.github.io/vite-awesome-svg-loader/vue/quick-start/)
 - [Vanilla JS](https://matafokka.github.io/vite-awesome-svg-loader/vanilla-js/quick-start/)
-- [Custom framework](https://matafokka.github.io/vite-awesome-svg-loader/guides/custom-integrations/)
+- [Other frameworks](https://matafokka.github.io/vite-awesome-svg-loader/other-frameworks/quick-start/)

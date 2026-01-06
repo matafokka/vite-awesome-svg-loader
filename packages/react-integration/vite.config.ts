@@ -3,17 +3,12 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
-import dts from "vite-plugin-dts";
+import dts from "unplugin-dts/vite";
+import pkgJson from "./package.json";
+import rootPkgJson from "../../package.json";
 
 export default defineConfig({
-  plugins: [
-    react(),
-    cssInjectedByJsPlugin(),
-    dts({
-      rollupTypes: true,
-      bundledPackages: ["types"],
-    }),
-  ],
+  plugins: [react(), cssInjectedByJsPlugin(), dts()],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
@@ -29,7 +24,13 @@ export default defineConfig({
     },
 
     rollupOptions: {
-      external: ["react", "react/jsx-runtime", "react-dom"],
+      external: [
+        "react",
+        "react/jsx-runtime",
+        "react-dom",
+        ...Object.keys(pkgJson.dependencies),
+        ...Object.keys(rootPkgJson.dependencies),
+      ],
       output: {
         globals: {
           "react": "React",
