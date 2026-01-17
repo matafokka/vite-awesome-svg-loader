@@ -2,9 +2,10 @@ import { XastChild } from "svgo/lib/types";
 // TODO: Update import when SVGO 4.x.x will be released, it should export utility functions
 // @ts-expect-error
 import { matches as matchesSelectorRaw } from "svgo/lib/xast.js";
-import type { SelectorsPerFiles } from "../types";
+import type { ColorMapPerFiles, CssSelectors, FileMatcherFnContext, FileMatchers } from "../types";
 import path from "path";
 import { ResolvedColorReplacements } from "./types";
+import { toArray } from "utils";
 
 export function normalizeBaseDir(dir: string) {
   dir = dir.replaceAll("\\", "/");
@@ -28,6 +29,10 @@ export function escapeBackticks(str: string) {
   return str.replaceAll("`", "\\`");
 }
 
+export interface MatchesQueryOrListOptions extends MatchesPathOptions {
+  queryValue?: string;
+}
+
 /**
  * Checks if given relative path or filename matches query value or a list of matchers
  * @param relPathWithSlash Relative path with leading slash
@@ -35,16 +40,16 @@ export function escapeBackticks(str: string) {
  * function returns `true`.
  * @param matchers List of matchers to check path and filename against
  */
-export function matchesQueryOrList(
-  relPathWithSlash: string,
-  queryValue: string | undefined,
-  matchers: (string | RegExp)[],
-) {
-  return matchesQuery(queryValue) || matchesPath(relPathWithSlash, matchers);
+export function matchesQueryOrPath(options: MatchesQueryOrListOptions) {
+  return matchesQuery(options.queryValue) || matchesPath(options);
 }
 
 export function matchesQuery(queryValue: string | undefined) {
   return !!queryValue && queryValue.toLowerCase() !== "false";
+}
+
+export interface MatchesPathOptions extends FileMatcherFnContext {
+  matchers: FileMatchers;
 }
 
 /**
@@ -52,23 +57,26 @@ export function matchesQuery(queryValue: string | undefined) {
  * @param relPathWithSlash Relative path with leading slash
  * @param matchers List of matchers to check path and filename against
  */
-export function matchesPath(relPathWithSlash: string, matchers: (string | RegExp)[]) {
-  const filename = path.basename(relPathWithSlash);
-  const toMatch = [filename, relPathWithSlash];
+export function matchesPath(options: MatchesPathOptions) {
+  const filename = path.basename(options.relativePath);
+  const toMatch = [filename, options.relativePath];
+  const matchers = toArray(options.matchers)
 
-  for (const matcher of matchers) {
-    const isRegex = matcher instanceof RegExp;
-
-    for (const entry of toMatch) {
-      const matches = isRegex ? matcher.test(entry) : entry === matcher;
-
-      if (matches) {
-        return true;
-      }
-    }
+  if (!matchers.length) {
+    return false
   }
 
-  return false;
+  return matchers.some((matcher) => {
+    switch (typeof matcher) {
+      case "string":
+        return toMatch.some((v) => v === matcher);
+
+      case "function":
+        return matcher({ fullPath: options.fullPath, relativePath: options.relativePath });
+    }
+
+    return toMatch.some((v) => matcher.test(v));
+  });
 }
 
 /**
@@ -78,21 +86,18 @@ function normalizeSelector(selector: string) {
   return selector.replaceAll(/\s+/g, " ").trim();
 }
 
+export interface SelectorsToListOptions extends FileMatcherFnContext {
+  selectors: CssSelectors;
+}
+
 /**
  * Converts CSS selectors to a list and normalizes each selector
  * @param relPathWithSlash Relative path with leading slash
  * @param selectors Selectors
  */
-export function selectorsToList(
-  relPathWithSlash: string,
-  selectors: (string | SelectorsPerFiles)[],
-  returnEmptyList?: boolean,
-) {
+export function selectorsToList(options: SelectorsToListOptions) {
+  const selectors = toArray(options.selectors);
   const resolvedSelectors: string[] = [];
-
-  if (returnEmptyList) {
-    return resolvedSelectors;
-  }
 
   for (const selector of selectors) {
     if (typeof selector === "string") {
@@ -100,9 +105,9 @@ export function selectorsToList(
       continue;
     }
 
-    if (matchesPath(relPathWithSlash, selector.files)) {
+    if (matchesPath({ ...options, matchers: selector.files })) {
       for (const selectorStr of selector.selectors) {
-        resolvedSelectors.push(normalizeSelector(selectorStr))
+        resolvedSelectors.push(normalizeSelector(selectorStr));
       }
     }
   }
@@ -134,4 +139,8 @@ export function replaceColor(color: string | undefined, replacements: ResolvedCo
   }
 
   return replacements.replacements[color.toLowerCase()] || replacements.default || color;
+}
+
+export function isColorMapPerFiles(value: unknown): value is ColorMapPerFiles {
+  return Array.isArray((value as any)?.files);
 }

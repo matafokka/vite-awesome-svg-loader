@@ -3,7 +3,7 @@ title: Vite Awesome SVG Loader Documentation
 description: |
   Vite Awesome SVG Loader documentation website. This loader:
   imports SVGs as source code, base64 and data URI;
-  preserves stroke width;
+  preserves line width;
   replaces colors with currentColor or custom colors;
   optimizes SVGs with SVGO;
   creates SVG sprites.
@@ -25,8 +25,8 @@ This is a Vite plugin that:
    1. Source code [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
    1. Source code base64.
    1. Source code base64 [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
-1. Can [preserve line width](/guides/available-transformations/#preserve-line-width), i.e. make icons and line art
-have same line width when scaling.
+1. Can [preserve line width](/guides/available-transformations/#preserve-line-width), i.e. images retain line width
+regardless of the image size.
 1. Can replace colors with [currentColor](/guides/available-transformations/#replace-all-colors-with-currentcolor-value)
 or a [custom color via configuration](/guides/available-transformations/#replace-colors-with-custom-values).
 1. Automatically minimizes your SVGs with [SVGO](https://github.com/svg/svgo).

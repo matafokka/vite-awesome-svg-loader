@@ -8,7 +8,7 @@ A Vite plugin that:
    1. Source code [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
    1. Source code base64.
    1. Source code base64 [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
-1. Can preserve line width, i.e. make icons and line art have same line width when scaling.
+1. Can preserve line width, i.e. make images retain line width regardless of the image size.
 1. Can replace colors with `currentColor` or a custom color via configuration (see `replaceColorsList` option).
 1. Will automatically minimize your SVGs using [SVGO](https://github.com/svg/svgo).
 1. Allows you to create SVG sprites using provided integrations.

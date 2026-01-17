@@ -1,7 +1,7 @@
 import { defineConfig } from "tsdown";
 import { fileURLToPath } from "node:url";
-import { resolve, dirname } from "path";
-import { ENTRIES } from "./src/generated/cfg.ts";
+import { resolve, dirname, join } from "path";
+import { ENTRIES, INTERNAL_PACKAGES } from "./src/generated/cfg.ts";
 import { readFile, writeFile, copyFile } from "node:fs/promises";
 
 import loaderPackageJson from "../loader/package.json" with { type: "json" };
@@ -11,15 +11,14 @@ import { rolldownSvgDeclarationsBuilder } from "./src/rolldown-svg-declarations-
 // Common data
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const packagesDir = join(__dirname, "..").replaceAll("\\", "/");
 const processedEntries: Record<string, string> = {};
 const entriesArr: string[] = [];
-const internalSourcesMatchers: string[] = [];
 
 for (const key in ENTRIES) {
   const entryPath = ENTRIES[key];
   processedEntries[key] = toPath(entryPath);
   entriesArr.push(key);
-  internalSourcesMatchers.push(key, entryPath);
 }
 
 // Config
@@ -128,5 +127,16 @@ function toPath(...paths: string[]) {
 
 function isExternalSource(source: string) {
   source = source.replaceAll("\\", "/");
-  return internalSourcesMatchers.every((entry) => source !== entry && !source.includes(`/${entry}`));
+
+  if (source.startsWith(packagesDir)) {
+    return false;
+  }
+
+  for (const matcher of INTERNAL_PACKAGES) {
+    if (source === matcher || source.startsWith(`${matcher}/`)) {
+      return false
+    }
+  }
+
+  return true
 }

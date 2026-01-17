@@ -7,74 +7,44 @@ import { XastChild } from "svgo/lib/types";
 // @ts-expect-error
 import { querySelectorAll } from "svgo/lib/xast.js";
 import MurmurHash3 from "imurmurhash";
-import { ColorMap, ColorMapPerFiles, SvgLoaderOptions } from "./types";
+import {
+  ColorMap,
+  ColorMapPerFiles,
+  CssSelectors,
+  FileMatcher,
+  FileMatcherFnContext,
+  FileMatchers,
+  SvgLoaderOptions,
+} from "./types";
 import {
   escapeBackticks,
+  isColorMapPerFiles,
   matchesPath,
   matchesQuery,
-  matchesQueryOrList,
+  matchesQueryOrPath as matchesQueryOrPathRaw,
   matchesSelectors,
   normalizeBaseDir,
-  selectorsToList,
+  selectorsToList as selectorsToListRaw,
   toBase64,
 } from "./internal/misc";
 import { preserveLineWidth } from "./internal/preserveLineWidth";
 import { ResolvedColorReplacements } from "./internal/types";
 import { replaceColorsSvg } from "./internal/replaceColorsSvg";
 import { IMPORT_TYPES } from "./internal/const";
-
-const DEFAULT_OPTIONS: Required<SvgLoaderOptions> = {
-  tempDir: ".temp",
-  preserveLineWidthList: [],
-  skipPreserveLineWidthList: [],
-  skipPreserveLineWidthSelectors: [],
-  setCurrentColorList: [],
-  skipSetCurrentColorList: [],
-  skipSetCurrentColorSelectors: [],
-  replaceColorsList: [],
-  skipReplaceColorsList: [],
-  skipReplaceColorsSelectors: [],
-  skipTransformsList: [],
-  skipTransformsSelectors: [],
-  skipFilesList: [],
-  defaultImport: "source",
-  urlImportsInLibraryMode: "source-data-uri",
-};
+import { toArray } from "utils";
 
 /**
- * A Vite plugin that:
+ * `vite-awesome-svg-loader` plugin.
  *
- * 1. Can import SVGs (see also: {@link SvgLoaderOptions.defaultImport}) as:
- *    1. Source code (default import type): `import imageSrc from "./path/to/image.svg"`.
- *    1. URL: `import imageUrl from "./path/to/image.svg?url"`.
- *    1. Source code data URI: `import imageSrcDataUri from "./path/to/image.svg?source-data-uri"`.
- *    1. Source code Base64: `import imageBase64 from "./path/to/image.svg?base64"`.
- *    1. Source code Base64 data URI: `import imageBase64DataUri from "./path/to/image.svg?base64-data-uri"`.
+ * See {@link SvgLoaderOptions} for advanced configuration.
  *
- * 1. Can preserve line width (make icons and line art have same line width when scaling):
- * `import imageSrc from "./path/to/image.svg?preserve-line-width"`.
- * Can be configured via {@link SvgLoaderOptions.preserveLineWidthList}.
- *
- * 1. Can replace colors with `currentColor` (or a custom color via {@link SvgLoaderOptions.replaceColorsList}):
- * `import imageSrc from "./path/to/image.svg?set-current-color"`.
- * Can be configured via {@link SvgLoaderOptions.replaceColorsList}.
- *
- * 1. Will automatically minimize your SVGs using [SVGO](https://github.com/svg/svgo).
- *
- * 1. Allows you to create SVG sprites using provided integrations.
- *
- * @param options Plugin options
+ * @param options Plugin options. It is recommended to provide options instead of using queries in imports.
  */
 export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
-  const mergedOptions = { ...DEFAULT_OPTIONS, ...options };
+  const { urlImportsInLibraryMode = "source-data-uri" } = options;
+  let tempDir = options.tempDir || ".temp";
 
-  mergedOptions.tempDir = mergedOptions.tempDir.replaceAll("\\", "/");
-
-  if (
-    mergedOptions.tempDir.startsWith("/") ||
-    mergedOptions.tempDir.startsWith("./") ||
-    mergedOptions.tempDir.indexOf(":/") !== -1
-  ) {
+  if (tempDir.startsWith("/") || tempDir.startsWith("./") || tempDir.indexOf(":/") !== -1) {
     throw new Error(
       '"tempDir" option must be in format "path/to/temp/dir",' +
         'i.e. it shouldn\'t be an absolute path, or start with "./".' +
@@ -82,46 +52,56 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
     );
   }
 
-  if (mergedOptions.tempDir.endsWith("/")) {
-    mergedOptions.tempDir = mergedOptions.tempDir.substring(0, mergedOptions.tempDir.length - 1);
+  if (tempDir.endsWith("/")) {
+    tempDir = tempDir.substring(0, tempDir.length - 1);
   }
 
-  mergedOptions.tempDir = "/" + mergedOptions.tempDir;
+  tempDir = "/" + tempDir;
 
   let isBuildMode = false;
   let isLibraryMode = false;
   let root = "";
   let base = "";
 
-  const replaceColorsList = options.setCurrentColorList || mergedOptions.replaceColorsList;
+  const replaceColorsList = toArray(options.setCurrentColorList || options.replaceColorsList || []);
 
   // Prioritize replacements like so:
   const replacementsWithFiles: ColorMapPerFiles[] = []; // ColorMapPerFiles
-  const filesWithCurrentColor: ColorMapPerFiles[] = []; // string | RegExp
+  const filesWithCurrentColor: ColorMapPerFiles[] = []; // FileMatcher
 
   // ColorMap
   const allFilesReplacements: ColorMapPerFiles = {
-    files: [/.*/],
+    files: /.*/,
     replacements: {},
     default: "",
   };
 
   let hasAllFilesReplacements = false;
 
+  const isFileMatcher = (value: Exclude<(typeof replaceColorsList)[0], ColorMapPerFiles>): value is FileMatcher => {
+    switch (typeof value) {
+      case "string":
+      case "function":
+        return true;
+    }
+
+    return value instanceof RegExp;
+  };
+
   // Normalize list and apply prioritization
   for (const replacements of replaceColorsList) {
-    if (typeof replacements === "string" || replacements instanceof RegExp) {
+    if (isColorMapPerFiles(replacements)) {
+      replacementsWithFiles.push(replacements);
+      continue;
+    }
+
+    if (isFileMatcher(replacements)) {
       filesWithCurrentColor.push({
-        files: [replacements],
+        files: replacements,
         replacements: {},
         default: "currentColor",
       });
 
-      continue;
-    }
-
-    if (replacements.files instanceof Array) {
-      replacementsWithFiles.push(replacements as ColorMapPerFiles);
       continue;
     }
 
@@ -154,7 +134,7 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
     configureServer(server) {
       server.httpServer?.on("close", async () => {
         if (!isBuildMode) {
-          await rm(root + mergedOptions.tempDir, { force: true, recursive: true });
+          await rm(root + tempDir, { force: true, recursive: true });
         }
       });
     },
@@ -191,28 +171,44 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
         query[key.toLowerCase()] = value || "1";
       }
 
-      if (matchesQueryOrList(relPathWithSlash, query["skip-awesome-svg-loader"], mergedOptions.skipFilesList)) {
+      // Create wrappers around matching functions for convenience
+
+      const fileMatcherCtx: FileMatcherFnContext = {
+        fullPath: (root.endsWith("/") ? root.substring(root.length) : root) + relPathWithSlash,
+        relativePath: relPathWithSlash,
+      };
+
+      const matchesQueryOrPath = (options: { matchers: FileMatchers | undefined; param?: string }) =>
+        matchesQueryOrPathRaw({
+          ...fileMatcherCtx,
+          matchers: options.matchers || [],
+          queryValue: query[options.param!],
+        });
+
+      const selectorsToList = (selectors: CssSelectors | undefined) =>
+        selectorsToListRaw({ ...fileMatcherCtx, selectors: selectors || [] });
+
+      // Skip specified files
+
+      if (matchesQueryOrPath({ param: "skip-awesome-svg-loader", matchers: options.skipFilesList })) {
         return null;
       }
 
       // Resolve transform configuration
 
-      const shouldSkipTransforms = matchesQueryOrList(
-        relPathWithSlash,
-        query["skip-transforms"],
-        mergedOptions.skipTransformsList,
-      );
+      const shouldSkipTransforms = matchesQueryOrPath({
+        param: "skip-transforms",
+        matchers: options.skipTransformsList,
+      });
 
       const shouldPreserveLineWidth =
         !shouldSkipTransforms &&
-        matchesQueryOrList(relPathWithSlash, query["preserve-line-width"], mergedOptions.preserveLineWidthList) &&
-        !matchesQueryOrList(relPathWithSlash, undefined, mergedOptions.skipPreserveLineWidthList);
+        matchesQueryOrPath({ param: "preserve-line-width", matchers: options.preserveLineWidthList }) &&
+        !matchesQueryOrPath({ matchers: options.skipPreserveLineWidthList });
 
-      const skipPreserveLineWidthSelectors = selectorsToList(
-        relPathWithSlash,
-        mergedOptions.skipPreserveLineWidthSelectors,
-        !shouldPreserveLineWidth,
-      );
+      const skipPreserveLineWidthSelectors = shouldPreserveLineWidth
+        ? selectorsToList(options.skipPreserveLineWidthSelectors)
+        : [];
 
       let shouldReplaceColors = false;
 
@@ -224,29 +220,25 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
 
       if (
         !shouldSkipTransforms &&
-        !matchesQueryOrList(
-          relPathWithSlash,
-          undefined,
-          options.skipSetCurrentColorList || mergedOptions.skipReplaceColorsList,
-        )
+        !matchesQueryOrPath({ matchers: options.skipSetCurrentColorList || options.skipReplaceColorsList })
       ) {
         if (matchesQuery(query["set-current-color"])) {
           colorReplacements.default = "currentColor";
           shouldReplaceColors = true;
         } else {
-          for (const replacements of replaceColorsListNormalized) {
-            if (!matchesPath(relPathWithSlash, replacements.files)) {
+          for (const entry of replaceColorsListNormalized) {
+            if (!matchesPath({ ...fileMatcherCtx, matchers: entry.files })) {
               continue;
             }
 
             shouldReplaceColors = true;
 
-            if (colorReplacements.default === undefined && replacements.default !== undefined) {
-              colorReplacements.default = replacements.default;
+            if (colorReplacements.default === undefined && entry.default !== undefined) {
+              colorReplacements.default = entry.default;
             }
 
-            for (const color in replacements.replacements) {
-              colorReplacements.replacements[color] ||= replacements.replacements[color];
+            for (const color in entry.replacements) {
+              colorReplacements.replacements[color] ||= entry.replacements[color];
             }
           }
         }
@@ -254,17 +246,11 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
 
       colorReplacements.default ??= "currentColor";
 
-      const skipReplaceColorsSelectors = selectorsToList(
-        relPathWithSlash,
-        options.skipSetCurrentColorSelectors || mergedOptions.skipReplaceColorsSelectors,
-        !shouldReplaceColors,
-      );
+      const skipReplaceColorsSelectors = shouldReplaceColors
+        ? selectorsToList(options.skipSetCurrentColorSelectors || options.skipReplaceColorsSelectors)
+        : [];
 
-      const skipTransformsSelectors = selectorsToList(
-        relPathWithSlash,
-        mergedOptions.skipTransformsSelectors,
-        shouldSkipTransforms,
-      );
+      const skipTransformsSelectors = shouldSkipTransforms ? [] : selectorsToList(options.skipTransformsSelectors);
 
       // Hash path and transform parameters to guarantee same output for duplicate parameters. All parameters
       // should be accounted and normalized (i.e. stuff like whitespace in CSS selectors shouldn't affect output).
@@ -354,7 +340,7 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
         ],
       }).data;
 
-      let importType = mergedOptions.defaultImport;
+      let importType = options.defaultImport || "source";
 
       for (const type of IMPORT_TYPES) {
         if (query[type]) {
@@ -362,8 +348,8 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
         }
       }
 
-      if (isLibraryMode && importType === "url" && mergedOptions.urlImportsInLibraryMode !== "emit-files") {
-        importType = mergedOptions.urlImportsInLibraryMode;
+      if (isLibraryMode && importType === "url" && urlImportsInLibraryMode !== "emit-files") {
+        importType = urlImportsInLibraryMode;
       }
 
       /**
@@ -392,7 +378,7 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
       }
 
       if (!isBuildMode) {
-        const assetUrl = mergedOptions.tempDir + assetRelPath;
+        const assetUrl = tempDir + assetRelPath;
         await writeFile(root + assetUrl, code);
         return getExports(`"${base + assetUrl}"`);
       }

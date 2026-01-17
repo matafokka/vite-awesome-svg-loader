@@ -9,7 +9,9 @@
     "build": "vite build"
   },
   "dependencies": {
-    "vite": "*"
+    "vite": "*",
+    "types": "*",
+    "utils": "*"
   },
   "devDependencies": {
     "@types/css-tree": "^2.3.3"

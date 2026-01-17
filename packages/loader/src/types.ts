@@ -1,33 +1,7 @@
+import type { MaybeArray } from "types/utility";
+
 /**
- * SVG loader options.
- *
- * **Paths**
- *
- * If an option accepts a path, both file name and the path relative to the project's root with leading slash are
- * compared against the matchers.
- *
- * For example, for a file `/src/assets/icons/menu.svg` following strings will be compared:
- *
- * 1. `/assets/icons/menu.svg` - note that it doesn't start with `/src`
- * 2. `menu.svg`
- *
- * To avoid transforming multiple files with the same name, always include path into each entry.
- *
- * Examples:
- *
- * ```ts
- * viteAwesomeSvgLoader({
- *   preserveLineWidthList: [
- *     // Recommended formats:
- *     new RegExp("\\/img\\/icons"), // Matches all paths containing "/img/line-art/"
- *     "/assets/img/logo.svg", // Matches single file "/assets/img/logo.svg"
- *
- *     // Not recommended formats:
- *     "splash.svg", // Matches all files named "splash.svg"
- *     new RegExp("\\/icons\\/plus\\.svg", // Matches all paths containing "/icons/plus.svg"
- *   ],
- * })
- * ```
+ * `vite-awesome-svg-loader` options
  */
 export interface SvgLoaderOptions {
   /**
@@ -38,230 +12,233 @@ export interface SvgLoaderOptions {
   tempDir?: string;
 
   /**
-   * A list of files or directories to preserve line width of, i.e. to set `vector-effect="non-scaling-stroke"`.
+   * Files where line width should be preserved by adding `vector-effect="non-scaling-stroke"`.
    *
-   * This option is primarily for icons and line art.
+   * See {@link FileMatchers} for the available formats.
    *
-   * This also can be done in an import: `import imageSrc from "./path/to/image.svg?preserve-line-width"`.
-   *
-   * @example
-   *
-   * viteAwesomeSvgLoader({
-   *   preserveLineWidthList: [new RegExp("some\\/pattern\\/"), "some/directory", "some/file.svg"],
-   * })
+   * **Alternative**: Use import query: `import image from "./image.svg?preserve-line-width"`.
    */
-  preserveLineWidthList?: (string | RegExp)[];
+  preserveLineWidthList?: FileMatchers;
 
   /**
-   * A list of files or directories to disable preserving line width of. Overrides {@link preserveLineWidthList}.
+   * Files where line width should **NOT** be preserved.
    *
-   * @example
+   * Takes precedence over {@link preserveLineWidthList} and import queries
+   * (`import image from "./image.svg?preserve-line-width"`).
    *
-   * viteAwesomeSvgLoader({
-   *   skipPreserveLineWidthList: [new RegExp("some\\/pattern\\/"), "some/directory", "some/file.svg"],
-   * })
+   * See {@link FileMatchers} for the available formats.
    */
-  skipPreserveLineWidthList?: (string | RegExp)[];
+  skipPreserveLineWidthList?: FileMatchers;
 
   /**
-   * A list of CSS selectors to disable {@link preserveLineWidthList} for. Use it to leave specific elements stroke
-   * width as-is.
+   * CSS selectors where line width should **NOT** be preserved. Use this to keep specific elements' stroke widths
+   * unchanged.
    *
-   * Can be a list of selectors or selectors-per-files specifiers.
+   * See {@link CssSelectors} for the available formats and more configuration options.
    *
-   * Unlike {@link skipSetCurrentColorSelectors} and {@link skipTransformsSelectors}, doesn't impact build performance.
+   * **Note:** Unlike {@link skipSetCurrentColorSelectors} and {@link skipTransformsSelectors}, doesn't impact build
+   * performance.
    *
    * @example
    *
    * viteAwesomeSvgLoader({
    *   skipPreserveLineWidthSelectors: [
-   *     // It can be a list of CSS selectors like this one. Every element in every file will be checked against it.
+   *     // Global selector:
    *     '*[data-original-line-width="true"], *[data-original-line-width="true"] *',
    *
-   *     // Or it can be configured on per-file basis:
+   *     // File-scoped selector:
    *     {
-   *       files: [/ignore-elements\.svg/, /some-other-file\.svg/],
+   *       files: [new RegExp("\\/some\\-file\\.svg"), new RegExp("\\/other\\-file\\.svg")],
    *       selectors: ['*[data-original-line-width="true"], *[data-original-line-width="true"] *'],
    *     },
    *   ],
    * })
    */
-  skipPreserveLineWidthSelectors?: (string | SelectorsPerFiles)[];
+  skipPreserveLineWidthSelectors?: CssSelectors;
 
   /**
-   * A list of files or directories to replace fill, stroke and `<stop>` colors with `currentColor` (default) or other
-   * colors (if {@link ColorMapPerFiles} or {@link ColorMap} is specified), i.e.:
+   * Files where fill, stroke and `<stop>` colors should be replaced with `currentColor` (default) or custom colors.
    *
-   * 1. `fill`, `stroke` and `stop-color` attributes and CSS identifiers will be replaced with `currentColor` or other
-   * given color.
-   * 2. `none`, `transparent` or `currentColor` values will not be replaced.
+   * **What's replaced:**
    *
-   * Opacity (i.e. `rgba()`) won't be preserved.
-   * You have to manually set opacity by setting `fill-opacity` and `stroke-opacity` attributes.
+   * 1. `fill`, `stroke` and `stop-color` attributes.
+   * 1. CSS identifiers.
    *
-   * This is done because opacity may be handled with a stylesheet selector. This case is hard to implement, and it may
-   * slow down build process. This behavior might be changed in future, but it shouldn't break your project.
+   * **What's untouched:**
+   *
+   * 1. `none`, `transparent`, and `currentColor` values.
+   *
+   * **Available formats** in application priority (from highest to lowest):
+   *
+   * 1. {@link ColorMapPerFiles} - a color to replacement map scoped to the files (see {@link FileMatchers})
+   * specified in {@link ColorMapPerFile.files} property.
+   *
+   * 1. {@link ColorMap} - a color to replacement map applied to all files.
+   *
+   * 1. {@link FileMatcher} - files where all colors should be replaced with `currentColor`.
+   *
+   * If multiple entries match the same file, replacements are merged by following rules:
+   *
+   * 1. If two entries replace the same color or have {@link ColorMapPerFiles.default} set, the entry with highest
+   * priority wins.
+   *
+   * 1. If, in previous case, both entries have the same priority, the entry with the lowest index in the original array
+   * wins.
+   *
+   * **Caveats:**
+   *
+   * Opacity set by initial colors, i.e. `rgba()` is lost when color is replaced. This is so because opacity retention
+   * would:
+   *
+   * 1. Still bring confusion because one may rightfully expect that color replacement will completely replace colors
+   * and not correct them.
+   *
+   * 1. Slow down build process.
+   *
+   * 1. Impose high maintenance complexity.
+   *
+   * **Notes:**
    *
    * Setting `currentColor` can be done with an import: `import imageSrc from "./path/to/image.svg?set-current-color"`.
    *
-   * Replacements priority:
-   *
-   * 1. {@link ColorMapPerFiles}
-   * 1. {@link ColorMap}
-   * 1. `string | RegExp`
+   * Setting custom color is not possible with import queries.
    *
    * @example
    *
    * viteAwesomeSvgLoader({
    *   replaceColorsList: [
-   *     // File names
+   *     // FileMatcher: files where all colors should be replaced with `currentColor`
    *     "some-file.svg",
+   *     new RegExp("\\/some\\/directory\\/"),
+   *     (ctx) => ctx.relativePath.includes("/some/directory/") || ctx.fullPath.endsWith("-image.svg"),
    *
-   *     // Regexes that are checked against whole path and file name with extension
-   *     new RegExp("some\\/pattern\\/"),
-   *
-   *     // Map of color replacements. Key is an original color, value is its replacement. Both can be any values:
-   *     // HEX, name, rgb() or arbitrary custom values. Applied to all files.
+   *     // ColorMap: map of color replacements.
+   *     // Key is an original color, value is its replacement.
    *     {
    *       "#003147": "red",
    *       "rgb(0, 49, 71)": "#003147",
    *       "myCustomColor": "var(--some-color-var)",
    *     },
    *
-   *     // Map of color replacements per files
+   *     // ColorMapPerFiles: a color to replacement map scoped to the specified files
    *     {
-   *       files: ["vars.svg"], // File names or regexes, same format as above
+   *       // File matchers
+   *       files: ["vars.svg"],
    *
-   *       // Replacements, same format as above
+   *       // Replacements
    *       replacements: {
    *         red: "var(--primary-color)",
    *         green: "var(--secondary-color)",
    *         blue: "var(--tertiary-color)",
    *       },
    *
-   *       // Default value for colors that are not in replacements map. Set an empty string to preserve original colors.
-   *       // Default value is "currentColor",
-   *       default: "currentColor"
+   *       // A default color for unspecified colors
+   *       default: "red",
    *     },
    *   ],
    * })
    */
-  replaceColorsList?: (string | RegExp | ColorMap | ColorMapPerFiles)[];
+  replaceColorsList?: MaybeArray<FileMatcher | ColorMap | ColorMapPerFiles>;
 
   /**
-   * A list of files or directories to disable color replacements of. Overrides {@link replaceColorsList}.
+   * Files where colors should **NOT** be replaced.
    *
-   * @example
+   * Takes precedence over {@link replaceColorsList} and import queries
+   * (`import image from "./image.svg?set-current-color"`).
    *
-   * viteAwesomeSvgLoader({
-   *   skipReplaceColorsList: [new RegExp("some\\/pattern\\/"), "some/directory", "some/file.svg"],
-   * })
+   * See {@link FileMatchers} for the available formats.
    */
-  skipReplaceColorsList?: (string | RegExp)[];
+  skipReplaceColorsList?: FileMatchers;
 
   /**
-   * A list of CSS selectors to disable {@link skipReplaceColorsList} for. Use it to leave specific elements colors
-   * as-is.
+   * CSS selectors where colors should **NOT** be replaced. Use it to leave specific elements colors unchanged.
    *
-   * Can be a list of selectors or selectors-per-files specifiers.
+   * See {@link CssSelectors} for the available formats and more configuration options.
    *
-   * **You probably don't need this option.** Think about other solutions to your problem. See the demos for the tips.
+   * **Warning**: Heavy usage can significantly slow down build performance.
    *
-   * **Heavy usage may significantly slow down build time.** Limit selectors to specific files to improve performance.
+   * Limit selectors to specific files to improve performance.
+   *
+   * Oe better, consider alternative approaches such as using color maps. See {@link replaceColorsList},
+   * {@link ColorMap}, and {@link ColorMapPerFiles}) for the details.
    *
    * @example
    *
    * viteAwesomeSvgLoader({
    *   skipReplaceColorsSelectors: [
-   *     // It can be a list of CSS selectors like this one. Every element in every file will be checked against it.
+   *     // Global selector:
    *     '*[data-original-colors="true"], *[data-original-colors="true"] *',
    *
-   *     // Or it can be configured on per-file basis:
+   *     // File-scoped selector:
    *     {
-   *       files: [/ignore-elements\.svg/, /some-other-file\.svg/],
+   *       files: [new RegExp("\\/some\\-file\\.svg"), new RegExp("\\/other\\-file\\.svg")],
    *       selectors: ['*[data-original-colors="true"], *[data-original-colors="true"] *'],
    *     },
    *   ],
    * })
    */
-  skipReplaceColorsSelectors?: (string | SelectorsPerFiles)[];
+  skipReplaceColorsSelectors?: CssSelectors;
 
   /**
-   * A list of files to skip while transforming. Applies to any transformation except SVGO.
+   * Files to **NOT** transform (except SVGO).
    *
-   * For example, if you add a directory to {@link preserveLineWidthList} and add a file in that directory to this list,
-   * line width of added file won't be preserved.
+   * See {@link FileMatchers} for the available formats.
    *
-   * SVGO is still applied to the added files.
+   * Takes precedence over {@link replaceColorsList}, {@link preserveLineWidthList}, and import queries
+   * (`import image from "./image.svg?set-current-color&preserve-line-width"`).
    *
-   * @example
-   *
-   * viteAwesomeSvgLoader({
-   *   skipTransformsList: [new RegExp("some\\/pattern\\/"), "some/directory", "some/file.svg"],
-   * })
+   * **Alternative**: Use import query: `import image from "./image.svg?skip-transforms"`.
    */
-  skipTransformsList?: (string | RegExp)[];
+  skipTransformsList?: FileMatchers;
 
   /**
-   * A list of CSS selectors to disable all transforms for. Use it to leave specific elements as-is.
+   * CSS selectors which should **NOT** be transformed. Use this to leave specific elements untouched.
    *
-   * Can be a list of selectors or selectors-per-files specifiers.
+   * See {@link CssSelectors} for the available formats and more configuration options.
    *
-   * **You probably don't need this option.** Think about other solutions to your problem. See the demos for the tips.
+   * **Warning**: Heavy usage can significantly slow down build performance.
    *
-   * **Heavy usage may significantly slow down build time.** Limit selectors to specific files to improve performance.
+   * Limit selectors to specific files to improve performance.
+   *
+   * Or better, consider following approach:
+   *
+   * 1. To avoid color replacement, consider alternative approaches such as using color maps.
+   * See {@link replaceColorsList}, {@link ColorMap}, and {@link ColorMapPerFiles}) for the details.
+   *
+   * 1. To avoid line width preservation, just use {@link skipPreserveLineWidthSelectors}.
    *
    * @example
    *
    * viteAwesomeSvgLoader({
    *   skipTransformsSelectors: [
-   *     // It can be a list of CSS selectors like this one. Every element in every file will be checked against it.
+   *     // Global selector:
    *     '*[data-no-transforms="true"], *[data-no-transforms="true"] *',
    *
-   *     // Or it can be configured on per-file basis:
+   *     // File-scoped selector:
    *     {
-   *       files: [/ignore-elements\.svg/, /some-other-file\.svg/],
+   *       files: [new RegExp("\\/some\\-file\\.svg"), new RegExp("\\/other\\-file\\.svg")],
    *       selectors: ['*[data-no-transforms="true"], *[data-no-transforms="true"] *'],
    *     },
    *   ],
    * })
    */
-  skipTransformsSelectors?: (string | SelectorsPerFiles)[];
+  skipTransformsSelectors?: CssSelectors;
 
   /**
-   * A list of files to skip loading of. Files will be passed to another loader.
+   * Files to bypass. They will be passed to another loader.
    *
-   * This also can be done in an import: `import imageSrc from "./path/to/image.svg?skip-transforms"`.
-   *
-   * @example
-   *
-   * viteAwesomeSvgLoader({
-   *   skipFilesList: [new RegExp("some\\/pattern\\/"), "some/directory", "some/file.svg"],
-   * })
+   * See {@link FileMatchers} for the available formats.
    */
-  skipFilesList?: (string | RegExp)[];
+  skipFilesList?: FileMatchers;
 
   /**
-   * Default import type, i.e. what you get without specifying anything in the import URL.
+   * Default import type when no import query is specified. Available values:
    *
-   * This also can be done in an import:
-   *
-   * ```ts
-   * // Source code
-   * import imageSrc from "./path/to/image.svg?source";
-   *
-   * // URL
-   * import imageUrl from "./path/to/image.svg?url";
-   *
-   * // Source code Data URI
-   * import imageSrcDataUri from "./path/to/image.svg?source-data-uri";
-   *
-   * // Base64
-   * import imageBase64 from "./path/to/image.svg?base-64";
-   *
-   * // Base64 data URI
-   * import imageBase64DataUri from "./path/to/image.svg?base-64-data-uri";
-   * ```
+   * 1. `source` - SVG source code (default).
+   * 1. `url` - URL pointing to the file.
+   * 1. `source-data-uri` - SVG source code encoded in data URI.
+   * 1. `base64` - SVG source code encoded in base-64.
+   * 1. `base64-data-uri`: SVG source code encoded in base-64 data URI.
    *
    * @default "source"
    */
@@ -270,57 +247,104 @@ export interface SvgLoaderOptions {
   // Deprecated options
 
   /**
-   * A list of files or directories to replace fill, stroke and `<stop>` colors of with `currentColor`.
-   *
-   * Overrides {@link replaceColorsList}.
-   *
-   * @deprecated Deprecated in favor of {@link replaceColorsList}
+   * @deprecated Use {@link replaceColorsList}
    */
-  setCurrentColorList?: (string | RegExp)[];
+  setCurrentColorList?: FileMatchers;
 
   /**
-   * A list of files or directories to disable setting current color of. Overrides {@link setCurrentColorList} and
-   * {@link replaceColorsList}.
-   *
-   * @deprecated Deprecated in favor of {@link replaceColorsList}
+   * @deprecated Use {@link replaceColorsList}
    */
-  skipSetCurrentColorList?: (string | RegExp)[];
+  skipSetCurrentColorList?: FileMatchers;
 
   /**
-   * A list of CSS selectors to disable {@link setCurrentColorList} for.Overrides {@link setCurrentColorList},
-   * {@link replaceColorsList} and {@link skipReplaceColorsSelectors}.
-   *
-   * @deprecated Deprecated in favor of {@link skipReplaceColorsSelectors}
+   * @deprecated Use {@link skipReplaceColorsSelectors}
    */
-  skipSetCurrentColorSelectors?: (string | SelectorsPerFiles)[];
+  skipSetCurrentColorSelectors?: CssSelectors;
 
   /**
-   * Should emit SVG files in [library mode](https://vite.dev/guide/build.html#library-mode) when SVGs are imported via
-   * `?url` import type.
+   * Behavior for `?url` imports in [library mode](https://vite.dev/guide/build.html#library-mode). Possible values:
    *
-   * Possible values:
+   * 1. `source-data-uri` - source data URI will be exported, no files will be emitted.
    *
-   * 1. `source-data-uri` - no files will be emitted, and source data URI will be exported
-   * (like with `?source-data-uri` import type).
+   * 1. `base-64-data-uri` - base64 data URI will be exported, no files will be emitted.
    *
-   * 1. `base-64-data-uri` - no files will be emitted, and base64 data URI will be exported
-   * (like with `?base-64-data-uri` import type).
-   *
-   *
-   * 1. `emit-files` - files will be emitted, and exports like this will be produced:
+   * 1. `emit-files` - files will be emitted, following exports will be produced:
    *
    *    ```ts
    *    "" + new URL("file-name-[hash].svg", import.meta.url).href
    *    ```
    *
-   *    **Warning:** suitable only for internal use because:
-   *
-   *    1. This may cause issues when your library is consumed. Additional setup from the users will be required.
-   *    1. This is not aligned with the default Vite behavior.
+   *    **Warning:** May cause issues when your library is consumed. Requires additional configuration from the users.
+   *    **Warning:** This behavior is not aligned with the default Vite behavior.
    *
    * @default "source-data-uri"
    */
   urlImportsInLibraryMode?: UrlImportsInLibraryMode;
+}
+
+/**
+ * A single instance or an array of file matchers in following formats:
+ *
+ * 1. **File name**: `image.svg`.
+ *
+ * 1. **Path to a file** from the project's root: `/src/assets/image.svg`.
+ *
+ * 1. **RegExp**: tested against file name (`image.svg`) and relative path (`/src/assets/image.svg`).
+ *
+ * 1. **Function** ({@link FileMatcherFn}) that accepts information about a file and returns `true`, if line width
+ * should be preserved.
+ *
+ * All paths use forward slash (`/`) as a separator. Relative paths start with `/`.
+ *
+ * **Recommendation:** Include path information and use clean project structure to avoid unintentional matches.
+ *
+ * @example
+ *
+ * const matchers: FileMatchers = [
+ *   // Any file named "image.svg"
+ *   "image.svg",
+ *
+ *   // Specific file
+ *   "/src/assets/image.svg",
+ *
+ *   // Any path containing "/some/directory/"
+ *   new RegExp("\\/some\\/directory\\/"),
+ *
+ *   // Any file ending with "-image.svg"
+ *   new RegExp("\\-image\\.svg$"),
+ *
+ *   // Any path containing "/some/directory/" or any file ending with "-image.svg"
+ *   (ctx) => ctx.relativePath.includes("/some/directory/") || ctx.fullPath.endsWith("-image.svg"),
+ * ];
+ */
+export type FileMatchers = MaybeArray<FileMatcher>;
+
+/**
+ * Everything a file can be matched against
+ */
+export type FileMatcher = string | RegExp | FileMatcherFn;
+
+/**
+ * Custom file matcher
+ *
+ * @param ctx Matching context (information about a file)
+ * @returns `true`, if file matches
+ */
+export type FileMatcherFn = (ctx: FileMatcherFnContext) => boolean;
+
+/**
+ * Information about a file to be matched against a custom rule
+ */
+export interface FileMatcherFnContext {
+  /**
+   * Full path to the file. Uses forward slash (`/`) as a separator.
+   */
+  fullPath: string;
+
+  /**
+   * Path to the file from the project's root. Uses forward slash (`/`) as a separator. Starts with a slash.
+   */
+  relativePath: string;
 }
 
 /**
@@ -334,60 +358,101 @@ export type ImportType = "url" | "source" | "source-data-uri" | "base64" | "base
 export type UrlImportsInLibraryMode = "emit-files" | "source-data-uri" | "base64-data-uri";
 
 /**
- * CSS selector per file or files
+ * A single instance or an array of CSS selectors ({@link CssSelector}).
+ *
+ * @example
+ *
+ * const selectors: CssSelectors = [
+ *   // Global selector: applies to all files
+ *   ".box > path",
+ *
+ *   // File-scoped: single selector in single file
+ *   { selectors: ".box > path", files: "/assets/my-file.svg" },
+ *
+ *   // File-scoped: multiple selectors, multiple file matchers
+ *   {
+ *     files: ["/assets/my-file.svg", new RegExp("\\/some\\/directory\\/")],
+ *     selectors: [".box > path", ".stripe.red"],
+ *   }
+ * ];
+ */
+export type CssSelectors = MaybeArray<CssSelector>;
+
+/**
+ * CSS selectors in following formats:
+ *
+ * 1. **String** - a selector that will be applied to all files.
+ * 1. **Object** ({@link SelectorsPerFiles}) - selectors applied only to the specified files.
+ */
+export type CssSelector = string | SelectorsPerFiles;
+
+/**
+ * One or more selectors applied to one or more specified files
  */
 export interface SelectorsPerFiles {
   /**
-   * List of filenames and/or paths matchers
+   * Files to which CSS selectors should be applied. See {@link FileMatchers} for the available formats.
    */
-  files: (string | RegExp)[];
+  files: FileMatchers;
 
   /**
-   * List of selectors
+   * A single instance or an array of CSS selectors
    */
-  selectors: string[];
+  selectors: MaybeArray<string>;
 }
 
 /**
- * Maps original SVG colors (case-insensitive) to their replacements
+ * Maps original SVG colors (case-insensitive) to their replacements (any values: HEX, name, rgb() or even arbitrary
+ * strings).
+ *
+ * Only specified keys will be replaced. Any other value even with the same color (i.e. `#00f` instead of "blue")
+ * won't be affected.
  */
 export type ColorMap = Record<string, string>;
 
 /**
- * Maps original SVG colors (case-insensitive) to their replacements. Can be applied to specific files via {@link files} property.
+ * Maps original SVG colors (case-insensitive) to their replacements per specified files.
  *
  * @example
  *
  * const map = {
- *   // Optional list of files to apply replacements to.
+ *   // Files where colors should be replaced
  *   files: ["my-file.svg", /icon\-*.\.svg/],
  *
- *   // Will replace all colors with "red" value with "var(--primary-color)".
- *   // It'll replace only "red". HEX ("#ff0000"), RGB ("rgb(255, 0, 0)") and other values won't be replaced.
- *   "red": "var(--primary-color)",
+ *   // Color replacements
+ *   replacements: {
+ *     // Will replace all colors with "red" value with "var(--primary-color)".
+ *     // It'll replace only "red" value. HEX ("#ff0000"), RGB ("rgb(255, 0, 0)") and other values won't be affected.
+ *     "red": "var(--primary-color)",
  *
- *   // Same as above: this HEX value (case-insensitive) will be replaced with "var(--secondary-color)".
- *   // Just "blue" or any other values with the same resulting color won't be replaced.
- *   "#0000ff": "var(--secondary-color)",
+ *     // Same as above: this HEX value (case-insensitive) will be replaced with "var(--secondary-color)".
+ *     // Any other value with the same color (such as "blue" or "hsl(240deg 100% 50%)") won't be affected.
+ *     "#0000ff": "var(--secondary-color)",
  *
- *   // Again, only this value (case-insensitive) will be replaced with "var(--tertiary-color)". Any other value will be
- *   // left as-is.
- *   "rgb(0, 255, 0)": "var(--tertiary-color)",
+ *     // Again, only this value (case-insensitive) will be replaced with "var(--tertiary-color)".
+ *     // Any other value won't be affected.
+ *     "rgb(0, 255, 0)": "var(--tertiary-color)",
+ *   },
+ *
+ *   // A default color for unspecified colors.
+ *   // If not specified, "currentColor" is used.
+ *   // If an empty string specified, other colors won't be affected.
+ *   default: "red",
  * }
  */
 export interface ColorMapPerFiles {
   /**
-   * A list of files to apply replacements to. If omitted, replacements will be applied to all files
+   * Files where colors should be replaced. See {@link FileMatchers} for the available formats.
    */
-  files: (string | RegExp)[];
+  files: FileMatchers;
 
   /**
-   * Maps original SVG colors (case-insensitive) to their replacements
+   * Color replacements. See {@link ColorMap} for the details.
    */
   replacements: ColorMap;
 
   /**
-   * Replacement for other colors. Set to empty string to leave colors as-is.
+   * Replacement for other colors. Set to empty string to leave colors untouched.
    *
    * @default "currentColor"
    */

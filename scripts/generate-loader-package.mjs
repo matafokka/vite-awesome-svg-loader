@@ -50,22 +50,11 @@ export default async function main() {
         return;
       }
 
-      return { pkg, pkgDir, shouldBundle: !!matcher, isLoader: matcher === LOADER_MATCHER };
+      return { pkg, pkgDir, isEntry: !!matcher, isLoader: matcher === LOADER_MATCHER };
     });
 
     return (await Promise.all(packagesDirsPromises)).filter((v) => !!v);
   })();
-
-  /**
-   * @typedef {typeof packagesMeta[0]} PackageMeta
-   */
-
-  /** @type {Record<string, PackageMeta>} */
-  const packagesIndex = {};
-
-  for (const meta of packagesMeta) {
-    packagesIndex[meta.pkg] = meta;
-  }
 
   // Register bundled packages
 
@@ -76,11 +65,17 @@ export default async function main() {
    */
   const viteConfigEntries = {};
 
+  let viteConfigInternalPackagesMatchers = "";
+
   /** @type {Promise<any>[]} */
   const entriesPromises = [];
 
-  for (const { pkg, shouldBundle, isLoader } of packagesMeta) {
-    if (!shouldBundle) {
+  for (const { pkg, isEntry, isLoader } of packagesMeta) {
+    if (pkg !== "vite-awesome-svg-loader") {
+      viteConfigInternalPackagesMatchers += `\n  "${pkg}",`;
+    }
+
+    if (!isEntry) {
       continue;
     }
 
@@ -116,7 +111,13 @@ export default async function main() {
 
   // Write constants for Vite config
 
-  const config = `export const ENTRIES: Record<string, string> = ${JSON.stringify(viteConfigEntries, undefined, 2)}`;
+  const config = [
+    `export const ENTRIES: Record<string, string> = ${JSON.stringify(viteConfigEntries, undefined, 2)}`,
+    ``,
+    `export const INTERNAL_PACKAGES = [` + viteConfigInternalPackagesMatchers,
+    `]`,
+  ].join("\n");
+
   const writeViteCfgPromise = writeFile(path.join(metaPackageEntriesDir, "cfg.ts"), config);
 
   // Await all created promises
