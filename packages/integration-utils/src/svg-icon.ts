@@ -9,7 +9,6 @@ import { SvgIconStyleProps } from "./types";
  * 1. CSS properties are in camel case: `minWidth`.
  *
  * @param props `SvgIcon` props
- * @param options Conversion options
  * @returns Style map
  */
 export function getSvgIconStyle(props: SvgIconStyleProps) {
