@@ -27,6 +27,7 @@
     "@vitejs/plugin-react": "^5.1.2",
     "@vitejs/plugin-vue": "^6.0.3",
     "@vue/eslint-config-typescript": "^14.2.0",
+    "@vue/language-core": "^3.0.10",
     "@vue/tsconfig": "^0.8.1",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "9.1.0",
