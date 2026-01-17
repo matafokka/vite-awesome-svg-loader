@@ -23,4 +23,4 @@ jobs:
       - run: npm install --verbose
       - run: npm run build
       - run: npm publish --verbose
-        working-directory: ./packages/vite-awesome-svg-loader/dist
+        working-directory: packages/vite-awesome-svg-loader/dist
