@@ -88,6 +88,11 @@ async function buildPackageJson() {
   delete packageJson.private;
   delete packageJson.scripts;
 
+  for (const pkg of INTERNAL_PACKAGES) {
+    delete packageJson.dependencies[pkg];
+    delete packageJson.devDependencies[pkg];
+  }
+
   await writeFile(toPath("dist/package.json"), JSON.stringify(packageJson, undefined, 2));
 }
 
