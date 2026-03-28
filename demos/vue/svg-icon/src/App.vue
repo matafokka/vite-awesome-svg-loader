@@ -10,27 +10,22 @@
     <SvgIcon
       :src="musicIconSrc"
       :color="color"
-      class="image"
     />
     <SvgIcon
       :src="starIconSrc"
       :color="color"
-      class="image"
     />
     <SvgIcon
       :src="videoIconSrc"
       :color="color"
-      class="image"
     />
     <SvgIcon
       :src="ghostImgSrc"
       :color="color"
-      class="image"
     />
     <SvgIcon
       :src="sunImgSrc"
       :color="color"
-      class="image"
     />
   </div>
 </template>

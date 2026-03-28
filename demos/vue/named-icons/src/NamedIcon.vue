@@ -39,7 +39,7 @@ const src = ref(loadingIcon); // SVG source code
 // Make name reactive
 
 const onNameChange = async (name: string) => {
-  let code = errorIcon;
+  let code: string;
 
   try {
     code = (await icons[name]()).default; // Fetch SVG source code
@@ -48,7 +48,7 @@ const onNameChange = async (name: string) => {
     code = errorIcon; // Provide a fallback for when icon could not be loaded
   }
 
-  // Verify that name hasn't changed. If it didn't, set its source code. Otherwise other onNameChange()
+  // Verify that name hasn't been changed. If it didn't, set its source code. Otherwise other onNameChange()
   // call will handle the changes.
   if (name === props.name) {
     src.value = code;

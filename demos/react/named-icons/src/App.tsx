@@ -5,18 +5,15 @@ export default function App() {
     <div className="images">
       <NamedIcon
         name="music"
-        color="orange"
-        className="image"
+        color="red"
       />
       <NamedIcon
         name="star"
-        color="orange"
-        className="image"
+        color="forestgreen"
       />
       <NamedIcon
         name="video"
-        color="orange"
-        className="image"
+        color="cornflowerblue"
       />
     </div>
   );

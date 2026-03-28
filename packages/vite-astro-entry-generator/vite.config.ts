@@ -18,7 +18,7 @@ export default defineConfig({
       entry: resolve(__dirname, "src/index.ts"),
       name: "ViteAstroEntryGenerator",
       fileName: "index",
-      formats: ["es", "cjs"],
+      formats: ["es"],
     },
 
     rollupOptions: {

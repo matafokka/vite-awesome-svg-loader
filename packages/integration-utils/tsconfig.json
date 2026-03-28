@@ -2,14 +2,15 @@
   "extends": ["../../tsconfig.json"],
   "compilerOptions": {
     "outDir": "./dist",
-    "module": "ES6",
-    "target": "ES5",
+    "module": "ESNext",
+    "target": "ESNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "downlevelIteration": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
+    "types": ["vite/client"]
   },
   "include": ["src", "../../modules.d.ts"]
 }

@@ -28,96 +28,127 @@
     "vite-awesome-svg-loader",
     "svgo"
   ],
-  "version": "4.1.1",
+  "version": "5.0.0",
   "homepage": "https://matafokka.github.io/vite-awesome-svg-loader",
   "repository": "https://github.com/matafokka/vite-awesome-svg-loader",
   "license": "LGPL-2.1-or-later",
   "private": true,
-  "main": "dist/loader.cjs",
-  "module": "dist/loader.js",
-  "types": "dist/loader.d.cts",
+  "sideEffects": false,
+  "main": "dist/loader/index.cjs",
+  "module": "dist/loader/index.js",
+  "types": "dist/loader/index.d.ts",
   "exports": {
-    "./integration-utils/styles.css": {
-      "import": "./dist/integration-utils-styles.css",
-      "require": "./dist/integration-utils-styles.css"
+    "./common-utils": {
+      "import": {
+        "types": "./dist/common-utils/index.d.ts",
+        "default": "./dist/common-utils/index.js"
+      },
+      "require": {
+        "types": "./dist/common-utils/index.d.ts",
+        "default": "./dist/common-utils/index.cjs"
+      }
     },
     "./integration-utils": {
       "import": {
-        "types": "./dist/integration-utils.d.ts",
-        "default": "./dist/integration-utils.js"
+        "types": "./dist/integration-utils/index.d.ts",
+        "default": "./dist/integration-utils/index.js"
       },
       "require": {
-        "types": "./dist/integration-utils.d.cts",
-        "default": "./dist/integration-utils.cjs"
+        "types": "./dist/integration-utils/index.d.ts",
+        "default": "./dist/integration-utils/index.cjs"
       }
     },
     ".": {
       "import": {
-        "types": "./dist/loader.d.ts",
-        "default": "./dist/loader.js"
+        "types": "./dist/loader/index.d.ts",
+        "default": "./dist/loader/index.js"
       },
       "require": {
-        "types": "./dist/loader.d.cts",
-        "default": "./dist/loader.cjs"
+        "types": "./dist/loader/index.d.ts",
+        "default": "./dist/loader/index.cjs"
       }
     },
     "./react-integration": {
       "import": {
-        "types": "./dist/react-integration.d.ts",
-        "default": "./dist/react-integration.js"
+        "types": "./dist/react-integration/index.d.ts",
+        "default": "./dist/react-integration/index.js"
       },
       "require": {
-        "types": "./dist/react-integration.d.cts",
-        "default": "./dist/react-integration.cjs"
+        "types": "./dist/react-integration/index.d.ts",
+        "default": "./dist/react-integration/index.cjs"
       }
     },
     "./vanilla-integration": {
       "import": {
-        "types": "./dist/vanilla-integration.d.ts",
-        "default": "./dist/vanilla-integration.js"
+        "types": "./dist/vanilla-integration/index.d.ts",
+        "default": "./dist/vanilla-integration/index.js"
       },
       "require": {
-        "types": "./dist/vanilla-integration.d.cts",
-        "default": "./dist/vanilla-integration.cjs"
+        "types": "./dist/vanilla-integration/index.d.ts",
+        "default": "./dist/vanilla-integration/index.cjs"
       }
     },
     "./vue-integration": {
       "import": {
-        "types": "./dist/vue-integration.d.ts",
-        "default": "./dist/vue-integration.js"
+        "types": "./dist/vue-integration/index.d.ts",
+        "default": "./dist/vue-integration/index.js"
       },
       "require": {
-        "types": "./dist/vue-integration.d.cts",
-        "default": "./dist/vue-integration.cjs"
+        "types": "./dist/vue-integration/index.d.ts",
+        "default": "./dist/vue-integration/index.cjs"
+      }
+    },
+    "./web-components-integration": {
+      "import": {
+        "types": "./dist/web-components-integration/index.d.ts",
+        "default": "./dist/web-components-integration/index.js"
+      },
+      "require": {
+        "types": "./dist/web-components-integration/index.d.ts",
+        "default": "./dist/web-components-integration/index.cjs"
+      }
+    },
+    "./web-components-integration/dom": {
+      "import": {
+        "types": "./dist/web-components-integration/dom.d.ts",
+        "default": "./dist/web-components-integration/dom.d.ts"
+      },
+      "require": {
+        "types": "./dist/web-components-integration/dom.d.ts",
+        "default": "./dist/web-components-integration/dom.d.ts"
       }
     }
   },
   "typesVersions": {
     "*": {
+      "./common-utils": [
+        "./dist/common-utils/index.d.ts"
+      ],
       "./integration-utils": [
-        "./dist/integration-utils.d.ts",
-        "./dist/integration-utils.d.cts"
+        "./dist/integration-utils/index.d.ts"
       ],
       ".": [
-        "./dist/loader.d.ts",
-        "./dist/loader.d.cts"
+        "./dist/loader/index.d.ts"
       ],
       "./react-integration": [
-        "./dist/react-integration.d.ts",
-        "./dist/react-integration.d.cts"
+        "./dist/react-integration/index.d.ts"
       ],
       "./vanilla-integration": [
-        "./dist/vanilla-integration.d.ts",
-        "./dist/vanilla-integration.d.cts"
+        "./dist/vanilla-integration/index.d.ts"
       ],
       "./vue-integration": [
-        "./dist/vue-integration.d.ts",
-        "./dist/vue-integration.d.cts"
+        "./dist/vue-integration/index.d.ts"
+      ],
+      "./web-components-integration": [
+        "./dist/web-components-integration/index.d.ts"
+      ],
+      "./web-components-integration/dom": [
+        "./dist/web-components-integration/dom.d.ts"
       ]
     }
   },
   "scripts": {
-    "build": "tsdown"
+    "build": "vite build"
   },
   "devDependencies": {
     "integration-utils": "*",
@@ -127,10 +158,12 @@
     "vue-integration": "*"
   },
   "dependencies": {
+    "common-utils": "*",
     "integration-utils": "*",
     "loader": "*",
     "react-integration": "*",
     "vanilla-integration": "*",
-    "vue-integration": "*"
+    "vue-integration": "*",
+    "web-components-integration": "*"
   }
 }

@@ -12,7 +12,7 @@ import transparentColorsOrig from "@/assets/caveats/white-fill.svg";
 
 import { SvgImage } from "vite-awesome-svg-loader/vanilla-integration";
 import { setSrcOnCheckboxChange } from "@/utils/dom";
-import { onAstroSamePageLoad } from "utils";
+import { onAstroSamePageLoad } from "internal-utils";
 
 export function caveats() {
   onAstroSamePageLoad(() => {
@@ -20,7 +20,7 @@ export function caveats() {
       const image = new SvgImage(lineWidth, "#line-width-images");
       image.getSvgEl().classList.add("standalone-image");
       setSrcOnCheckboxChange(image, "line-width-checkbox", lineWidthCaveatOrig, lineWidth);
-      new SvgImage(brokenLineWidth, "#broken-line-width").getSvgEl().classList.add("image");
+      new SvgImage(brokenLineWidth, "#broken-line-width").getSvgEl().classList.add("standalone-image");
     })();
 
     (function preLineWidthWorksOnlyOnStrokes() {

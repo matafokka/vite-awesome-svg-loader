@@ -8,14 +8,13 @@ sidebar:
 
 import { Aside, Steps } from "@astrojs/starlight/components";
 
-<Aside type="caution" title="This is not for integrations">
-  Do **NOT** use this to integrate with a framework. Vanilla JS integration is almost always larger than it needs to be.
-  Use `vite-awesome-svg-loader/integration-utils` instead.
+<Aside type="caution" title="Not for frameworks integrations">
+  Do **NOT** use this to integrate with a framework. The result almost always will be bulkier than a specialized
+  integration. Use `vite-awesome-svg-loader/integration-utils` package instead.
   See [other frameworks guide](/other-frameworks/quick-start/).
-
   ___
 
-  But if you need all or almost all Vanilla JS integration API then it's OK to use 👍
+  Only use Vanilla JS integration if you need its complete API for your own integration.
 </Aside>
 
 <Steps>
@@ -23,7 +22,7 @@ import { Aside, Steps } from "@astrojs/starlight/components";
 
    ```ts
    import {
-     SvgImage, // Basically implements SVG sprites
+     SvgImage, // Renders SVG sprites
      SvgIcon, // Basic SVG icon that uses SvgImage class internally
    } from "vite-awesome-svg-loader/vanilla-integration";
    ```
@@ -42,6 +41,6 @@ import { Aside, Steps } from "@astrojs/starlight/components";
    new SvgIcon(imageSrc, "#my-container") // Create an icon and mount it to the element with "my-container" id.
      .setSize("24px") // Set 24px size
      .setColor("red") // Set red color
-     .setColorTransition("0.3s ease-out"); // Set color transition
+     .setColorTransition("0.2s ease-out"); // Set color transition
    ```
 </Steps>

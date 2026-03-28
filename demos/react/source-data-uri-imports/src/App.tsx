@@ -20,23 +20,23 @@ export default function App() {
       <div className="images">
         <img
           src={musicIconUrl}
-          className="image"
+          alt=""
         />
         <img
           src={starIconUrl}
-          className="image"
+          alt=""
         />
         <img
           src={videoIconUrl}
-          className="image"
+          alt=""
         />
         <img
           src={ghostImgUrl}
-          className="image"
+          alt=""
         />
         <img
           src={sunImgUrl}
-          className="image"
+          alt=""
         />
       </div>
 
@@ -45,23 +45,23 @@ export default function App() {
       <div className="images">
         <img
           src={musicIconPreWidthUrl}
-          className="image"
+          alt=""
         />
         <img
           src={starIconPreWidthUrl}
-          className="image"
+          alt=""
         />
         <img
           src={videoIconPreWidthUrl}
-          className="image"
+          alt=""
         />
         <img
           src={ghostImgPreWidthUrl}
-          className="image"
+          alt=""
         />
         <img
           src={sunImgPreWidthUrl}
-          className="image"
+          alt=""
         />
       </div>
     </Fragment>

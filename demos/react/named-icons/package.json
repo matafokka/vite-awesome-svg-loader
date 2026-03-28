@@ -7,8 +7,7 @@
     "dev": "npm run build -- --watch",
     "build": "npm run type-check && npm run build-only",
     "build-only": "vite build --config vite.config.lib.ts",
-    "type-check": "tsc --noEmit",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "vite-awesome-svg-loader": "*",

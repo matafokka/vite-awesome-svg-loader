@@ -6,26 +6,26 @@
 
     <img
       src="@/assets/icons/music.svg?url"
-      class="image"
+      alt=""
     />
     <img
       src="@/assets/icons/star.svg?url"
-      class="image"
+      alt=""
     />
     <img
       src="@/assets/icons/video.svg?url"
-      class="image"
+      alt=""
     />
 
     <!-- Or import in script and pass to the img tag -->
 
     <img
       :src="ghostImgUrl"
-      class="image"
+      alt=""
     />
     <img
       :src="sunImgUrl"
-      class="image"
+      alt=""
     />
   </div>
 
@@ -34,23 +34,23 @@
   <div class="images">
     <img
       src="@/assets/icons/music.svg?url&preserve-line-width"
-      class="image"
+      alt=""
     />
     <img
       src="@/assets/icons/star.svg?url&preserve-line-width"
-      class="image"
+      alt=""
     />
     <img
       src="@/assets/icons/video.svg?url&preserve-line-width"
-      class="image"
+      alt=""
     />
     <img
       src="@/assets/lineart/ghost.svg?url&preserve-line-width"
-      class="image"
+      alt=""
     />
     <img
       src="@/assets/lineart/sun.svg?url&preserve-line-width"
-      class="image"
+      alt=""
     />
   </div>
 </template>

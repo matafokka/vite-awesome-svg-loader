@@ -1,10 +1,18 @@
+import styles from "@/assets/symbols.scss?inline";
+
 import debounce from "debounce";
 import MurmurHash3 from "imurmurhash";
+import { createStyle } from "common-utils";
 
 /**
- * ID of an SVG element that contains all symbols
+ * ID of an `<svg>` element that contains all symbols
  */
-export const SVG_ID = "svg-symbols";
+export const SVG_ID = "vite-awesome-svg-loader-symbols";
+
+/**
+ * ID of a `<style>` element that contains symbols' styles
+ */
+export const SVG_SYMBOLS_STYLE_ID = "vite-awesome-svg-loader-symbols-styles";
 
 /**
  * Prepended to the symbol ID
@@ -30,6 +38,8 @@ export function onSrcUpdate(prevSrc: string | undefined, src: string) {
     return {};
   }
 
+  createStyle(SVG_SYMBOLS_STYLE_ID, styles); // Reuse common function for initialization to simplify API
+
   // Get or create SVG symbols container
 
   let svgEl = document.getElementById(SVG_ID) as SVGSVGElement | null;
@@ -38,8 +48,6 @@ export function onSrcUpdate(prevSrc: string | undefined, src: string) {
     svgEl = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svgEl.id = SVG_ID;
     svgEl.setAttribute("aria-hidden", "true");
-    // display: none messes with some of the icons
-    svgEl.setAttribute("style", "position:fixed;top:-99999px;left:-99999px;z-index:0;opacity:0;");
     document.body.appendChild(svgEl);
   }
 
@@ -66,7 +74,7 @@ export function onSrcUpdate(prevSrc: string | undefined, src: string) {
   const svg = new DOMParser().parseFromString(src, "application/xml").firstElementChild;
 
   if (svg?.querySelector("parsererror")) {
-    console.error("Provided source code is not a valid SVG: " + src);
+    console.error("Source code is not a valid SVG: " + src);
     return { id };
   }
 

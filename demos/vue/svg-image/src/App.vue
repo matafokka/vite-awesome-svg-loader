@@ -2,51 +2,21 @@
   <p class="demo-section-caption">Original images:</p>
 
   <div class="images">
-    <SvgImage
-      :src="musicIconSrc"
-      class="image"
-    />
-    <SvgImage
-      :src="starIconSrc"
-      class="image"
-    />
-    <SvgImage
-      :src="videoIconSrc"
-      class="image"
-    />
-    <SvgImage
-      :src="ghostImgSrc"
-      class="image"
-    />
-    <SvgImage
-      :src="sunImgSrc"
-      class="image"
-    />
+    <SvgImage :src="musicIconSrc" />
+    <SvgImage :src="starIconSrc" />
+    <SvgImage :src="videoIconSrc" />
+    <SvgImage :src="ghostImgSrc" />
+    <SvgImage :src="sunImgSrc" />
   </div>
 
   <p class="demo-section-caption">Preserve line width:</p>
 
   <div class="images">
-    <SvgImage
-      :src="musicIconPreWidthSrc"
-      class="image"
-    />
-    <SvgImage
-      :src="starIconPreWidthSrc"
-      class="image"
-    />
-    <SvgImage
-      :src="videoIconPreWidthSrc"
-      class="image"
-    />
-    <SvgImage
-      :src="ghostImgPreWidthSrc"
-      class="image"
-    />
-    <SvgImage
-      :src="sunImgPreWidthSrc"
-      class="image"
-    />
+    <SvgImage :src="musicIconPreWidthSrc" />
+    <SvgImage :src="starIconPreWidthSrc" />
+    <SvgImage :src="videoIconPreWidthSrc" />
+    <SvgImage :src="ghostImgPreWidthSrc" />
+    <SvgImage :src="sunImgPreWidthSrc" />
   </div>
 
   <p class="demo-section-caption">Set current color:</p>
@@ -54,27 +24,22 @@
   <div class="images">
     <SvgImage
       :src="musicIconCurrentColorSrc"
-      class="image"
       style="color: #00988a"
     />
     <SvgImage
       :src="starIconCurrentColorSrc"
-      class="image"
       style="color: orange"
     />
     <SvgImage
       :src="videoIconCurrentColorSrc"
-      class="image"
       style="color: hotpink"
     />
     <SvgImage
       :src="ghostImgCurrentColorSrc"
-      class="image"
       style="color: purple"
     />
     <SvgImage
       :src="sunImgCurrentColorSrc"
-      class="image"
       style="color: green"
     />
   </div>
@@ -84,27 +49,22 @@
   <div class="images">
     <SvgImage
       :src="musicIconAllSrc"
-      class="image"
       style="color: #00988a"
     />
     <SvgImage
       :src="starIconAllSrc"
-      class="image"
       style="color: orange"
     />
     <SvgImage
       :src="videoIconAllSrc"
-      class="image"
       style="color: hotpink"
     />
     <SvgImage
       :src="ghostImgAllSrc"
-      class="image"
       style="color: purple"
     />
     <SvgImage
       :src="sunImgAllSrc"
-      class="image"
       style="color: green"
     />
   </div>

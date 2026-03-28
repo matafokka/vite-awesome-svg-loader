@@ -36,27 +36,22 @@ export default function App() {
         <SvgIcon
           src={musicIconSrc}
           color={color}
-          className="image"
         />
         <SvgIcon
           src={starIconSrc}
           color={color}
-          className="image"
         />
         <SvgIcon
           src={videoIconSrc}
           color={color}
-          className="image"
         />
         <SvgIcon
           src={ghostImgSrc}
           color={color}
-          className="image"
         />
         <SvgIcon
           src={sunImgSrc}
           color={color}
-          className="image"
         />
       </div>
     </Fragment>

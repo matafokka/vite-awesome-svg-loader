@@ -117,7 +117,12 @@ export function replaceColorsCss(
           return false;
         });
 
-        insertBefore ? parent?.insertData(origColorsRule, insertBefore) : parent?.push(origColorsRule);
+        if (insertBefore) {
+          parent?.insertData(origColorsRule, insertBefore);
+        } else {
+          parent?.push(origColorsRule);
+        }
+
         didSplitSelectors = true;
       }
 

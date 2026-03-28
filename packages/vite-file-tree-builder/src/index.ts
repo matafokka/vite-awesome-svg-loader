@@ -1,7 +1,7 @@
 import "./declarations.d.ts";
 
 import { Plugin } from "vite";
-import { DemoExportFsData, FileTreeNode } from "types/demos";
+import type { DemoExportFsData, FileTreeNode } from "internal-utils";
 import path from "path";
 import { lstat, readFile, readdir } from "node:fs/promises";
 
@@ -101,10 +101,10 @@ export function viteFileTreeBuilder(options: ViteFileTreeBuilderOptions = {}): P
 
       // Read demo name
 
-      let normalizedRoot = root.replaceAll("\\", "/")
+      let normalizedRoot = root.replaceAll("\\", "/");
 
       if (normalizedRoot.endsWith("/")) {
-        normalizedRoot = normalizedRoot.substring(0, normalizedRoot.length - 1)
+        normalizedRoot = normalizedRoot.substring(0, normalizedRoot.length - 1);
       }
 
       fsData.name = normalizedRoot.split("/").pop() || "";

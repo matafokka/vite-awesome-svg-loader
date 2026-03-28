@@ -7,8 +7,6 @@ import sunImgSrc from "@/assets/lineart/sun.svg";
 import { SvgIcon } from "vite-awesome-svg-loader/vanilla-integration";
 
 export function main() {
-  // Initial markup
-
   document.getElementById("app")!.innerHTML += `
     <div
       id="icons"
@@ -31,14 +29,7 @@ export function main() {
     new SvgIcon(videoIconSrc),
     new SvgIcon(ghostImgSrc),
     new SvgIcon(sunImgSrc),
-  ];
-
-  const container = document.getElementById("icons")!;
-
-  for (const icon of icons) {
-    icon.getSvgEl().classList.add("image");
-    icon.mount(container);
-  }
+  ].map((icon) => icon.mount("#icons"));
 
   // Set icon color
 

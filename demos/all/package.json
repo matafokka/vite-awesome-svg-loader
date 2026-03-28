@@ -40,6 +40,18 @@
     "vue-svg-icon": "*",
     "vue-svg-nodes-targeting": "*",
     "vue-svgs-in-dom": "*",
-    "vue-svg-image": "*"
+    "vue-svg-image": "*",
+    "web-components-base64-data-uri-imports": "*",
+    "web-components-base64-imports": "*",
+    "web-components-ignore-elements": "*",
+    "web-components-ignore-files": "*",
+    "web-components-multicolored-icons": "*",
+    "web-components-named-icons": "*",
+    "web-components-source-data-uri-imports": "*",
+    "web-components-svg-icon": "*",
+    "web-components-svg-image": "*",
+    "web-components-svg-nodes-targeting": "*",
+    "web-components-import-urls": "*",
+    "web-components-svgs-in-dom": "*"
   }
 }

@@ -1,4 +1,4 @@
-import type { DemoExport } from "types/demos";
+import type { DemoExport } from "internal-utils";
 
 export function transformDemos(modules: Record<string, any>, framework: string) {
   framework += "/";

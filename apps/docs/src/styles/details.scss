@@ -13,6 +13,7 @@
   }
 
   & > summary {
+    min-height: 28px;
     margin-left: unset;
     margin: 0 calc(-1 * var(--padding));
     background-color: var(--sl-color-gray-7);

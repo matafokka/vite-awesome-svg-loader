@@ -1,4 +1,4 @@
 declare module "demo-fs-data" {
-  const res: import("types/demos").DemoExportFsData
+  const res: import("internal-utils").DemoExportFsData;
   export default res;
 }

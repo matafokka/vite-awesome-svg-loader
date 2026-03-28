@@ -1,19 +1,16 @@
 {
   "extends": ["../../tsconfig.json"],
   "compilerOptions": {
-     "target": "ESNext",
-     "module": "ESNext",
-     "moduleResolution": "bundler",
-     "isolatedModules": true,
-     "lib": ["ESNext", "DOM"],
-     "skipLibCheck": true,
-     "noEmit": true,
-     "resolveJsonModule": true,
-     "allowSyntheticDefaultImports": true
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "lib": ["ESNext", "DOM"],
+    "skipLibCheck": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
   },
   "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
 }

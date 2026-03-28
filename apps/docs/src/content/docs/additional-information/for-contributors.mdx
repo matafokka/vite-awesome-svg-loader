@@ -19,14 +19,19 @@ This project is a monorepo with the following structure:
   - `inline` - inline demos for various pages outside of specific framework context.
   - `*` - demos for each supported framework.
 - `packages` - loader itself, integrations and internal utilities.
-  - `integration-utils` - utility functions and constants for integrations. Bundled with the loader to allow users to write their own integrations.
+  - `integration-utils` - utility functions and constants for integrations. They are exposed to the user via
+  `vite-awesome-svg-loader/integration-utils` package. This makes it possible to write custom integrations.
   - `loader` - loader's source code.
   - `types` - types for usage throughout the project.
-  - `utils` - various utilities for usage throughout the project.
+  - `common-utils` - various utilities for usage throughout the project. They are exposed to the user via
+  `vite-awesome-svg-loader/common-utils` package for convenience.
+  - `internal-utils` - utilities for internal usage only.
   - `*-integration` - specific framework integration.
   - `vite-astro-entry-generator` - a plugin that generates an Astro component that loads a script on the client side.
   - `vite-awesome-svg-loader` - final loader bundle (in other words, meta-package).
   - `vite-file-tree-builder` - a plugin that builds a project's file tree.
+- `tests` - tests.
+- `scripts` - build scripts.
 - `modules.d.ts` - types for untyped external modules.
 
 ### Monorepo management
@@ -35,87 +40,94 @@ This project is a monorepo with the following structure:
 
 ### Demos
 
-Demos are self-contained NPM packages.
+Demos are self-contained packages.
 
 All demos should contain their own scripts and assets. The code and the assets are often duplicated across the demos.
 
-When demo is built, its file tree is formed that will be displayed in the docs website.
+When a demo is built, its file tree is generated and displayed in the docs website.
 
 Demos should be small and should not have a sprawling file tree.
 
-Demos are built in [Vite library mode](https://vite.dev/guide/build.html#library-mode) and rebuilt whenever a change
-occurs. This pattern avoids necessity for the running multiple web servers.
+Demos are built in [Vite library mode](https://vite.dev/guide/build.html#library-mode) and consumed by the `apps/docs`
+package.
+
+This pattern avoids the need to run multiple web servers for live reload and simplifies build process.
 
 ### Scripts
 
-1. `generate-sources` - generates project's source code required for building. Runs automatically before any other build command.
+1. `generate-sources` - generates project's source code required for building. Runs automatically before any other build
+command.
 1. `build` - builds whole project.
 1. `build:packages` - builds all packages. Use this while developing to speed up the build.
 1. `build:apps` - builds all apps.
 1. `build:demos` - builds all demos.
-1. `dev` - builds all packages and executes `dev` all dev commands. This command is resource heavy!
+1. `dev` - builds all packages and runs all `dev` commands. This command is resource-heavy!
 1. `dev:docs:standalone` - runs `dev` command for `docs` packages without running all demos in watch mode.
 This is a lighter alternative to `dev`. The docs are still updated whenever demo is rebuilt.
+1. `test` - runs the tests.
 1. `lint` - lints the code with ESLint.
 1. `format` - formats the code with Prettier.
 
 ### TypeScript and JavaScript
 
-The primary language for this project is TypeScript. TypeScript should be used while developing loader itself, integrations and demos.
+The primary language for this project is TypeScript. TypeScript should be used while the developing loader itself,
+integrations and demos.
 
-However, build scripts are written in JS to simplify development and speed up the build. Typing is not critical for these scripts. Thus, TypeScript is just not worth it.
+However, build scripts are written in JS to simplify development and speed up the build. Typing is not crucial
+for these scripts. Thus, TypeScript is not necessary.
 
 ### Bundlers
 
 Vite is the primary bundler for this project.
 
-Other bundlers may be used, if Vite ecosystem doesn't have a solution, or specific package requires specific tooling.
-Examples:
-
-1. `vite-awesome-svg-loader` meta-package uses `tsdown` because no other tool was able to correctly build types
-for multiple entry points.
-1. `docs` app uses Astro and its tooling (it's Vite internally, but it may change in future).
+Other bundlers may be used if Vite ecosystem doesn't have a solution, or if specific package requires specific tooling.
+For example, `docs` app uses Astro and its tooling (it's Vite internally, but this may change in future).
 
 Custom build scripts and/or plugins may be used in the build process. Ideally, custom additions to the build process
-should be implemented as bundler's plugins or build lifecycle hooks. But plain JS scripts are OK, if it makes
-life easier.
+should be implemented as bundler's plugins or build lifecycle hooks. But plain JS scripts are fine if they're suited
+better for the job.
 
 ### Bundle structure
 
-Every project (package, demo or app) should be bundled into `dist` directory inside the project's root.
+Every project (package, demo or app) should be bundled into a `dist` directory inside the project's root.
 
 For example, `packages/utils` bundle should be in `packages/utils/dist` directory.
 
 ### Dependencies
 
-Dependencies that are used by more than one project should be installed for the whole project, i.e. added to the root `package.json`.
+Dependencies that are used by more than one project should be installed for the whole project (added to the root
+`package.json`).
 
 Such dependencies include Vite, TypeScript, Vue, React, Solid, etc.
 
 Local dependencies should be installed in package or app where they're required.
 
-`vite-awesome-svg-loader` final bundle dependencies always should be in `packages/vite-awesome-svg-loader/package.json` file even if they're duplicated in the root `package.json`.
-
 ### Build process
 
 This is how `build` command works:
 
-1. `generate-sources` command is ran, and the source code is generated:
+1. `generate-sources` command is run, and the source code is generated:
    1. `vite-awesome-svg-loader` source code is generated:
-     1. Loader and integrations re-exports are added.
+     1. Packages are added as dependencies.
+     1. Re-exports from packages are added.
      1. Subpath exports are updated.
-     1. Loader and all integrations are added as dependencies.
-   1. `all-demos` package is generated: all demos are added as dependencies.
+   1. `all-demos` package is generated. All demos are added as the dependencies to the `apps/docs` package.
 1. All packages are built.
 1. `vite-awesome-svg-loader` package is built.
 1. All demos are built.
 1. Apps are built.
 
+## Linting
+
+ESLint is used for linting.
+
 ## Code style
 
-Prettier should be used to format the code. Styles that are left for the user to decide are handled by ESLint rules.
+Prettier is used for formatting. All configuration options are set. Formatting that is not covered by Prettier
+is handled by ESLint.
 
-This project tries to keep the source code clean and readable. Please, try to do so as well, i.e. don't stack `if`s too many times, don't use bit shifts unnecessarily, etc.
+This project tries to keep the source code clean and readable. Please try to do so as well.
+For example, don't nest too many conditions, don't use bit shifts unnecessarily, etc.
 
 ## Integrations development
 
@@ -129,12 +141,13 @@ This project tries to keep the source code clean and readable. Please, try to do
    1. Open `package.json` file inside your integration directory.
    1. Add `"integration-utils": "*"` dependency.
    1. Develop your integration.
-1. Run `npm run generate-sources` command to regenerate `vite-awesome-svg-loader` source code. Or just run any build or dev command.
+1. Run `npm run generate-sources` command to regenerate `vite-awesome-svg-loader` source code. Or just run any build
+or dev command.
 1. Develop demos for your integration:
-   1. Duplicate any existing demo and pages in the `/apps/docs/src/content/docs` directory.
+   1. Copy any existing demo and pages in the `/apps/docs/src/content/docs` directory.
    1. Develop your demos.
    1. Update the docs:
-      1. Add a glob import for the demos inside `/apps/docs/src/demos` directory.
+      1. Add a glob import for the demos inside the `/apps/docs/src/demos` directory.
       1. Update the previously copied pages.
       1. Feel free to add your own pages if needed.
 1. Submit a PR with your integration.
@@ -146,3 +159,82 @@ This project tries to keep the source code clean and readable. Please, try to do
 1. Update the docs to showcase your feature.
 1. Test if demos work.
 1. Submit a PR.
+
+## Running docs and demos
+
+Docs and demos may be run in parallel with live reload by using `npm run dev` command.
+
+However, this spins up **a lot** of Vite watchers running simultaneously. If your machine can handle it, it's
+fine.
+
+Alternative workflow is recommended:
+
+1. Run `npm run build:apps` command to build all packages and demos.
+1. Run `npm run dev:docs:standalone` command to run documentation website.
+1. After changing the code, run `npm run build:apps` command again. This will rebuild only changed packages.
+1. If multiple packages are rebuilt, Astro server may hang. In this case, kill it and run `npm run dev:docs:standalone`
+command again.
+
+## Testing
+
+This guide outlines testing principles. For concrete examples, see already existing tests.
+
+### Goals
+
+The goal of the tests is to verify that the final library's package is working correctly.
+
+### Core principles
+
+1. Tests should be added as packages inside the `/tests/` directory.
+
+1. There must be one test suite per package.
+
+1. Tests structure must mirror package's structure. Multiple test files per one package's file may be used.
+In this case, test files must be placed in a folder with the package's file's name.
+
+1. In future, demos in the documentation website may also be automatically visually tested.
+
+1. If multiple packages perform the same tests, the tests may be abstracted. The abstraction must be placed
+in the `tests` directory.
+
+1. While testing is performed on per-package basis, the `vite-awesome-svg-loader` package must be used instead of
+its dependencies.
+
+   It is reasonable to think that if all dependencies are tested, transitively the compilation of these dependencies
+   is also tested. In practice, a change in `tsconfig.json` or some Vite plugin may alter the final bundle's behavior
+   which renders tests invalid.
+
+1. Tests must be performed in a real browser for correctness' sake.
+
+1. If possible, the widest range of modern browsers should be tested.
+
+1. Tests should focus on `vite-awesome-svg-loader`, not the frameworks.
+
+1. Tests for trivial code may be omitted. For example, there's no need to test that `2+2` equals `5`. Nevertheless,
+these tests are welcome if they don't bring unreasonable maintenance burden.
+
+### Tooling
+
+Each test suite may use its own tooling. However, some recommendations have formed while researching the available
+software.
+
+The tests must follow chosen tooling's conventions.
+
+#### Unit and integration testing. DOM manipulation. Components.
+
+**Cypress** is recommended for testing DOM manipulation and framework components.
+
+Cypress is the only tool that can run tests in the same context as components and supports multiple browsers
+out of the box. This makes state modification easy and boilerplate-free.
+
+Cypress supports synchronous assertions via Chai and asynchronous assertions (with wait time, retries and other
+features) via its own API (`cy.get(...).should(...)`).
+
+This allows testing both synchronous DOM manipulation and asynchronous framework lifecycle.
+
+#### e2e testing
+
+If testing user's interactions only is required, **Playwright** is recommended.
+
+It supports all major browsers and accurately simulates user's actions (events are fired as the result of user's
+interactions, not as a JS script).

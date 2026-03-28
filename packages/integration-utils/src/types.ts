@@ -42,7 +42,7 @@ export interface SvgIconStyleProps {
   /**
    * Icon color transition. Should contain only timing and easing functions.
    *
-   * For example, if you want to set `transition: color 0.3s ease-out;`, you should pass only `0.3s ease-out`.
+   * For example, if you want to set `transition: color 0.2s ease-out;`, pass only `0.2s ease-out`.
    *
    * @default "0.3s linear"
    */

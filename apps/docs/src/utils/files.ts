@@ -7,8 +7,8 @@
  * @returns Index or -1, if file doesn't have extension
  */
 export function getExtensionIndex(name: string) {
-  const index = name.lastIndexOf(".")
-  return index <= 0 ? -1 : index
+  const index = name.lastIndexOf(".");
+  return index <= 0 ? -1 : index;
 }
 
 /**
@@ -22,11 +22,11 @@ export function getFileExtension(name: string) {
 }
 
 export function getFileName(path: string) {
-  return path.substring(path.lastIndexOf("/") + 1)
+  return path.substring(path.lastIndexOf("/") + 1);
 }
 
 export function getBaseName(path: string) {
-  const fullName = getFileName(path)
+  const fullName = getFileName(path);
   const extIndex = getExtensionIndex(fullName);
   return extIndex === -1 ? fullName : fullName.substring(0, extIndex);
 }

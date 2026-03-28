@@ -1,5 +1,5 @@
 /**
- *
+ * Adds `base` prefix to a given `url` link
  * @param {string} base Base URL
  * @param {string} url Raw URL
  */

@@ -5,7 +5,7 @@ import { matches as matchesSelectorRaw } from "svgo/lib/xast.js";
 import type { ColorMapPerFiles, CssSelectors, FileMatcherFnContext, FileMatchers } from "../types";
 import path from "path";
 import { ResolvedColorReplacements } from "./types";
-import { toArray } from "utils";
+import { toArray } from "common-utils";
 
 export function normalizeBaseDir(dir: string) {
   dir = dir.replaceAll("\\", "/");
@@ -60,10 +60,10 @@ export interface MatchesPathOptions extends FileMatcherFnContext {
 export function matchesPath(options: MatchesPathOptions) {
   const filename = path.basename(options.relativePath);
   const toMatch = [filename, options.relativePath];
-  const matchers = toArray(options.matchers)
+  const matchers = toArray(options.matchers);
 
   if (!matchers.length) {
-    return false
+    return false;
   }
 
   return matchers.some((matcher) => {

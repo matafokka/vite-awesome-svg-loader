@@ -1,5 +1,5 @@
 <template>
-  <svg v-bind="{ alt: '', ...$attrs, ...svgAttrs }">
+  <svg v-bind="{ ...$attrs, ...svgAttrs }">
     <use v-bind="{ ...(useElAttrs || {}), href: '#' + id }" />
   </svg>
 </template>

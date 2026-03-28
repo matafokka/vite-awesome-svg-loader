@@ -1,0 +1,40 @@
+.images {
+  --image-size: 72px;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden; // Not sure where it comes from
+  user-select: none;
+
+  & > .vite-awesome-svg-loader-icon,
+  & > div > svg,
+  & > svg,
+  & > img,
+  & > svg-image {
+    min-width: var(--image-size);
+    min-height: var(--image-size);
+    width: var(--image-size);
+    height: var(--image-size);
+    max-width: var(--image-size);
+    max-height: var(--image-size);
+  }
+}
+
+.standalone-image {
+  display: block;
+
+  &:not(svg-image),
+  & > svg {
+    width: fit-content;
+    max-height: 200px;
+  }
+}
+
+div.standalone-image {
+  display: flex;
+  width: 100%;
+  max-height: unset;
+}

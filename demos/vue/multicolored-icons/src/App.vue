@@ -2,7 +2,6 @@
   <div class="images">
     <SvgImage
       :src="imageSrc"
-      class="image"
       :style="{
         '--primary-color': 'red',
         '--secondary-color': 'green',
@@ -11,7 +10,6 @@
     />
     <SvgImage
       :src="imageSrc"
-      class="image"
       :style="{
         '--primary-color': 'magenta',
         '--secondary-color': 'cyan',

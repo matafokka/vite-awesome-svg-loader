@@ -1,0 +1,31 @@
+import { fileURLToPath, URL } from "node:url";
+import { defineConfig } from "vite";
+import { resolve } from "path";
+import dts from "unplugin-dts/vite";
+
+import pkgJson from "./package.json";
+import rootPkgJson from "../../package.json";
+
+export default defineConfig({
+  plugins: [dts({ copyDtsFiles: true })],
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
+  },
+  build: {
+    sourcemap: true,
+    lib: {
+      entry: {
+        index: resolve(__dirname, "src/index.ts"),
+      },
+      name: "AwesomeSvgLoaderWebComponentsIntegration",
+      fileName: "index",
+      formats: ["es"],
+    },
+
+    rollupOptions: {
+      external: [...Object.keys(pkgJson.dependencies), ...Object.keys(rootPkgJson.dependencies)],
+    },
+  },
+});

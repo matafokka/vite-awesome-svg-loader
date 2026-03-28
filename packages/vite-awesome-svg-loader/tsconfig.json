@@ -4,12 +4,13 @@
     "types": ["node"],
     "outDir": "./dist",
     "module": "ESNext",
-    "target": "ES6",
+    "target": "ESNext",
     "lib": ["ESNext"],
     "esModuleInterop": true,
     "emitDeclarationOnly": true,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "allowJs": true
   },
-  "include": ["./tsdown.config.mts", "src/*", "../../modules.d.ts"],
-  "exclude": ["node_modules"],
+  "include": ["./vite.config.ts", "src/**/*", "../../modules.d.ts"],
+  "exclude": ["node_modules"]
 }

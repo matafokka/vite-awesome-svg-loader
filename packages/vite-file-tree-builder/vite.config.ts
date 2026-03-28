@@ -18,11 +18,16 @@ export default defineConfig({
       entry: resolve(__dirname, "src/index.ts"),
       name: "ViteFileTreeBuilder",
       fileName: "index",
-      formats: ["es", "cjs"],
+      formats: ["es"],
     },
 
     rollupOptions: {
-      external: [...Object.keys(pkgJson.dependencies), ...Object.keys(rootPkgJson.dependencies), "node:fs/promises", "path"],
+      external: [
+        ...Object.keys(pkgJson.dependencies),
+        ...Object.keys(rootPkgJson.dependencies),
+        "node:fs/promises",
+        "path",
+      ],
     },
   },
 });

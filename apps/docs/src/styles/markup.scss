@@ -38,3 +38,9 @@ html {
 :root::view-transition-new(root) {
   animation-duration: 0.1s;
 }
+
+.card-grid > .full-width {
+  @media (min-width: 50rem) {
+    grid-column: span 2;
+  }
+}

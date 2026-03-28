@@ -2,13 +2,12 @@ import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
-import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 import dts from "unplugin-dts/vite";
 import pkgJson from "./package.json";
 import rootPkgJson from "../../package.json";
 
 export default defineConfig({
-  plugins: [react(), cssInjectedByJsPlugin(), dts()],
+  plugins: [react(), dts()],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
@@ -20,7 +19,7 @@ export default defineConfig({
       entry: resolve(__dirname, "src/index.ts"),
       name: "AwesomeSvgLoaderVueIntegration",
       fileName: "index",
-      formats: ["es", "cjs"],
+      formats: ["es"],
     },
 
     rollupOptions: {

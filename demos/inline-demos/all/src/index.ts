@@ -1,2 +1,2 @@
-export * from "./available-transformations";
+export * from "./svg-transformations";
 export * from "./caveats";

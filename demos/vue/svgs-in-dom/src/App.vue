@@ -2,51 +2,21 @@
   <p class="demo-section-caption">Original images:</p>
 
   <div class="images">
-    <div
-      v-html="musicIconSrc"
-      class="image"
-    />
-    <div
-      v-html="starIconSrc"
-      class="image"
-    />
-    <div
-      v-html="videoIconSrc"
-      class="image"
-    />
-    <div
-      v-html="ghostImgSrc"
-      class="image"
-    />
-    <div
-      v-html="sunImgSrc"
-      class="image"
-    />
+    <div v-html="musicIconSrc" />
+    <div v-html="starIconSrc" />
+    <div v-html="videoIconSrc" />
+    <div v-html="ghostImgSrc" />
+    <div v-html="sunImgSrc" />
   </div>
 
   <p class="demo-section-caption">Preserve line width:</p>
 
   <div class="images">
-    <div
-      v-html="musicIconPreWidthSrc"
-      class="image"
-    />
-    <div
-      v-html="starIconPreWidthSrc"
-      class="image"
-    />
-    <div
-      v-html="videoIconPreWidthSrc"
-      class="image"
-    />
-    <div
-      v-html="ghostImgPreWidthSrc"
-      class="image"
-    />
-    <div
-      v-html="sunImgPreWidthSrc"
-      class="image"
-    />
+    <div v-html="musicIconPreWidthSrc" />
+    <div v-html="starIconPreWidthSrc" />
+    <div v-html="videoIconPreWidthSrc" />
+    <div v-html="ghostImgPreWidthSrc" />
+    <div v-html="sunImgPreWidthSrc" />
   </div>
 
   <p class="demo-section-caption">Set current color:</p>
@@ -54,27 +24,22 @@
   <div class="images">
     <div
       v-html="musicIconCurrentColorSrc"
-      class="image"
       style="color: #00988a"
     />
     <div
       v-html="starIconCurrentColorSrc"
-      class="image"
       style="color: orange"
     />
     <div
       v-html="videoIconCurrentColorSrc"
-      class="image"
       style="color: hotpink"
     />
     <div
       v-html="ghostImgCurrentColorSrc"
-      class="image"
       style="color: purple"
     />
     <div
       v-html="sunImgCurrentColorSrc"
-      class="image"
       style="color: green"
     />
   </div>
@@ -84,27 +49,22 @@
   <div class="images">
     <div
       v-html="musicIconAllSrc"
-      class="image"
       style="color: #00988a"
     />
     <div
       v-html="starIconAllSrc"
-      class="image"
       style="color: orange"
     />
     <div
       v-html="videoIconAllSrc"
-      class="image"
       style="color: hotpink"
     />
     <div
       v-html="ghostImgAllSrc"
-      class="image"
       style="color: purple"
     />
     <div
       v-html="sunImgAllSrc"
-      class="image"
       style="color: green"
     />
   </div>

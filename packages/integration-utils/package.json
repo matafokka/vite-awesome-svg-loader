@@ -2,29 +2,37 @@
   "name": "integration-utils",
   "version": "0.0.0",
   "private": true,
-  "main": "dist/index.mjs",
-  "module": "dist/index.mjs",
+  "type": "module",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
     },
-    "./styles.css": {
-      "import": "./dist/styles.css",
-      "require": "./dist/styles.css"
+    "./dom": {
+      "import": {
+        "types": "./dist/dom.d.ts",
+        "default": "./dist/dom.d.ts"
+      }
     }
   },
   "typesVersions": {
     "*": {
       ".": [
         "./dist/index.d.ts"
+      ],
+      "./dom": [
+        "./dist/dom.d.ts"
       ]
     }
   },
   "scripts": {
     "build": "vite build"
   },
-  "dependencies": {}
+  "dependencies": {
+    "common-utils": "*"
+  }
 }

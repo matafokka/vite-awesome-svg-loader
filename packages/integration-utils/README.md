@@ -12,5 +12,3 @@ And this package exposes following constants:
 1. `SVG_ID` - ID of an SVG element that contains all symbols.
 1. `SYMBOL_ID_PREFIX` - this string prepended to the symbol ID.
 1. `USAGES_COUNT_ATTR` - symbol attribute that contains count of elements that uses that symbol.
-
-See usage example in `packages/vue-integration` directory.

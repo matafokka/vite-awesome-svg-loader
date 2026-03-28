@@ -18,7 +18,7 @@ export function createEl<T extends keyof HTMLElementTagNameMap>(tag: T, classNam
  * @returns Image element
  */
 export function createImage(url: string) {
-  const img = createEl("img", "image");
+  const img = createEl("img");
   img.src = url;
   img.alt = "";
   return img;

@@ -11,63 +11,54 @@ import Caveats from "./scripts/Caveats.astro";
 
 ## Stroke width should be in CSS pixels
 
-When preserving line width, stroke width should be in CSS pixels. Image size doesn't matter. This is how it looks like:
+When preserving line width, always define stroke width in CSS pixels. The image size itself does not matter.
 
-<PaddedFrame title="Example" icon="rocket">
+Example of different stroke widths:
+
+<PaddedFrame title="Different widths" icon="puzzle">
   <demo-checkbox
     id="line-width-checkbox"
     label="Show original image"
   />
 
-  <div
-    id="line-width-images"
-    class="images"
-  ></div>
+  <div id="line-width-images"></div>
 </PaddedFrame>
 
-Incorrect stroke width will result in something like this:
+Poorly-chosen stroke width will result in visual issues:
 
 <PaddedFrame
-  title="Example"
-  icon="rocket"
+  title="Stroke width is too large for the image"
+  icon="puzzle"
 >
-  <div
-    id="broken-line-width"
-    class="images"
-  ></div>
+  <div id="broken-line-width"></div>
 </PaddedFrame>
 
 ## Preserving line width works only on strokes
 
-Create your images with strokes instead of filled path to preserve line width.
+To preserve line width when scaling, ensure that your images use strokes rather than filled paths.
 
-Toggle original image to see that there's no difference when stroke is not preserved.
+Toggle an original image to see the effect of using both.
 
-<PaddedFrame title="Example" icon="rocket">
+<PaddedFrame title="Filled polygon vs. Outlined polygon" icon="puzzle">
   <demo-checkbox
     id="only-strokes-supported-checkbox"
     label="Show original image"
   />
 
-  <div
-    id="only-strokes-supported-images"
-    class="images"
-  ></div>
+  <div id="only-strokes-supported-images"></div>
 </PaddedFrame>
 
 ## Transparent colors should be omitted or set as none or transparent
 
-Quite common catch is to set white color and then wonder why image is messed up. If you don't want fill, omit it or
-set it to `none` or `transparent`.
+A common mistake is setting a fill color to white and wondering why the output appears incorrect.
 
-<PaddedFrame title="Example" icon="rocket">
+If you do not want a fill, simply omit it, or explicitly set it to `none` or `transparent`.
+
+<PaddedFrame title="White fill vs. No fill" icon="puzzle">
   <demo-checkbox
     id="transparent-colors-checkbox"
     label="Show original image"
   />
 
-  <div
-    id="transparent-colors-images"
-    class="images"
-  ></div>
+  <div id="transparent-colors-images"></div>
 </PaddedFrame>

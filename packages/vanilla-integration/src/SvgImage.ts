@@ -1,10 +1,8 @@
 import { onSrcUpdate, onUnmount } from "integration-utils";
-import { ElementOrSelector, mount, setAttrs } from "./utils";
+import { clearAttrs, ElementOrSelector, mount, setAttrs, SettableAttributeValue } from "common-utils";
 
 /**
- * Basic SVG image. Implements SVG sprites.
- *
- * Will create `<svg>` element that contains all symbols, add passed source code to it and reuse it later.
+ * Basic SVG image. Implements SVG sprites. Adds `<svg>` element with the symbols to the `<body>`.
  *
  * ### Basic usage
  *
@@ -38,8 +36,8 @@ import { ElementOrSelector, mount, setAttrs } from "./utils";
  *
  * Use `constructor()` and {@link SvgImage#mount} to change component markup.
  *
- * You probably don't need to override required element's attributes. If you actually need to do so, override
- * {@link SvgImage._updateSvgEl}
+ * You probably don't need to override required elements' attributes. If you actually need to do so, override
+ * {@link SvgImage._setRequiredSvgElAttrs} and {@link SvgImage._setRequiredUseElAttrs}.
  */
 export class SvgImage {
   /**
@@ -61,16 +59,6 @@ export class SvgImage {
    * `<use>` element
    */
   protected readonly _useEl: SVGUseElement;
-
-  /**
-   * User-provided attributes
-   */
-  protected _svgAttrs: Record<string, any> = {};
-
-  /**
-   * User-provided attributes
-   */
-  protected _useElAttrs: Record<string, any> = {};
 
   /**
    * Last {@link onSrcUpdate} call result
@@ -119,19 +107,18 @@ export class SvgImage {
    * @param attrs Attributes to set
    * @returns this
    */
-  setSvgElAttrs(attrs: Record<string, any>) {
-    this._svgAttrs = attrs;
-    return this._updateSvgEl();
+  setSvgElAttrs(attrs: Record<string, SettableAttributeValue>) {
+    clearAttrs(this._svgEl);
+    setAttrs(this._svgEl, attrs);
+    this._setRequiredSvgElAttrs();
+    return this;
   }
 
   /**
-   * Updates SVG element: sets SVG source code, clears previous attributes, sets new attributes
+   * Sets required attributes to the `<svg>` element
    * @returns this
    */
-  protected _updateSvgEl() {
-    setAttrs(this._svgEl, { alt: "" }, true);
-    setAttrs(this._svgEl, this._svgAttrs);
-
+  protected _setRequiredSvgElAttrs() {
     if (this._updateSrcRes.attrs) {
       setAttrs(this._svgEl, this._updateSrcRes.attrs);
     }
@@ -140,22 +127,22 @@ export class SvgImage {
   }
 
   /**
-   * Sets `<use>` element attributes. It won't remove id, class and style.
+   * Sets `<use>` element attributes. It won't remove `id`, `class` and `style`.
    * @param attrs Attributes to set
    * @returns this
    */
-  setUseElAttrs(attrs: Record<string, any>) {
-    this._useElAttrs = attrs;
-    return this._updateUseEl();
+  setUseElAttrs(attrs: Record<string, SettableAttributeValue>) {
+    clearAttrs(this._useEl);
+    setAttrs(this._useEl, attrs);
+    this._setRequiredUseElAttrs();
+    return this;
   }
 
   /**
-   * Updates `<use>` element attributes
+   * Sets required attributes to the `<use>` element
    * @returns this
    */
-  protected _updateUseEl() {
-    setAttrs(this._useEl, this._useElAttrs, true);
-
+  protected _setRequiredUseElAttrs() {
     if (this._updateSrcRes.id) {
       setAttrs(this._useEl, { href: "#" + this._updateSrcRes.id });
     }
@@ -171,8 +158,8 @@ export class SvgImage {
   setSrc(src: string) {
     this._updateSrcRes = onSrcUpdate(this._src, src);
     this._src = src;
-    this._updateSvgEl();
-    this._updateUseEl();
+    this._setRequiredSvgElAttrs();
+    this._setRequiredUseElAttrs();
     return this;
   }
 

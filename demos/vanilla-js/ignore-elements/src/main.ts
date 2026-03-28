@@ -8,16 +8,13 @@ export function main() {
       id="checkbox"
       label="Show original image"
     ></demo-checkbox>
-
-    <div
-      id="images"
-      class="images"
-      style="color: red; margin-top: 24px;"
-    ></div>
   `;
 
-  const image = new SvgImage(imageSrc, "#images");
-  image.getSvgEl().classList.add("standalone-image");
+  const image = new SvgImage(imageSrc, "#app");
+  const svgEl = image.getSvgEl();
+  svgEl.classList.add("standalone-image");
+  svgEl.style.color = "red";
+  svgEl.style.marginTop = "24px";
 
   document
     .getElementById("checkbox")!

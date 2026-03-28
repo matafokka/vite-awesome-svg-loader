@@ -48,43 +48,19 @@ export default function App() {
       <p className="demo-section-caption">Original images:</p>
 
       <div className="images">
-        <SvgImage
-          src={starOriginal}
-          className="image"
-        />
-        <SvgImage
-          src={colorsNotReplacedOriginal}
-          className="image"
-        />
-        <SvgImage
-          src={lineWidthNotPreservedOriginal}
-          className="image"
-        />
-        <SvgImage
-          src={skipTransformsOriginal}
-          className="image"
-        />
+        <SvgImage src={starOriginal} />
+        <SvgImage src={colorsNotReplacedOriginal} />
+        <SvgImage src={lineWidthNotPreservedOriginal} />
+        <SvgImage src={skipTransformsOriginal} />
       </div>
 
       <p className="demo-section-caption">Preserve line width:</p>
 
       <div className="images">
-        <SvgImage
-          src={starPreLineWidth}
-          className="image"
-        />
-        <SvgImage
-          src={colorsNotReplacedPreLineWidth}
-          className="image"
-        />
-        <SvgImage
-          src={lineWidthNotPreservedPreLineWidth}
-          className="image"
-        />
-        <SvgImage
-          src={skipTransformsPreLineWidth}
-          className="image"
-        />
+        <SvgImage src={starPreLineWidth} />
+        <SvgImage src={colorsNotReplacedPreLineWidth} />
+        <SvgImage src={lineWidthNotPreservedPreLineWidth} />
+        <SvgImage src={skipTransformsPreLineWidth} />
       </div>
 
       <p className="demo-section-caption">Set current color:</p>
@@ -92,22 +68,18 @@ export default function App() {
       <div className="images">
         <SvgImage
           src={starSetCurrentColor}
-          className="image"
           style={{ color: "#00988a" }}
         />
         <SvgImage
           src={colorsNotReplacedSetCurrentColor}
-          className="image"
           style={{ color: "orange" }}
         />
         <SvgImage
           src={lineWidthNotPreservedSetCurrentColor}
-          className="image"
           style={{ color: "hotpink" }}
         />
         <SvgImage
           src={skipTransformsSetCurrentColor}
-          className="image"
           style={{ color: "purple" }}
         />
       </div>
@@ -117,22 +89,18 @@ export default function App() {
       <div className="images">
         <SvgImage
           src={starAll}
-          className="image"
           style={{ color: "#00988a" }}
         />
         <SvgImage
           src={colorsNotReplacedAll}
-          className="image"
           style={{ color: "orange" }}
         />
         <SvgImage
           src={lineWidthNotPreservedAll}
-          className="image"
           style={{ color: "hotpink" }}
         />
         <SvgImage
           src={skipTransformsAll}
-          className="image"
           style={{ color: "purple" }}
         />
       </div>

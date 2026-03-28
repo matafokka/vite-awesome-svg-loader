@@ -1,8 +1,6 @@
 import { NamedIcon } from "@/NamedIcon";
 
 export function main() {
-  // Initial markup
-
   document.getElementById("app")!.innerHTML += `
     <div
       id="icons"
@@ -11,12 +9,7 @@ export function main() {
     </div>
   `;
 
-  // Create icons
-
-  const icons = ["music", "star", "video"];
-  const container = document.getElementById("icons")!;
-
-  for (const name of icons) {
-    new NamedIcon(name, container).setColor("orange").getSvgEl().classList.add("image");
-  }
+  new NamedIcon("music", "#icons").setColor("red");
+  new NamedIcon("star", "#icons").setColor("forestgreen");
+  new NamedIcon("video", "#icons").setColor("cornflowerblue");
 }

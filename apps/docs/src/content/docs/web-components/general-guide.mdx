@@ -1,0 +1,100 @@
+---
+title: Web components guide
+sidebar:
+  order: 0
+  label: General guide
+---
+
+import { Aside, Steps } from "@astrojs/starlight/components";
+
+## Introduction
+
+<Aside>
+  If you're not familiar with web components (custom elements), read
+  [this MDN page](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements)
+  first
+</Aside>
+
+Web components integration provides a lightweight, universal and framework-agnostic way to create SVG sprites.
+
+Provided web components should be treated as regular custom elements.
+
+In addition to that, instance properties are synchronized with their attributes counterparts written in `kebab-case`.
+For example, setting `colorTransition` property updates `color-transition` attribute and vice-versa.
+
+Web components can be integrated with any existing framework that supports custom elements:
+
+- No additional setup required.
+- Properties and attributes should work out of the box, doesn't matter what exactly is being set.
+- Use static `define()` method to simplify registration.
+
+For the detailed instructions, refer to your framework's documentation.
+
+Web components' markup differ from the other integration because of the inherent custom elements' limitations.
+
+## Quick start
+
+<Steps>
+1. Import classes:
+
+   ```ts
+   import {
+     SvgImage, // Renders SVG sprites
+     SvgIcon, // Basic SVG icon that uses SvgImage class internally
+   } from "vite-awesome-svg-loader/web-components-integration";
+   ```
+
+1. Import images:
+
+   ```ts
+   import imageSrc from "@/path/to/image.svg";
+   ```
+
+1. Define custom elements:
+
+   ```ts
+   SvgImage.define();
+   SvgIcon.define();
+
+   // Or with custom tag name:
+
+   SvgImage.define({ tag: "x-image" });
+   SvgIcon.define({ tag: "x-icon" });
+   ```
+
+1. Display images:
+
+   ```ts
+   const image = new SvgImage();
+   image.src = imageSrc;
+   document.getElementById("my-container")!.appendChild(image);
+
+   const icon = new SvgIcon();
+   icon.src = imageSrc;
+   icon.size = "24px";
+   icon.color = "red";
+   icon.colorTransition = "0.2s ease-out";
+   document.getElementById("my-container")!.appendChild(icon);
+   ```
+</Steps>
+
+## Web components and other integrations
+
+While web components integration can be run alongside other integrations, it is not recommended to do so.
+This will result in a larger bundle and more memory usage because all integrations will be loaded at once.
+This defeats the whole purpose of improving performance by using SVG symbols.
+
+It is imperative to choose **either** web components or specific framework integration.
+
+**When to use web components:**
+
+- In applications that use, or plan to use, multiple frameworks.
+- In applications without a framework (also consider using [Vanilla JS integration](/vanilla-js/quick-start)).
+- In libraries that do not wish to deal with multiple frameworks (web components will support everything).
+- In any scenario. There's no dependency on a particular framework. The resource usage is exactly enough
+for the integration to work.
+
+**When to use framework integration:**
+
+- When one and only one framework will be used, and no other framework will be added in even far-far away future
+(unless you're willing to refactor).

@@ -15,10 +15,12 @@ export default defineConfig({
   build: {
     sourcemap: true,
     lib: {
-      entry: resolve(__dirname, "src/index.ts"),
+      entry: {
+        index: resolve(__dirname, "src/index.ts"),
+      },
       name: "ViteAwesomeSvgLoader",
       fileName: "index",
-      formats: ["es", "cjs"],
+      formats: ["es"],
     },
 
     rollupOptions: {

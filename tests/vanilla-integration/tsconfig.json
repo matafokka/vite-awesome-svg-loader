@@ -1,0 +1,16 @@
+{
+  "extends": ["../../tsconfig.json"],
+  "compilerOptions": {
+    "outDir": "./dist",
+    "module": "ESNext",
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["cypress/*"]
+    },
+    "downlevelIteration": true,
+    "types": ["vite/client", "vite-awesome-svg-loader/web-components-integration/dom"]
+  },
+  "include": ["cypress", "../../modules.d.ts"]
+}

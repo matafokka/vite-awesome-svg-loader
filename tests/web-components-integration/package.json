@@ -1,0 +1,26 @@
+{
+  "name": "web-components-integration-tests",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test:ui": "cypress open",
+    "test:base": "cypress run --quiet --component",
+    "test:chrome": "npm run test:base -- --browser chrome",
+    "test:firefox": "npm run test:base -- --browser firefox",
+    "test:webkit": "npm run test:base -- --browser webkit",
+    "test": "run-p --aggregate-output test:chrome test:firefox test:webkit",
+    "test:browser": "vitest --config=vitest.browser.config.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "internal-utils": "*",
+    "vanilla-tests-core": "*",
+    "vite-awesome-svg-loader": "*"
+  }
+}

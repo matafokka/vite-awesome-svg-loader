@@ -6,13 +6,27 @@ sidebar:
 
 import { Aside } from "@astrojs/starlight/components";
 
-These are possible loading methods and their tradeoffs
+There are several ways to display SVG images, each with its own trade-off.
 
-## Render SVGs in the DOM
+## Why it matters
 
-Put whole SVG source code into the DOM every time image is displayed. This is the most popular method.
+The more elements per component you render, the less components and content you will be able to render before hanging
+or crashing the page. This is specifically true for icons which are repeated very often throughout the page,
+and performance impact is not realized before real issues occur.
 
-This is implemented by importing images with `?source` query parameter _(or `source`
+For example, you need to display a grid of profile cards with lots of icons in buttons, action items, etc.
+If your markup is heavy, you'll be able to render just a few of those cards before requiring a pagination.
+
+Depending on the context, this may completely ruin the user experience.
+
+However, you can avoid such a problem by simply using any alternative SVG loading method that reduces
+amount of SVG nodes per image/icon.
+
+## Insert SVGs into the DOM
+
+The entire SVG source code is inserted directly into the DOM for each image. This is the most popular method.
+
+This can be achieved by importing images with `?source` query parameter _(or `source`
 [default import option](/loader-api-reference/interfaces/svgloaderoptions/#defaultimport))_
 and inserting the result directly into the DOM:
 
@@ -22,14 +36,14 @@ import imgSrc from "./image.svg?source";
 document.getElementById("image-container")!.innerHtml = imgSrc;
 ```
 
-1. **Advantages:**
-   1. Simplicity.
+1. **Pros:**
+   1. Simple to implement.
    1. Great customization. This is actually the only option, if you need to manipulate the content,
       or need more than just CSS styles.
 
-1. **Disadvantages:**
-   1. Very bad performance. Browser needs to parse and update good number of DOM nodes. It doesn't really matter
-      when images count is low, but it may slow down the page when 1000+ images are used.
+1. **Cons:**
+   1. Performance will degrade with a large number (1000+) of images.
+
       Another loading method is always preferred when customization is not required.
 
 ## Link as an image
@@ -41,17 +55,16 @@ document.getElementById("image-container")!.innerHtml = imgSrc;
    conversion function. The discrepancies are often way off the desired result.
    If you try to fix them, you'll lose all performance benefits gained by instancing.
 
-So this is not suitable for icons or any other element requiring precise colors. Simple filters only.
-
+   So this is not suitable for icons or any other element requiring precise colors. Simple filters only.
 </Aside>
 
-Set `src` attribute of an `<img>` element:
+The SVG is loaded via an `<img>` tag:
 
 ```html
-<img src="/image.svg" />
+<img src="/image.svg" alt="" />
 ```
 
-Or load via `background-image` CSS property:
+Or via `background-image` CSS property:
 
 ```css
 .element {
@@ -59,7 +72,12 @@ Or load via `background-image` CSS property:
 }
 ```
 
-This is implemented via `?url` import and `url`
+This improves performance by:
+
+1. Reducing DOM nodes per image to one.
+1. Enabling browser to cache and reuse the same image.
+
+This can be achieved by using `?url` import or `url`
 [default import option](/loader-api-reference/interfaces/svgloaderoptions/#defaultimport):
 
 ```ts
@@ -70,19 +88,48 @@ img.href = imgUrl;
 document.body.appendChild(img);
 ```
 
-1. **Advantages:**
-   1. Simplicity.
-   1. Great performance thanks to instancing.
+1. **Pros:**
+   1. Simple to implement.
+   1. Best performance available.
 
-2. **Disadvantages:**
-   1. Lack of any customization, good only for static images. You can't modify external assets using JS or CSS.
+2. **Cons:**
+   1. Lack of any customization. Works with static images only. You can't modify external assets using JS or CSS.
       The only thing you can do is [CSS filters](https://developer.mozilla.org/en-US/docs/Web/CSS/filter)
       (see warning above!).
 
+## CSS masks
+
+[mask-image](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/mask-image) property can be used
+to clip a filled element:
+
+```css
+.element {
+  background-color: currentColor;
+  mask-image: url("/image.svg");
+  mask-size: 100%;
+  mask-position: center;
+  mask-repeat: no-repeat;
+}
+```
+
+1. **Pros:**
+   1. Simple to implement.
+   1. Best performance available.
+   1. Fill can be customized with `background` and `background-color` properties.
+
+2. **Cons:**
+   1. Limited availability. Masks are fairly new.
+   1. Cannot be customized further.
+
+This improves performance by:
+
+1. Reducing DOM nodes per image to one.
+1. Enabling browser to cache and reuse the same image.
+
 ## SVG Symbols (sprites)
 
-Put all images into a single `<svg>` node (sprite sheet) and wrap each image with a `<symbol>` element.
-This improves performance by reducing DOM tree size and enabling instancing.
+SVGs are inserted into a single `<svg>` node (sprite sheet). Each image is wrapped with a `<symbol>` element and linked
+by a `<use>` tag.
 
 ```html
 <!-- Create sprite sheet -->
@@ -108,16 +155,21 @@ This improves performance by reducing DOM tree size and enabling instancing.
 </svg>
 ```
 
-This is implemented by importing images with `?source` query parameter _(or `source`
+This improves performance by:
+
+1. Reducing DOM nodes per image.
+1. Enabling browser to cache and reuse the same image.
+
+This can be achieved by importing images with `?source` query parameter _(or `source`
 [default import option](/loader-api-reference/interfaces/svgloaderoptions/#defaultimport))_
 and passing the result to the `<SvgImage>` or `<Svg Icon>` component provided by the integrations.
 See examples for your framework.
 
-1. **Advantages:**
-   1. Performance is way better than when using whole SVG each time thanks to smaller DOM tree size and instancing.
-   1. Images can be customized via CSS, for example, you can set custom stroke and fill colors.
+1. **Pros:**
+   1. Great performance (but worse than linking as an image or CSS mask).
+   1. Images can be customized with CSS. For example, you can set custom stroke and fill colors.
 
-1. **Disadvantages:**
+1. **Cons:**
    1. Requires a bit of maintenance in form of using provided integrations.
    1. Performance is worse than when linking an image.
    1. Customization is not that great when using whole SVG source code.
@@ -128,10 +180,10 @@ Either use source code or base64 in a [data URI](https://en.wikipedia.org/wiki/D
 Then set `src` attribute of an `<img>` element:
 
 ```html
-<img src="data:..." />
+<img src="data:..." alt="" />
 ```
 
-Or load via `background-image` CSS property:
+Or set `background-image` CSS property:
 
 ```css
 .element {
@@ -139,7 +191,15 @@ Or load via `background-image` CSS property:
 }
 ```
 
-Implemented via `?source-data-uri` and `base64-data-uri` imports, `source-data-uri` and `base64-data-uri`
+This improves performance by:
+
+1. Reducing DOM nodes per image to one.
+1. Enabling browser to cache and reuse the same image.
+
+This can be achieved by:
+
+- `?source-data-uri` and `base64-data-uri` imports
+- `source-data-uri` and `base64-data-uri`
 [default import options](/loader-api-reference/interfaces/svgloaderoptions/#defaultimport).
 
 ```ts
@@ -155,16 +215,19 @@ for (const uri of uris) {
 }
 ```
 
-1. **Advantages:**
+1. **Pros:**
    1. Great performance, although a tiny bit worse than when linking an image.
 
-2. **Disadvantages:**
-   1. Lack of any customization, good only for static images.
-   2. Increased memory and traffic usage when linking images.
+2. **Cons:**
+   1. Lack of any customization. Works with static images only. You can't modify external assets using JS or CSS.
+   2. Increased memory and traffic usage when linking images because of the encoding itself.
 
 ## Summary
 
-1. If you don't need customization, i.e. you want to display static images, use linking method.
-1. If you only need CSS customization, use symbols. This is preferred option for icons and line art that's needed to be customized.
-1. If you need heavy customization and interactivity, put whole SVG source code into the DOM.
-1. As for the data URI, not sure why you would need it. It's implemented just for completeness sake.
+1. If you don't need customization, i.e. you want to display static images, use **image linking** or **CSS masks**.
+1. If you only need to customize the background, and you support only evergreen browsers, use **CSS masks**.
+1. If you only need custom CSS, use **symbols**.
+1. If you need heavy customization and interactivity, use **inline SVGs**.
+1. Data URIs are rarely needed. They're implemented just for completeness sake.
+1. For **icons**, use **CSS masks** and **symbols**. They are suited best because of the balance between customization
+and performance.

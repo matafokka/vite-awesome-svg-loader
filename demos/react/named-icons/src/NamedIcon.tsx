@@ -37,7 +37,7 @@ export function NamedIcon({ name, ...iconProps }: NamedIconProps) {
       code = errorIcon; // Provide a fallback for when icon could not be loaded
     }
 
-    // Verify that name hasn't changed. If it didn't, set its source code. Otherwise other onNameChange()
+    // Verify that name hasn't been changed. If it didn't, set its source code. Otherwise other onNameChange()
     // call will handle the changes.
     if (name === name) {
       setSrc(code);

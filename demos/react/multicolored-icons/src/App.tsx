@@ -7,7 +7,6 @@ export default function App() {
     <div className="images">
       <SvgImage
         src={imageSrc}
-        className="image"
         style={
           {
             "--primary-color": "red",
@@ -18,7 +17,6 @@ export default function App() {
       />
       <SvgImage
         src={imageSrc}
-        className="image"
         style={
           {
             "--primary-color": "magenta",

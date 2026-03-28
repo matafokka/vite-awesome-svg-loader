@@ -1,13 +1,11 @@
 <template>
   <p class="demo-section-caption">Click on the rectangles to change their colors:</p>
 
-  <div class="images">
-    <div
-      v-html="imageSrc"
-      class="standalone-image"
-      @click="onClick"
-    />
-  </div>
+  <div
+    v-html="imageSrc"
+    class="standalone-image"
+    @click="onClick"
+  />
 </template>
 
 <script setup lang="ts">

@@ -1,4 +1,4 @@
-import type { MaybeArray } from "types/utility";
+import type { MaybeArray } from "common-utils";
 
 /**
  * `vite-awesome-svg-loader` options
@@ -36,8 +36,7 @@ export interface SvgLoaderOptions {
    *
    * See {@link CssSelectors} for the available formats and more configuration options.
    *
-   * **Note:** Unlike {@link skipSetCurrentColorSelectors} and {@link skipTransformsSelectors}, doesn't impact build
-   * performance.
+   * **Note:** Unlike {@link skipTransformsSelectors}, doesn't impact build performance.
    *
    * @example
    *
@@ -159,7 +158,7 @@ export interface SvgLoaderOptions {
    *
    * Limit selectors to specific files to improve performance.
    *
-   * Oe better, consider alternative approaches such as using color maps. See {@link replaceColorsList},
+   * Or better, consider alternative approaches such as using color maps. See {@link replaceColorsList},
    * {@link ColorMap}, and {@link ColorMapPerFiles}) for the details.
    *
    * @example
@@ -243,23 +242,6 @@ export interface SvgLoaderOptions {
    * @default "source"
    */
   defaultImport?: ImportType;
-
-  // Deprecated options
-
-  /**
-   * @deprecated Use {@link replaceColorsList}
-   */
-  setCurrentColorList?: FileMatchers;
-
-  /**
-   * @deprecated Use {@link replaceColorsList}
-   */
-  skipSetCurrentColorList?: FileMatchers;
-
-  /**
-   * @deprecated Use {@link skipReplaceColorsSelectors}
-   */
-  skipSetCurrentColorSelectors?: CssSelectors;
 
   /**
    * Behavior for `?url` imports in [library mode](https://vite.dev/guide/build.html#library-mode). Possible values:
@@ -405,7 +387,7 @@ export interface SelectorsPerFiles {
  * Maps original SVG colors (case-insensitive) to their replacements (any values: HEX, name, rgb() or even arbitrary
  * strings).
  *
- * Only specified keys will be replaced. Any other value even with the same color (i.e. `#00f` instead of "blue")
+ * Only specified keys will be replaced. Any other value even with the same color (i.e. `#00f` instead of `blue`)
  * won't be affected.
  */
 export type ColorMap = Record<string, string>;

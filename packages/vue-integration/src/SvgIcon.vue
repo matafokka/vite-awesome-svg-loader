@@ -1,6 +1,6 @@
 <template>
   <span
-    class="awesome-svg-loader-icon icon"
+    class="vite-awesome-svg-loader-icon"
     :style="iconStyle"
   >
     <SvgImage
@@ -13,8 +13,9 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 import SvgImage from "./SvgImage.vue";
-import { getSvgIconStyle, SvgIconProps } from "integration-utils";
+import { getSvgIconStyle, initSvgIcons, SvgIconProps } from "integration-utils";
 
 const props = defineProps<SvgIconProps>();
+initSvgIcons();
 const iconStyle = computed(() => getSvgIconStyle(props));
 </script>

@@ -1,7 +1,7 @@
 ---
-title: Vite Awesome SVG Loader Documentation
+title: vite-awesome-svg-loader
 description: |
-  Vite Awesome SVG Loader documentation website. This loader:
+  vite-awesome-svg-loader documentation website. This loader:
   imports SVGs as source code, base64 and data URI;
   preserves line width;
   replaces colors with currentColor or custom colors;
@@ -10,14 +10,15 @@ description: |
 template: doc
 sidebar:
   label: Home
+head:
+  - tag: title
+    content: Vite Awesome SVG Loader
 ---
 
 import LinkCard from "@/components/LinkCard.astro";
 import { CardGrid, Aside } from "@astrojs/starlight/components";
 
-## What is this?
-
-This is a Vite plugin that:
+This is a framework-agnostic Vite plugin that:
 
 1. Can [import SVGs](/guides/svg-loading-methods/) as:
    1. Source code (default import type).
@@ -25,42 +26,54 @@ This is a Vite plugin that:
    1. Source code [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
    1. Source code base64.
    1. Source code base64 [data URI](https://en.wikipedia.org/wiki/Data_URI_scheme).
-1. Can [preserve line width](/guides/available-transformations/#preserve-line-width), i.e. images retain line width
-regardless of the image size.
-1. Can replace colors with [currentColor](/guides/available-transformations/#replace-all-colors-with-currentcolor-value)
-or a [custom color via configuration](/guides/available-transformations/#replace-colors-with-custom-values).
+1. Can [improve performance](/guides/svg-loading-methods/) of your website by using an alternative SVG loading method.
+1. Can [preserve line width](/guides/svg-transformations/#preserve-line-width). Images will retain line width
+regardless of the size.
+1. Can replace colors with [currentColor](/guides/svg-transformations/#replace-all-colors-with-currentcolor-value)
+or a [custom color via configuration](/guides/svg-transformations/#replace-colors-with-custom-values).
 1. Automatically minimizes your SVGs with [SVGO](https://github.com/svg/svgo).
-1. Allows you to create [SVG sprites via symbols](/guides/svg-loading-methods/#svg-symbols-sprites) using provided
-integrations.
+1. Allows you to create [SVG sprites](/guides/svg-loading-methods/#svg-symbols-sprites) using optional integrations.
 
-`vite-awesome-svg-loader` is framework-agnostic.
-
-However, to create SVG symbols, some boilerplate code in form of components is required. These components are provided
-in the integrations.
-
-All integrations are provided as ES modules in separate subpath imports
-(for example, `vite-awesome-svg-loader/vue-integration`), so your app will contain only required code.
-
-You can integrate `vite-awesome-svg-loader` with [any framework](/other-frameworks/quick-start/)
-using `vite-awesome-svg-loader/integration-utils` package.
-
-## Great! How do I use it?
+## Learn the basics
 
 <Aside>
-  Make sure to check out the website's navbar for useful links
+  See the website's navigation for all available articles
 </Aside>
-
-### Learn the basics
 
 <LinkCard title={"Read the " + '"Getting started"' + " guide"} href="/guides/getting-started" />
 <LinkCard title="Learn about SVG loading methods" href="/guides/svg-loading-methods" />
 <LinkCard title="See configuration options" href="/loader-api-reference/interfaces/svgloaderoptions" />
 
-### Jump straight to the demos and examples
+## Demos and examples
 
 <CardGrid>
-  <LinkCard title="React" href="/react/quick-start" />
-  <LinkCard title="Vue" href="/vue/quick-start" />
-  <LinkCard title="Vanilla JS" href="/vanilla-js/quick-start" />
-  <LinkCard title="Other frameworks" href="/other-frameworks/quick-start" />
+  <LinkCard
+    title="React"
+    href="/react/quick-start"
+  />
+
+  <LinkCard
+    title="Vue 3"
+    href="/vue/quick-start"
+  />
+
+  <LinkCard
+    title="Web components"
+    description="Standard custom elements. Works with any framework."
+    href="/web-components/general-guide"
+  />
+
+  <LinkCard
+    title="Vanilla JS"
+    description="Classic object-oriented API. Widest browser support."
+    href="/vanilla-js/quick-start"
+  />
+
+  <div class="full-width">
+    <LinkCard
+      title="Other frameworks"
+      href="/other-frameworks/quick-start"
+      description="Not found what you're looking for? Build your own integration!"
+    />
+  </div>
 </CardGrid>

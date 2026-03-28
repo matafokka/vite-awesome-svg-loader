@@ -11,14 +11,7 @@ export default async function main() {
   // Reset package.json
 
   metaPackageJson.dependencies = {};
-
-  metaPackageJson.exports = {
-    "./integration-utils/styles.css": {
-      import: "./dist/integration-utils-styles.css",
-      require: "./dist/integration-utils-styles.css",
-    },
-  };
-
+  metaPackageJson.exports = {};
   metaPackageJson.typesVersions = { "*": {} };
 
   // Paths
@@ -40,7 +33,7 @@ export default async function main() {
 
   const packagesMeta = await (async () => {
     const LOADER_MATCHER = /^loader$/;
-    const TO_BUNDLE = [LOADER_MATCHER, /-integration$/, /integration-utils/];
+    const TO_BUNDLE = [LOADER_MATCHER, /-integration$/, /integration-utils/, /common-utils/];
 
     const packagesDirsPromises = packagesContent.map(async (pkg) => {
       const matcher = TO_BUNDLE.find((regex) => pkg.match(regex));
@@ -56,6 +49,11 @@ export default async function main() {
     return (await Promise.all(packagesDirsPromises)).filter((v) => !!v);
   })();
 
+  // Non-blocking file writing promises
+
+  /** @type {Promise<any>[]} */
+  const writeFilePromises = [];
+
   // Register bundled packages
 
   /**
@@ -63,16 +61,15 @@ export default async function main() {
    *
    * @type {Record<string, string>}
    */
-  const viteConfigEntries = {};
+  const bundlerEntries = {};
+  const addBundlerEntry = (pkg) => void (bundlerEntries[pkg] = `src/generated/${pkg}.ts`);
 
-  let viteConfigInternalPackagesMatchers = "";
-
-  /** @type {Promise<any>[]} */
-  const entriesPromises = [];
+  let internalPackagesMatchers = "";
+  const addInternalPackage = (pkg) => void (internalPackagesMatchers += `\n  "${pkg}",`);
 
   for (const { pkg, isEntry, isLoader } of packagesMeta) {
     if (pkg !== "vite-awesome-svg-loader") {
-      viteConfigInternalPackagesMatchers += `\n  "${pkg}",`;
+      addInternalPackage(pkg);
     }
 
     if (!isEntry) {
@@ -80,26 +77,41 @@ export default async function main() {
     }
 
     const subpath = isLoader ? "." : `./${pkg}`;
-    const mtsTypes = `./dist/${pkg}.d.ts`;
-    const ctsTypes = `./dist/${pkg}.d.cts`;
+    const types = `./dist/${pkg}/index.d.ts`;
 
     metaPackageJson.exports[subpath] = {
       import: {
-        types: mtsTypes,
-        default: `./dist/${pkg}.js`,
+        types: types,
+        default: `./dist/${pkg}/index.js`,
       },
 
       require: {
-        types: ctsTypes,
-        default: `./dist/${pkg}.cjs`,
+        types: types,
+        default: `./dist/${pkg}/index.cjs`,
       },
     };
 
-    metaPackageJson.typesVersions["*"][subpath] = [mtsTypes, ctsTypes];
+    metaPackageJson.typesVersions["*"][subpath] = [types];
     metaPackageJson.dependencies[pkg] = "*";
-    viteConfigEntries[pkg] = `src/generated/${pkg}.ts`;
+    addBundlerEntry(pkg);
 
-    entriesPromises.push(writeFile(path.join(metaPackageEntriesDir, `${pkg}.ts`), `export * from "${pkg}"`));
+    writeFilePromises.push(writeFile(path.join(metaPackageEntriesDir, `${pkg}.ts`), `export * from "${pkg}"`));
+  }
+
+  // Register global definitions
+
+  const GLOBAL_DTS = ["web-components-integration/dom"];
+
+  for (const pkg of GLOBAL_DTS) {
+    const subpathExport = `./${pkg}`;
+    const types = `./dist/${pkg}.d.ts`;
+
+    metaPackageJson.exports[subpathExport] = {
+      import: { types: types, default: types },
+      require: { types: types, default: types },
+    };
+
+    metaPackageJson.typesVersions["*"][subpathExport] = [types];
   }
 
   // Write new package.json
@@ -109,20 +121,19 @@ export default async function main() {
     JSON.stringify(metaPackageJson, undefined, 2),
   );
 
-  // Write constants for Vite config
+  // Write constants for bundler config
 
   const config = [
-    `export const ENTRIES: Record<string, string> = ${JSON.stringify(viteConfigEntries, undefined, 2)}`,
+    `export const ENTRIES: Record<string, string> = ${JSON.stringify(bundlerEntries, undefined, 2)}`,
     ``,
-    `export const INTERNAL_PACKAGES = [` + viteConfigInternalPackagesMatchers,
-    `]`,
+    `export const INTERNAL_PACKAGES = [${internalPackagesMatchers}\n]`,
   ].join("\n");
 
-  const writeViteCfgPromise = writeFile(path.join(metaPackageEntriesDir, "cfg.ts"), config);
+  const writeBundlerCfgPromise = writeFile(path.join(metaPackageEntriesDir, "cfg.ts"), config);
 
   // Await all created promises
 
-  await Promise.all([...entriesPromises, updatePackageJsonPromise, writeViteCfgPromise]);
+  await Promise.all([...writeFilePromises, updatePackageJsonPromise, writeBundlerCfgPromise]);
 
   console.log(`"vite-awesome-svg-loader" source code generated`);
 }

@@ -31,7 +31,7 @@ import { preserveLineWidth } from "./internal/preserveLineWidth";
 import { ResolvedColorReplacements } from "./internal/types";
 import { replaceColorsSvg } from "./internal/replaceColorsSvg";
 import { IMPORT_TYPES } from "./internal/const";
-import { toArray } from "utils";
+import { toArray } from "common-utils";
 
 /**
  * `vite-awesome-svg-loader` plugin.
@@ -63,7 +63,7 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
   let root = "";
   let base = "";
 
-  const replaceColorsList = toArray(options.setCurrentColorList || options.replaceColorsList || []);
+  const replaceColorsList = toArray(options.replaceColorsList || []);
 
   // Prioritize replacements like so:
   const replacementsWithFiles: ColorMapPerFiles[] = []; // ColorMapPerFiles
@@ -218,10 +218,7 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
         default: undefined,
       };
 
-      if (
-        !shouldSkipTransforms &&
-        !matchesQueryOrPath({ matchers: options.skipSetCurrentColorList || options.skipReplaceColorsList })
-      ) {
+      if (!shouldSkipTransforms && !matchesQueryOrPath({ matchers: options.skipReplaceColorsList })) {
         if (matchesQuery(query["set-current-color"])) {
           colorReplacements.default = "currentColor";
           shouldReplaceColors = true;
@@ -246,10 +243,7 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
 
       colorReplacements.default ??= "currentColor";
 
-      const skipReplaceColorsSelectors = shouldReplaceColors
-        ? selectorsToList(options.skipSetCurrentColorSelectors || options.skipReplaceColorsSelectors)
-        : [];
-
+      const skipReplaceColorsSelectors = shouldReplaceColors ? selectorsToList(options.skipReplaceColorsSelectors) : [];
       const skipTransformsSelectors = shouldSkipTransforms ? [] : selectorsToList(options.skipTransformsSelectors);
 
       // Hash path and transform parameters to guarantee same output for duplicate parameters. All parameters

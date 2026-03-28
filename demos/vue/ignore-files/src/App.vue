@@ -2,43 +2,19 @@
   <p class="demo-section-caption">Original images:</p>
 
   <div class="images">
-    <SvgImage
-      :src="starOriginal"
-      class="image"
-    />
-    <SvgImage
-      :src="colorsNotReplacedOriginal"
-      class="image"
-    />
-    <SvgImage
-      :src="lineWidthNotPreservedOriginal"
-      class="image"
-    />
-    <SvgImage
-      :src="skipTransformsOriginal"
-      class="image"
-    />
+    <SvgImage :src="starOriginal" />
+    <SvgImage :src="colorsNotReplacedOriginal" />
+    <SvgImage :src="lineWidthNotPreservedOriginal" />
+    <SvgImage :src="skipTransformsOriginal" />
   </div>
 
   <p class="demo-section-caption">Preserve line width:</p>
 
   <div class="images">
-    <SvgImage
-      :src="starPreLineWidth"
-      class="image"
-    />
-    <SvgImage
-      :src="colorsNotReplacedPreLineWidth"
-      class="image"
-    />
-    <SvgImage
-      :src="lineWidthNotPreservedPreLineWidth"
-      class="image"
-    />
-    <SvgImage
-      :src="skipTransformsPreLineWidth"
-      class="image"
-    />
+    <SvgImage :src="starPreLineWidth" />
+    <SvgImage :src="colorsNotReplacedPreLineWidth" />
+    <SvgImage :src="lineWidthNotPreservedPreLineWidth" />
+    <SvgImage :src="skipTransformsPreLineWidth" />
   </div>
 
   <p class="demo-section-caption">Set current color:</p>
@@ -46,22 +22,18 @@
   <div class="images">
     <SvgImage
       :src="starSetCurrentColor"
-      class="image"
       style="color: #00988a"
     />
     <SvgImage
       :src="colorsNotReplacedSetCurrentColor"
-      class="image"
       style="color: orange"
     />
     <SvgImage
       :src="lineWidthNotPreservedSetCurrentColor"
-      class="image"
       style="color: hotpink"
     />
     <SvgImage
       :src="skipTransformsSetCurrentColor"
-      class="image"
       style="color: purple"
     />
   </div>
@@ -71,22 +43,18 @@
   <div class="images">
     <SvgImage
       :src="starAll"
-      class="image"
       style="color: #00988a"
     />
     <SvgImage
       :src="colorsNotReplacedAll"
-      class="image"
       style="color: orange"
     />
     <SvgImage
       :src="lineWidthNotPreservedAll"
-      class="image"
       style="color: hotpink"
     />
     <SvgImage
       :src="skipTransformsAll"
-      class="image"
       style="color: purple"
     />
   </div>

@@ -1,0 +1,15 @@
+{
+  "extends": ["../../tsconfig.json"],
+  "compilerOptions": {
+    "outDir": "./dist",
+    "module": "ESNext",
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "../../modules.d.ts"],
+  "exclude": ["node_modules"]
+}

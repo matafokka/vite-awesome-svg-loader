@@ -1,6 +1,7 @@
 import loadingIcon from "@/assets/icons/hourglass.svg";
 import errorIcon from "@/assets/icons/broken-image.svg";
-import { ElementOrSelector, SvgIcon } from "vite-awesome-svg-loader/vanilla-integration";
+import { ElementOrSelector } from "vite-awesome-svg-loader/common-utils";
+import { SvgIcon } from "vite-awesome-svg-loader/vanilla-integration";
 
 // See: https://vitejs.dev/guide/features#glob-import
 const rawIcons: any = import.meta.glob("/src/assets/icons/*.svg", {
@@ -28,7 +29,7 @@ export class NamedIcon extends SvgIcon {
 
   async setName(name: string) {
     this.name = name;
-    let code = errorIcon;
+    let code: string;
 
     try {
       code = (await icons[name]()).default; // Fetch SVG source code
@@ -37,7 +38,7 @@ export class NamedIcon extends SvgIcon {
       code = errorIcon; // Provide a fallback for when icon could not be loaded
     }
 
-    // Verify that name hasn't changed. If it didn't, set its source code. Otherwise other setName()
+    // Verify that name hasn't been changed. If it didn't, set its source code. Otherwise other setName()
     // call will handle the changes.
     if (name === this.name) {
       this.setSrc(code);

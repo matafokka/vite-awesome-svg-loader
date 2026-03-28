@@ -1,0 +1,24 @@
+---
+title: Named icons
+tableOfContents: false
+sidebar:
+  order: 4
+---
+
+import Demos from "@/demos/web-components";
+import Demo from "@/components/Demo.astro";
+
+import { Aside } from "@astrojs/starlight/components";
+
+<Aside>
+  This example shows advanced web components usage.
+
+  Make sure to read this
+  [MDN page](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements)
+  about custom elements
+  and ["Creating and extending web components"](/web-components/api-reference/classes/webcomponent) guide first.
+</Aside>
+
+<Demo demo={Demos.NamedIcons}>
+  <Demos.NamedIcons.App />
+</Demo>

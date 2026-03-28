@@ -44,7 +44,7 @@ export function SvgImage({ src, useElAttrs, ...attrs }: SvgImageProps) {
   useEffect(onSrcUpdate, [src]); // When src is updated
 
   return (
-    <svg {...{ alt: "", ...attrs, ...svgAttrs }}>
+    <svg {...{ ...attrs, ...svgAttrs }}>
       <use {...{ ...useElAttrs, href: "#" + id }} />
     </svg>
   );

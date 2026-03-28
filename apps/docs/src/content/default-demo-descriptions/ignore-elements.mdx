@@ -6,11 +6,10 @@ import ClientCheckbox from '@/components/Checkbox/ClientCheckbox.astro';
 
 <ClientCheckbox />
 
-<Aside type="tip">
-You probably don't need these options because it's easy to make mistakes while working with elements and especially easy
-when there're allow and ignore lists.
+<Aside type="caution" title="Consider alternative approaches">
+It's easy to make mistakes while working with elements and especially easy when using allow- and ignore-lists.
 
-Think about other solutions to your problem. See the demos for the tips.
+Moreover, some options introduce heavy build time impact.
 </Aside>
 
 It's possible to skip transforms on per-element or per-element-per-file basis via following
@@ -25,5 +24,4 @@ a list of selectors to skip while replacing colors.
 1. <Badge variant="caution" text="Build time impact" /> [skipTransformsSelectors](/loader-api-reference/interfaces/svgloaderoptions/#skiptransformsselectors)
 - a list of selectors to skip while transforming.
 
-The demo below utilizes all these options. Make sure to check out `vite.config.ts` and `src/assets/ignore-elements.svg`
-files.
+The demo below utilizes all these options. See `vite.config.ts` and `src/assets/ignore-elements.svg` files.

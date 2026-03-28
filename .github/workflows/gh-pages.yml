@@ -8,7 +8,8 @@ on:
   workflow_dispatch:
 
 env:
-  DOCS_BASE_URL: /vite-awesome-svg-loader
+  DOCS_BASE_URL: /vite-awesome-svg-loader/
+  HOST: https://matafokka.github.io/
 
 jobs:
   deploy:
@@ -19,9 +20,8 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-      - run: echo "$DOCS_BASE_URL"
       - run: npm install --verbose
-      - run: export DOCS_BASE_URL="$DOCS_BASE_URL" && npm run build
+      - run: npm run build
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:

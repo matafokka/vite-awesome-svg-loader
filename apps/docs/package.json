@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",
-    "@astrojs/starlight": "^0.37.1",
+    "@astrojs/starlight": "^0.37.7",
     "@astrojs/vue": "^5.1.4",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
@@ -21,6 +21,6 @@
     "react-dom": "^19.1.1",
     "sharp": "^0.34.5",
     "starlight-typedoc": "^0.21.5",
-    "types": "*"
+    "internal-utils": "*"
   }
 }

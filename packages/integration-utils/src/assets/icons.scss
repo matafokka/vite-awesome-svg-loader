@@ -1,0 +1,21 @@
+.vite-awesome-svg-loader-icon {
+  display: inline-block;
+
+  min-width: var(--size);
+  width: var(--size);
+  max-width: var(--size);
+
+  min-height: var(--size);
+  height: var(--size);
+  max-height: var(--size);
+
+  color: var(--color);
+
+  svg {
+    vertical-align: top;
+  }
+
+  use {
+    transition: color var(--color-transition);
+  }
+}

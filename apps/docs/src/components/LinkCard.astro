@@ -1,13 +1,13 @@
 ---
 import { LinkCard as Default } from "@astrojs/starlight/components";
-import { addBasePathIfNeeded } from "@/utils/misc";
+import { prefixUrl } from "@/utils/prefixUrl.mjs";
 
 type Props = Parameters<typeof Default>[0];
 
 let href = Astro.props.href || "";
 
 if (typeof href === "string") {
-  href = addBasePathIfNeeded(href);
+  href = prefixUrl(import.meta.env.BASE_URL || "", href);
 }
 ---
 

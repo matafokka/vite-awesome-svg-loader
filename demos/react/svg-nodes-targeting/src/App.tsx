@@ -38,13 +38,11 @@ export default function App() {
     <Fragment>
       <p className="demo-section-caption">Click on the rectangles to change their colors:</p>
 
-      <div className="images">
-        <div
-          dangerouslySetInnerHTML={{ __html: imageSrc }}
-          onClick={onClick}
-          className="standalone-image"
-        />
-      </div>
+      <div
+        dangerouslySetInnerHTML={{ __html: imageSrc }}
+        onClick={onClick}
+        className="standalone-image"
+      />
     </Fragment>
   );
 }

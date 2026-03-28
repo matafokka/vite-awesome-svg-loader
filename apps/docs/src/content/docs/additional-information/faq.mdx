@@ -4,25 +4,44 @@ sidebar:
   order: 1
 ---
 
-## Can this loader put whole SVG source code every time I use an image?
+## Can this loader inline SVGs in the DOM like other loaders?
 
-Yes, load an image as a source code and insert that code into the DOM like shown in the demos.
+Yes, by loading an image as a source code and inserting it into the DOM like shown in the demos. Quick example:
 
-## Should I always import my images like shown in the examples? Can I simplify this?
+```ts
+import image from "./image.svg?source";
 
-Use `import.meta.glob()` to import images in bulk. See "Named icons" demos for your framework for the details.
+document.getElementById("image")!.innerHTML = image
+```
 
-"Named image/icon" components are not present in the integrations because glob imports do not support variable
-interpolation.
+## Should I always import all images and pass them down like shown in the examples?
 
-For more detail on glob import see: https://vitejs.dev/guide/features#glob-import
+Use `import.meta.glob()` to import images in bulk, then map them to the distinct names. See "Named icons" example
+for your framework.
 
-## Does it support legacy browsers?
+Such components are provided out of the box because:
 
-By default, `vite-awesome-svg-loader` requires
-[ES modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import) support.
+1. Variable interpolation is not supported in glob imports.
+1. Glob imports can get highly project-specific. `vite-awesome-svg-loader` avoids such specificity.
 
-Use [@vitejs/plugin-legacy](https://www.npmjs.com/package/@vitejs/plugin-legacy) to support ES5 environments:
+For more detail on glob import, see: https://vitejs.dev/guide/features#glob-import
+
+## What browsers are supported?
+
+**Short answer:** ES5-capable browsers.
+
+**Long answer:**
+
+`vite-awesome-svg-loader` uses latest ES features advantage of modern environments, minimize bundle size,
+and achieve better performance when bundled for evergreen browsers.
+
+However, `vite-awesome-svg-loader` can be transpiled to support older browsers.
+
+Vite transpiles all dependencies (including `vite-awesome-svg-loader`) to the target environment when app is built
+for production.
+
+While Vite's minimum target is ES6, you can support ES5 environments by using
+[@vitejs/plugin-legacy](https://www.npmjs.com/package/@vitejs/plugin-legacy) package:
 
 ```ts
 // vite.config.ts
@@ -75,7 +94,7 @@ option to `source-data-uri` (recommended) or `base64-data-uri` and see if it hel
 1. Report bugs.
 1. Create feature requests by creating an issue.
 
-## I want to participate in vite-awesome-svg-loader development. Where do I start?
-
-Thanks for considering contribution! Please start with
+If you want to participate in the development, start by reading
 [the guide for contributors](/additional-information/for-contributors).
+
+Thank you for considering supporting this project!

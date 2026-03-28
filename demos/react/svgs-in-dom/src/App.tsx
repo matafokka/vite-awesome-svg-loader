@@ -30,51 +30,21 @@ export default function App() {
       <p className="demo-section-caption">Original images:</p>
 
       <div className="images">
-        <div
-          dangerouslySetInnerHTML={{ __html: musicIconSrc }}
-          className="image"
-        />
-        <div
-          dangerouslySetInnerHTML={{ __html: starIconSrc }}
-          className="image"
-        />
-        <div
-          dangerouslySetInnerHTML={{ __html: videoIconSrc }}
-          className="image"
-        />
-        <div
-          dangerouslySetInnerHTML={{ __html: ghostImgSrc }}
-          className="image"
-        />
-        <div
-          dangerouslySetInnerHTML={{ __html: sunImgSrc }}
-          className="image"
-        />
+        <div dangerouslySetInnerHTML={{ __html: musicIconSrc }} />
+        <div dangerouslySetInnerHTML={{ __html: starIconSrc }} />
+        <div dangerouslySetInnerHTML={{ __html: videoIconSrc }} />
+        <div dangerouslySetInnerHTML={{ __html: ghostImgSrc }} />
+        <div dangerouslySetInnerHTML={{ __html: sunImgSrc }} />
       </div>
 
       <p className="demo-section-caption">Preserve line width:</p>
 
       <div className="images">
-        <div
-          dangerouslySetInnerHTML={{ __html: musicIconPreWidthSrc }}
-          className="image"
-        />
-        <div
-          dangerouslySetInnerHTML={{ __html: starIconPreWidthSrc }}
-          className="image"
-        />
-        <div
-          dangerouslySetInnerHTML={{ __html: videoIconPreWidthSrc }}
-          className="image"
-        />
-        <div
-          dangerouslySetInnerHTML={{ __html: ghostImgPreWidthSrc }}
-          className="image"
-        />
-        <div
-          dangerouslySetInnerHTML={{ __html: sunImgPreWidthSrc }}
-          className="image"
-        />
+        <div dangerouslySetInnerHTML={{ __html: musicIconPreWidthSrc }} />
+        <div dangerouslySetInnerHTML={{ __html: starIconPreWidthSrc }} />
+        <div dangerouslySetInnerHTML={{ __html: videoIconPreWidthSrc }} />
+        <div dangerouslySetInnerHTML={{ __html: ghostImgPreWidthSrc }} />
+        <div dangerouslySetInnerHTML={{ __html: sunImgPreWidthSrc }} />
       </div>
 
       <p className="demo-section-caption">Set current color:</p>
@@ -82,27 +52,22 @@ export default function App() {
       <div className="images">
         <div
           dangerouslySetInnerHTML={{ __html: musicIconCurrentColorSrc }}
-          className="image"
           style={{ color: "#00988a" }}
         />
         <div
           dangerouslySetInnerHTML={{ __html: starIconCurrentColorSrc }}
-          className="image"
           style={{ color: "orange" }}
         />
         <div
           dangerouslySetInnerHTML={{ __html: videoIconCurrentColorSrc }}
-          className="image"
           style={{ color: "hotpink" }}
         />
         <div
           dangerouslySetInnerHTML={{ __html: ghostImgCurrentColorSrc }}
-          className="image"
           style={{ color: "purple" }}
         />
         <div
           dangerouslySetInnerHTML={{ __html: sunImgCurrentColorSrc }}
-          className="image"
           style={{ color: "green" }}
         />
       </div>
@@ -112,27 +77,22 @@ export default function App() {
       <div className="images">
         <div
           dangerouslySetInnerHTML={{ __html: musicIconAllSrc }}
-          className="image"
           style={{ color: "#00988a" }}
         />
         <div
           dangerouslySetInnerHTML={{ __html: starIconAllSrc }}
-          className="image"
           style={{ color: "orange" }}
         />
         <div
           dangerouslySetInnerHTML={{ __html: videoIconAllSrc }}
-          className="image"
           style={{ color: "hotpink" }}
         />
         <div
           dangerouslySetInnerHTML={{ __html: ghostImgAllSrc }}
-          className="image"
           style={{ color: "purple" }}
         />
         <div
           dangerouslySetInnerHTML={{ __html: sunImgAllSrc }}
-          className="image"
           style={{ color: "green" }}
         />
       </div>

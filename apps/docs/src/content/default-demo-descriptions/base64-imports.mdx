@@ -9,13 +9,13 @@ import { Aside } from "@astrojs/starlight/components";
   `?base64-data-uri` import.
 </Aside>
 
-SVGs may be imported as base64 strings. This is done by appending `?base64` to the import:
+SVGs may be imported as base64 strings. This is achieved by appending `?base64` to the import:
 
 ```ts
 import imageUrl from "./image.svg?base64";
 ```
 
-A line width of an image may be [preserved](/guides/available-transformations/#preserve-line-width)
+A line width of an image may be [preserved](/guides/svg-transformations/#preserve-line-width)
 by adding a `preserve-line-width` parameter to the import query:
 
 ```ts

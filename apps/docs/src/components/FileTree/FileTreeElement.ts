@@ -65,18 +65,18 @@ export class FileTreeElement extends BaseComponent {
 
           const onFrame = () => {
             if (!this.clientWidth && !this.clientHeight) {
-              requestAnimationFrame(onFrame)
+              requestAnimationFrame(onFrame);
             }
 
-            const visibilityOffset = 12
+            const visibilityOffset = 12;
 
             if (button.offsetTop < visibilityOffset || button.offsetTop > this.clientHeight - visibilityOffset) {
               this.scrollTop = button.offsetTop - visibilityOffset;
             }
-          }
+          };
 
-          onFrame()
-          return
+          onFrame();
+          return;
         }
       }
     })();

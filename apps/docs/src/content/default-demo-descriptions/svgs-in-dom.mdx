@@ -2,7 +2,8 @@
 title: T
 ---
 
-This is a classic method of rendering SVGs. See [main article](/guides/svg-loading-methods/#render-svgs-in-the-dom).
+This is a most common method of rendering SVGs. See
+[main article](/guides/svg-loading-methods/#insert-svgs-into-the-dom).
 
 SVGs may be imported as the source code (this is a default import method) and rendered directly into the DOM using
 your framework's standard methods:
@@ -14,7 +15,7 @@ import imageSrc from "./image.svg?source"; // Append ?source if you've changed t
 document.getElementById("image")!.innerHTML = imageSrc;
 ```
 
-A line width of an image may be [preserved](/guides/available-transformations/#preserve-line-width)
+A line width of an image may be [preserved](/guides/svg-transformations/#preserve-line-width)
 by adding a `preserve-line-width` parameter to the import query:
 
 ```ts

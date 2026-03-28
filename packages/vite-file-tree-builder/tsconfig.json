@@ -3,13 +3,13 @@
   "compilerOptions": {
     "outDir": "./dist",
     "module": "ESNext",
-    "target": "ES6",
+    "target": "ESNext",
     "lib": ["ESNext", "DOM"],
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    },
+    }
   },
   "include": ["src", "../../modules.d.ts"],
   "exclude": ["node_modules"]

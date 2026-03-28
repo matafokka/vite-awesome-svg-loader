@@ -25,8 +25,6 @@ import sunImgAllSrc from "@/assets/all/lineart/sun.svg";
 import { SvgImage } from "vite-awesome-svg-loader/vanilla-integration";
 
 export function main() {
-  // Initial markup
-
   document.getElementById("app")!.innerHTML += `
     <p class="demo-section-caption">Original images:</p>
     <div class="images" id="original-images"></div>
@@ -41,8 +39,6 @@ export function main() {
     <div class="images" id="all"></div>
   `;
 
-  // Create images
-
   const colors = ["#00988a", "orange", "hotpink", "purple", "green"];
 
   const setColor = (img: SvgImage, index: number) => {
@@ -50,33 +46,31 @@ export function main() {
     return img;
   };
 
+  new SvgImage(musicIconSrc, "#original-images");
+  new SvgImage(starIconSrc, "#original-images");
+  new SvgImage(videoIconSrc, "#original-images");
+  new SvgImage(ghostImgSrc, "#original-images");
+  new SvgImage(sunImgSrc, "#original-images");
+
+  new SvgImage(musicIconPreWidthSrc, "#preserve-line-width");
+  new SvgImage(starIconPreWidthSrc, "#preserve-line-width");
+  new SvgImage(videoIconPreWidthSrc, "#preserve-line-width");
+  new SvgImage(ghostImgPreWidthSrc, "#preserve-line-width");
+  new SvgImage(sunImgPreWidthSrc, "#preserve-line-width");
+
   [
-    new SvgImage(musicIconSrc, "#original-images"),
-    new SvgImage(starIconSrc, "#original-images"),
-    new SvgImage(videoIconSrc, "#original-images"),
-    new SvgImage(ghostImgSrc, "#original-images"),
-    new SvgImage(sunImgSrc, "#original-images"),
+    new SvgImage(musicIconCurrentColorSrc, "#set-current-color"),
+    new SvgImage(starIconCurrentColorSrc, "#set-current-color"),
+    new SvgImage(videoIconCurrentColorSrc, "#set-current-color"),
+    new SvgImage(ghostImgCurrentColorSrc, "#set-current-color"),
+    new SvgImage(sunImgCurrentColorSrc, "#set-current-color"),
+  ].forEach(setColor);
 
-    new SvgImage(musicIconPreWidthSrc, "#preserve-line-width"),
-    new SvgImage(starIconPreWidthSrc, "#preserve-line-width"),
-    new SvgImage(videoIconPreWidthSrc, "#preserve-line-width"),
-    new SvgImage(ghostImgPreWidthSrc, "#preserve-line-width"),
-    new SvgImage(sunImgPreWidthSrc, "#preserve-line-width"),
-
-    ...[
-      new SvgImage(musicIconCurrentColorSrc, "#set-current-color"),
-      new SvgImage(starIconCurrentColorSrc, "#set-current-color"),
-      new SvgImage(videoIconCurrentColorSrc, "#set-current-color"),
-      new SvgImage(ghostImgCurrentColorSrc, "#set-current-color"),
-      new SvgImage(sunImgCurrentColorSrc, "#set-current-color"),
-    ].map(setColor),
-
-    ...[
-      new SvgImage(musicIconAllSrc, "#all"),
-      new SvgImage(starIconAllSrc, "#all"),
-      new SvgImage(videoIconAllSrc, "#all"),
-      new SvgImage(ghostImgAllSrc, "#all"),
-      new SvgImage(sunImgAllSrc, "#all"),
-    ].map(setColor),
-  ].forEach((img) => img.getSvgEl().classList.add("image"));
+  [
+    new SvgImage(musicIconAllSrc, "#all"),
+    new SvgImage(starIconAllSrc, "#all"),
+    new SvgImage(videoIconAllSrc, "#all"),
+    new SvgImage(ghostImgAllSrc, "#all"),
+    new SvgImage(sunImgAllSrc, "#all"),
+  ].forEach(setColor);
 }

@@ -1,5 +1,5 @@
 import { isIterable } from "@/utils/typecheck";
-import type { HTMLAttributes, HTMLTag } from "astro/types";
+import type { HTMLAttributes } from "astro/types";
 
 export function getClasses(props: Pick<HTMLAttributes<"div">, "class" | "class:list">) {
   const origList = props["class:list"] || "";

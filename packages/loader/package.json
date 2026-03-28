@@ -2,16 +2,15 @@
   "name": "loader",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "vite build"
   },
   "dependencies": {
     "vite": "*",
-    "types": "*",
-    "utils": "*"
+    "common-utils": "*"
   },
   "devDependencies": {
     "@types/css-tree": "^2.3.3"

@@ -54,7 +54,7 @@ export function viteAstroEntryGenerator(options: ViteAstroEntryGeneratorOptions 
   const script = `
     <script>
       import { main } from "${relPathToScript}";
-      import { onAstroSamePageLoad } from "utils";
+      import { onAstroSamePageLoad } from "internal-utils";
 
       onAstroSamePageLoad(main);
     </script>

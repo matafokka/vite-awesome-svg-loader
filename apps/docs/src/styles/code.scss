@@ -1,7 +1,12 @@
-.expressive-code .frame {
-  box-shadow: none;
-}
+.expressive-code {
+  .frame {
+    box-shadow: none;
+  }
 
+  pre {
+    cursor: text;
+  }
+}
 .ec-line {
   line-height: 1.2rem;
 }

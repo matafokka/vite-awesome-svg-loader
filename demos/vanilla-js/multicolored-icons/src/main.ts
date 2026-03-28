@@ -23,8 +23,6 @@ export function main() {
 
   for (let i = 0; i < colorVars.length; i++) {
     const svgEl = new SvgImage(imageSrc, container).getSvgEl();
-    svgEl.classList.add("image");
-
     const vars = colorVars[i];
 
     for (const cssVar in vars) {

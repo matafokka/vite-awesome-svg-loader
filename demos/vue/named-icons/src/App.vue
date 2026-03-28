@@ -2,18 +2,15 @@
   <div class="images">
     <NamedIcon
       name="music"
-      color="orange"
-      class="image"
+      color="red"
     />
     <NamedIcon
       name="star"
-      color="orange"
-      class="image"
+      color="forestgreen"
     />
     <NamedIcon
       name="video"
-      color="orange"
-      class="image"
+      color="cornflowerblue"
     />
   </div>
 </template>

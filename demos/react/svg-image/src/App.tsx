@@ -31,51 +31,21 @@ export default function App() {
       <p className="demo-section-caption">Original images:</p>
 
       <div className="images">
-        <SvgImage
-          src={musicIconSrc}
-          className="image"
-        />
-        <SvgImage
-          src={starIconSrc}
-          className="image"
-        />
-        <SvgImage
-          src={videoIconSrc}
-          className="image"
-        />
-        <SvgImage
-          src={ghostImgSrc}
-          className="image"
-        />
-        <SvgImage
-          src={sunImgSrc}
-          className="image"
-        />
+        <SvgImage src={musicIconSrc} />
+        <SvgImage src={starIconSrc} />
+        <SvgImage src={videoIconSrc} />
+        <SvgImage src={ghostImgSrc} />
+        <SvgImage src={sunImgSrc} />
       </div>
 
       <p className="demo-section-caption">Preserve line width:</p>
 
       <div className="images">
-        <SvgImage
-          src={musicIconPreWidthSrc}
-          className="image"
-        />
-        <SvgImage
-          src={starIconPreWidthSrc}
-          className="image"
-        />
-        <SvgImage
-          src={videoIconPreWidthSrc}
-          className="image"
-        />
-        <SvgImage
-          src={ghostImgPreWidthSrc}
-          className="image"
-        />
-        <SvgImage
-          src={sunImgPreWidthSrc}
-          className="image"
-        />
+        <SvgImage src={musicIconPreWidthSrc} />
+        <SvgImage src={starIconPreWidthSrc} />
+        <SvgImage src={videoIconPreWidthSrc} />
+        <SvgImage src={ghostImgPreWidthSrc} />
+        <SvgImage src={sunImgPreWidthSrc} />
       </div>
 
       <p className="demo-section-caption">Set current color:</p>
@@ -83,27 +53,22 @@ export default function App() {
       <div className="images">
         <SvgImage
           src={musicIconCurrentColorSrc}
-          className="image"
           style={{ color: "#00988a" }}
         />
         <SvgImage
           src={starIconCurrentColorSrc}
-          className="image"
           style={{ color: "orange" }}
         />
         <SvgImage
           src={videoIconCurrentColorSrc}
-          className="image"
           style={{ color: "hotpink" }}
         />
         <SvgImage
           src={ghostImgCurrentColorSrc}
-          className="image"
           style={{ color: "purple" }}
         />
         <SvgImage
           src={sunImgCurrentColorSrc}
-          className="image"
           style={{ color: "green" }}
         />
       </div>
@@ -113,27 +78,22 @@ export default function App() {
       <div className="images">
         <SvgImage
           src={musicIconAllSrc}
-          className="image"
           style={{ color: "#00988a" }}
         />
         <SvgImage
           src={starIconAllSrc}
-          className="image"
           style={{ color: "orange" }}
         />
         <SvgImage
           src={videoIconAllSrc}
-          className="image"
           style={{ color: "hotpink" }}
         />
         <SvgImage
           src={ghostImgAllSrc}
-          className="image"
           style={{ color: "purple" }}
         />
         <SvgImage
           src={sunImgAllSrc}
-          className="image"
           style={{ color: "green" }}
         />
       </div>

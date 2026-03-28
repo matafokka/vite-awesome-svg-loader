@@ -1,0 +1,8 @@
+#vite-awesome-svg-loader-symbols {
+  // "display: none" messes with some of the icons, so hide it like so:
+  position: fixed;
+  top: -99999px;
+  left: -99999px;
+  z-index: 0;
+  opacity: 0;
+}

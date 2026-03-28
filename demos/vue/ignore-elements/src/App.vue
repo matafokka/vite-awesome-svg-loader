@@ -5,15 +5,11 @@
     @change="isOriginalShown = $event.checked"
   />
 
-  <div
-    class="images"
+  <SvgImage
+    :src="isOriginalShown ? originalImageSrc : imageSrc"
+    class="standalone-image"
     style="color: red; margin-top: 24px"
-  >
-    <SvgImage
-      :src="isOriginalShown ? originalImageSrc : imageSrc"
-      class="standalone-image"
-    />
-  </div>
+  />
 </template>
 
 <script setup lang="ts">

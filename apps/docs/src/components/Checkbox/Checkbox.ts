@@ -34,7 +34,6 @@ class DemoCheckboxElement extends BaseComponent {
   }
 
   attributeChangedCallback(name: string, oldValue: any, newValue: any) {
-    oldValue += "";
     newValue += "";
 
     switch (name) {

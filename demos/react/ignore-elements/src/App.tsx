@@ -4,6 +4,7 @@ import { Fragment, useState } from "react";
 import { SvgImage } from "vite-awesome-svg-loader/react-integration";
 
 declare module "react/jsx-runtime" {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       "demo-checkbox": any;
@@ -22,15 +23,11 @@ export default function App() {
         onchange={(e: any) => setIsOriginalShown(e.checked)}
       />
 
-      <div
-        className="images"
+      <SvgImage
+        src={isOriginalShown ? originalImageSrc : imageSrc}
+        className="standalone-image"
         style={{ color: "red", marginTop: "24px" }}
-      >
-        <SvgImage
-          src={isOriginalShown ? originalImageSrc : imageSrc}
-          className="standalone-image"
-        />
-      </div>
+      />
     </Fragment>
   );
 }

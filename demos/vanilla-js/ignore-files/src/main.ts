@@ -25,8 +25,6 @@ import skipLoadingAll from "@/assets/all/skip-loading.svg";
 import { SvgImage } from "vite-awesome-svg-loader/vanilla-integration";
 
 export function main() {
-  // Initial markup
-
   document.getElementById("app")!.innerHTML += `
     <p class="demo-section-caption">Original images:</p>
     <div class="images" id="original-images"></div>
@@ -63,31 +61,29 @@ export function main() {
     return img;
   };
 
+  new SvgImage(starOriginal, "#original-images");
+  new SvgImage(colorsNotReplacedOriginal, "#original-images");
+  new SvgImage(lineWidthNotPreservedOriginal, "#original-images");
+  new SvgImage(skipTransformsOriginal, "#original-images");
+
+  new SvgImage(starPreLineWidth, "#preserve-line-width");
+  new SvgImage(colorsNotReplacedPreLineWidth, "#preserve-line-width");
+  new SvgImage(lineWidthNotPreservedPreLineWidth, "#preserve-line-width");
+  new SvgImage(skipTransformsPreLineWidth, "#preserve-line-width");
+
   [
-    new SvgImage(starOriginal, "#original-images"),
-    new SvgImage(colorsNotReplacedOriginal, "#original-images"),
-    new SvgImage(lineWidthNotPreservedOriginal, "#original-images"),
-    new SvgImage(skipTransformsOriginal, "#original-images"),
+    new SvgImage(starSetCurrentColor, "#set-current-color"),
+    new SvgImage(colorsNotReplacedSetCurrentColor, "#set-current-color"),
+    new SvgImage(lineWidthNotPreservedSetCurrentColor, "#set-current-color"),
+    new SvgImage(skipTransformsSetCurrentColor, "#set-current-color"),
+  ].forEach(setColor);
 
-    new SvgImage(starPreLineWidth, "#preserve-line-width"),
-    new SvgImage(colorsNotReplacedPreLineWidth, "#preserve-line-width"),
-    new SvgImage(lineWidthNotPreservedPreLineWidth, "#preserve-line-width"),
-    new SvgImage(skipTransformsPreLineWidth, "#preserve-line-width"),
-
-    ...[
-      new SvgImage(starSetCurrentColor, "#set-current-color"),
-      new SvgImage(colorsNotReplacedSetCurrentColor, "#set-current-color"),
-      new SvgImage(lineWidthNotPreservedSetCurrentColor, "#set-current-color"),
-      new SvgImage(skipTransformsSetCurrentColor, "#set-current-color"),
-    ].map(setColor),
-
-    ...[
-      new SvgImage(starAll, "#all"),
-      new SvgImage(colorsNotReplacedAll, "#all"),
-      new SvgImage(lineWidthNotPreservedAll, "#all"),
-      new SvgImage(skipTransformsAll, "#all"),
-    ].map(setColor),
-  ].forEach((img) => img.getSvgEl().classList.add("image"));
+  [
+    new SvgImage(starAll, "#all"),
+    new SvgImage(colorsNotReplacedAll, "#all"),
+    new SvgImage(lineWidthNotPreservedAll, "#all"),
+    new SvgImage(skipTransformsAll, "#all"),
+  ].forEach(setColor);
 
   // Print skipped files import results
 

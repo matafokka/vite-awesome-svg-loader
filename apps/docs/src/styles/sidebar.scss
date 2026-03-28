@@ -1,0 +1,35 @@
+#starlight__sidebar {
+  a,
+  summary {
+    border-radius: 0.25rem;
+  }
+
+  a:not([aria-current]),
+  summary {
+    &:hover {
+      background-color: var(--sl-color-gray-6);
+    }
+  }
+
+  a[data-sidebar-alias] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    // Icon after text. Styles match arrow styles.
+    &::after {
+      --size: 1.25rem;
+
+      display: block;
+      content: "";
+      min-width: var(--size);
+      min-height: var(--size);
+      background-color: currentColor;
+      mask-image: url("/src/assets/icons/shortcut.svg?url");
+      mask-size: 100%;
+      mask-position: center;
+      mask-repeat: no-repeat;
+    }
+  }
+}

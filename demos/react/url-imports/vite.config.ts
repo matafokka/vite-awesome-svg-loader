@@ -6,10 +6,7 @@ import react from "@vitejs/plugin-react";
 import { viteAwesomeSvgLoader } from "vite-awesome-svg-loader";
 
 export default defineConfig({
-  plugins: [
-    react(),
-    viteAwesomeSvgLoader({ urlImportsInLibraryMode: 'emit-files' }),
-  ],
+  plugins: [react(), viteAwesomeSvgLoader({ urlImportsInLibraryMode: "emit-files" })],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
