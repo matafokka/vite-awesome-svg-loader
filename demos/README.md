@@ -1,5 +1,7 @@
 # Demos
 
-This directory contains demos for each supported framework and inline demos rendered outside of any framework context.
+This directory contains:
 
-The exception is the `all` directory which is a meta-package for all demos.
+1. Demos for each supported framework.
+1. Inline demos rendered outside of any framework's context.
+1. `all` meta-package that links all demos to be consumed by `apps/docs` package.

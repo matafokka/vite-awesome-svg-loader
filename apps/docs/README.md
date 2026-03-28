@@ -37,3 +37,11 @@ In the Markdown, this is solved by prepending a base path via a `remark-rehype` 
 The default Starlight components should be wrapped to prepend a base path to the links.
 
 Custom components should account for this behavior too.
+
+### Starlight doesn't support multiple links to the same page in the sidebar
+
+To resolve this, there're following modules:
+
+1. `sidebarShortcut()` function - creates a shortcut in the sidebar. This function should not be used for the "main"
+page.
+1. `remove-alias-hacks.ts` file - clears side-effects caused by `sidebarShortcut()`
