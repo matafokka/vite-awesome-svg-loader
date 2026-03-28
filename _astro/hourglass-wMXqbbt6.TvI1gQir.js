@@ -1,0 +1,1 @@
+const s='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M6 2v6l4 4l-4 4v6h12v-6l-4-4l4-4V2z" vector-effect="non-scaling-stroke"/></svg>',t="hourglass-1960140591__";export{s as default,t as prefix,s as src};

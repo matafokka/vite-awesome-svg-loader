@@ -1,0 +1,1 @@
+function e(){const t=window.location.pathname;return t.endsWith("/")?t.substring(0,t.length-1):t}function r(t){const o=e();t();let n=!0;document.addEventListener("astro:page-load",()=>{if(n){n=!1;return}o===e()&&t()})}export{r};
