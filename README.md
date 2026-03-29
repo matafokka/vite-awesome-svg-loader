@@ -1,13 +1,11 @@
 # vite-awesome-svg-loader
 
-[![Docs](https://img.shields.io/badge/Docs-royalblue?logo=readthedocs)](https://matafokka.github.io/vite-awesome-svg-loader/)
+[![Documentation](https://img.shields.io/badge/Documentation-royalblue?logo=readthedocs)](https://matafokka.github.io/vite-awesome-svg-loader/)
 [![React](https://img.shields.io/badge/React-004961?logo=react)](https://matafokka.github.io/vite-awesome-svg-loader/react/quick-start/)
 [![Vue](https://img.shields.io/badge/Vue-00523b?logo=vuedotjs)](https://matafokka.github.io/vite-awesome-svg-loader/vue/quick-start/)
 [![Web Components](https://img.shields.io/badge/Web%20Components-572300?logo=html5&logoColor=orange)](https://matafokka.github.io/vite-awesome-svg-loader/web-components/general-guide/)
 [![Vanilla JS](https://img.shields.io/badge/Vanilla%20JS-525200?logo=javascript)](https://matafokka.github.io/vite-awesome-svg-loader/vanilla/quick-start/)
 [![Any framework](https://img.shields.io/badge/Any%20Framework-560063?logo=vite&logoColor=f9c7ff)](https://matafokka.github.io/vite-awesome-svg-loader/other-frameworks/quick-start/)
-
-___
 
 A framework-agnostic Vite plugin that:
 
