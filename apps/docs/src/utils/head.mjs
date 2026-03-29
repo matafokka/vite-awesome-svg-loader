@@ -1,3 +1,5 @@
+const host = process.env.HOST || "/";
+
 /**
  * Generates meta tag: `<meta property="..." content="..." />`
  * @param {string} property Property name
@@ -35,7 +37,7 @@ export function headMetaWithNameList(...entries) {
 }
 
 export function headOgImage() {
-  const url = (process.env.HOST || "/") + "splash.png";
+  const url = host + "splash.png";
 
   /** @type {ReturnType<typeof headMetaWithContent>[]} */
   const meta = [];
@@ -62,7 +64,7 @@ export function headFavicon() {
     tag: "link",
     attrs: {
       rel: "icon",
-      href: `/favicon.${ext}`,
+      href: `${host}favicon.${ext}`,
       sizes: "192x192",
     },
   }));
