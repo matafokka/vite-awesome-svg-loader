@@ -1,7 +1,8 @@
 {
   "type": "module",
+  "$schema": "https://raw.githubusercontent.com/vitejs/vite-plugin-registry/refs/heads/main/data/schema/extended-package-json.schema.json",
   "name": "vite-awesome-svg-loader",
-  "description": "Imports SVGs as source code, base64 and data URI. Preserves stroke width, replaces colors with currentColor or custom colors. Optimizes SVGs with SVGO. Creates SVG sprites.",
+  "description": "A universal Vite SVG loader. Imports SVGs as source code, base64 and data URI. Preserves stroke width. Replaces colors with currentColor or custom colors. Creates SVG sprites. Optimizes SVGs.",
   "keywords": [
     "vite",
     "svg",
@@ -13,18 +14,21 @@
     "vite-svg",
     "vite-loader",
     "vite-plugin",
+    "sprite",
+    "preserve-line-width",
+    "replace-colors",
+    "currentColor",
     "vue",
     "react",
     "vanilla",
-    "sprite",
+    "web-components",
+    "custom-elements",
+    "typescript",
     "sprite-sheet",
     "svg-sprite",
     "sprites",
     "sprite-sheets",
-    "preserve-line-width",
     "preserve-stroke-width",
-    "currentColor",
-    "replace-colors",
     "vite-awesome-svg-loader",
     "svgo"
   ],
@@ -165,5 +169,20 @@
     "vanilla-integration": "*",
     "vue-integration": "*",
     "web-components-integration": "*"
+  },
+  "compatiblePackages": {
+    "schemaVersion": 1,
+    "vite": {
+      "type": "compatible",
+      "versions": ">=2.0.0"
+    },
+    "rollup": {
+      "type": "compatible",
+      "versions": "*"
+    },
+    "rolldown": {
+      "type": "compatible",
+      "versions": "*"
+    }
   }
 }
