@@ -13,14 +13,8 @@ import { sidebarShortcut } from "./src/utils/sidebar.mjs";
 
 const title = "Vite Awesome SVG Loader";
 
-const description = [
-  "vite-awesome-svg-loader documentation website. This loader:",
-  "imports SVGs as source code, base64 and data URI;",
-  "preserves stroke width;",
-  "replaces colors with currentColor or custom colors;",
-  "optimizes SVGs with SVGO;",
-  "creates SVG sprites.",
-].join(" ");
+const description =
+  "A universal Vite SVG loader. Imports SVGs as source code, base64 and data URI. Preserves stroke width. Replaces colors with currentColor or custom colors. Creates SVG sprites. Optimizes SVGs.";
 
 // Typedoc
 
