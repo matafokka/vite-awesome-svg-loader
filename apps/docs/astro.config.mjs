@@ -9,10 +9,6 @@ import { prefixUrl } from "./src/utils/prefixUrl.mjs";
 import { headFavicon, headOgImage, headMetaWithNameList } from "./src/utils/head.mjs";
 import { sidebarShortcut } from "./src/utils/sidebar.mjs";
 
-// TODO: Remove
-
-console.log(`DEBUG: HOST="${process.env.HOST}" DOCS_BASE_URL=${process.env.DOCS_BASE_URL}`);
-
 // Meta
 
 const title = "Vite Awesome SVG Loader";
