@@ -50,7 +50,7 @@ export function getSvgIconStyle(props: SvgIconStyleProps) {
     style["--color"] = props.color;
   }
 
-  style["--transition"] = props.colorTransition || SVG_ICON_DEFAULT_COLOR_TRANSITION;
+  style["--color-transition"] = props.colorTransition || SVG_ICON_DEFAULT_COLOR_TRANSITION;
 
   return style;
 }
