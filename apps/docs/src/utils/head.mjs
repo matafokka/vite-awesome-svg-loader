@@ -1,3 +1,5 @@
+const docsBaseUrl = process.env.DOCS_BASE_URL || "/";
+
 /**
  * Generates meta tag: `<meta property="..." content="..." />`
  * @param {string} property Property name
@@ -35,7 +37,7 @@ export function headMetaWithNameList(...entries) {
 }
 
 export function headOgImage() {
-  const url = (process.env.HOST || "/") + process.env.DOCS_BASE_URL.substring(1) + "splash.png";
+  const url = (process.env.HOST || "/") + docsBaseUrl.substring(1) + "splash.png";
 
   /** @type {ReturnType<typeof headMetaWithContent>[]} */
   const meta = [];
@@ -62,7 +64,7 @@ export function headFavicon() {
     tag: "link",
     attrs: {
       rel: "icon",
-      href: `${process.env.DOCS_BASE_URL || "/"}favicon.${ext}`,
+      href: `${docsBaseUrl}favicon.${ext}`,
       sizes: "192x192",
     },
   }));
