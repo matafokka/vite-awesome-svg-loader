@@ -11,11 +11,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import SvgImage from "./SvgImage.vue";
 import { getSvgIconStyle, initSvgIcons, SvgIconProps } from "integration-utils";
 
 const props = defineProps<SvgIconProps>();
-initSvgIcons();
 const iconStyle = computed(() => getSvgIconStyle(props));
+onMounted(initSvgIcons);
 </script>
