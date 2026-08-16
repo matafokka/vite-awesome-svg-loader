@@ -6,7 +6,7 @@ const docsBaseUrl = process.env.DOCS_BASE_URL || "/";
  * @param {string} content Property content (value)
  * @returns Meta element
  */
-export function headMetaWithContent(property, content) {
+export function headMetaWithProperty(property, content) {
   return {
     /** @type {'meta'} */
     tag: "meta",
@@ -37,25 +37,13 @@ export function headMetaWithNameList(...entries) {
 }
 
 export function headOgImage() {
-  const url = (process.env.HOST || "/") + docsBaseUrl.substring(1) + "splash.png";
-
-  /** @type {ReturnType<typeof headMetaWithContent>[]} */
-  const meta = [];
-
-  for (const graph of ["og", "twitter"]) {
-    const prefix = graph + ":image";
-    /** @type {typeof headMetaWithContent} */
-    const headMetaWithPrefix = (param, content) => headMetaWithContent(prefix + ":" + param, content);
-
-    meta.push(
-      headMetaWithContent(prefix, url),
-      headMetaWithPrefix("type", "image/png"),
-      headMetaWithPrefix("width", "1200"),
-      headMetaWithPrefix("height", "600"),
-    );
-  }
-
-  return meta;
+  return [
+    ["image", (process.env.HOST || "/") + docsBaseUrl.substring(1) + "splash.png"],
+    ["image:type", "image/png"],
+    ["image:width", "1200"],
+    ["image:height", "600"],
+    ["image:alt", "Logo and name of the library"],
+  ].flatMap(([name, value]) => [headMetaWithProperty(`og:${name}`, value), headMetaWithName(`twitter:${name}`, value)]);
 }
 
 export function headFavicon() {

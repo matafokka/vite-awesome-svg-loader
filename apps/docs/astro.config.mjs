@@ -6,7 +6,7 @@ import react from "@astrojs/react";
 import { createStarlightTypeDocPlugin } from "starlight-typedoc";
 import { defaultHandlers } from "mdast-util-to-hast";
 import { prefixUrl } from "./src/utils/prefixUrl.mjs";
-import { headFavicon, headOgImage, headMetaWithNameList } from "./src/utils/head.mjs";
+import { headFavicon, headOgImage, headMetaWithNameList, headMetaWithProperty } from "./src/utils/head.mjs";
 import { sidebarShortcut } from "./src/utils/sidebar.mjs";
 
 // Meta
@@ -45,6 +45,7 @@ export default defineConfig({
       favicon: "/favicon.svg",
 
       head: [
+        headMetaWithProperty("site_name", title),
         ...headFavicon(),
         ...headOgImage(),
         ...headMetaWithNameList(
