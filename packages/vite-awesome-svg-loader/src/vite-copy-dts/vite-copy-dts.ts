@@ -1,8 +1,10 @@
 import { Plugin } from "vite";
-import { ENTRIES, INTERNAL_PACKAGES } from "./generated/cfg";
+import { ENTRIES } from "../generated/cfg";
 import { basename, join, relative, sep } from "node:path";
 import { readdir, lstat, readFile, mkdir, writeFile } from "node:fs/promises";
 import * as ts from "typescript";
+import { resolveInternalModules } from "./resolveInternalModules";
+import { addExtensions } from "./addExtensions";
 
 /**
  * This plugin copies type definitions from packages' `dist` directories to the loader's `dist` directory.
@@ -106,43 +108,22 @@ class Processor {
       true,
     );
 
-    const resolveInternalModules: ts.TransformerFactory<ts.Node> = (context) => {
-      const visit: ts.Visitor<ts.Node, ts.Node> = (node) => {
-        const next = () => ts.visitEachChild(node, visit, context);
+    const transformResult = ts.transform(sourceFile, [
+      resolveInternalModules({
+        basePath: relImport,
+        // See? Now we process discovered package!
+        onPkgResolved: (pkg) => promises.push(this.processPackage(pkg)),
+      }),
+      addExtensions,
+    ]);
 
-        if (!ts.isImportDeclaration(node) || !ts.isStringLiteral(node.moduleSpecifier)) {
-          return next();
-        }
-
-        const importStr = node.moduleSpecifier.text;
-        const pkg = INTERNAL_PACKAGES.find((pkg) => importStr.startsWith(pkg))?.split("/")[0];
-
-        if (!pkg) {
-          return next();
-        }
-
-        promises.push(this.processPackage(pkg)); // See? Now we process discovered package!
-
-        return ts.factory.updateImportDeclaration(
-          node,
-          node.modifiers,
-          node.importClause,
-          ts.factory.createStringLiteral(`${relImport}/${pkg}/index`),
-          node.attributes,
-        );
-      };
-
-      return (rootNode) => ts.visitNode(rootNode, visit);
-    };
-
-    const transformResult = ts.transform(sourceFile, [resolveInternalModules]);
     const transformedSourceFile = transformResult.transformed[0] as ts.SourceFile;
     transformResult.dispose();
     let code = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed }).printFile(transformedSourceFile);
 
     // Add declarations import to the loader's entry point
     if (pkgName === "loader" && relPath === "index.d.ts") {
-      code += `\nimport "./declarations";`;
+      code += `\nimport "./declarations.d.ts";`;
     }
 
     const writeRes = async () => {

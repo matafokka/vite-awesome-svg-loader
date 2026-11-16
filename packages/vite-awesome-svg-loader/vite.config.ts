@@ -7,7 +7,7 @@ import sourcemaps from "rollup-plugin-sourcemaps2";
 
 import { viteBuildPackageJson } from "./src/vite-build-package-json";
 import { viteCopyReadme } from "./src/vite-copy-readme";
-import { viteCopyDts } from "./src/vite-copy-dts";
+import { viteCopyDts } from "./src/vite-copy-dts/vite-copy-dts";
 
 // Common data
 
