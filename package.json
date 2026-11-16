@@ -9,7 +9,7 @@
     "predev": "npm run build:packages",
     "dev": "turbo run dev",
     "dev:docs:standalone": "turbo run dev --filter docs",
-    "test": "npm run turbo-run -- test",
+    "test": "npm run turbo-run -- test --filter=./tests/**/*",
     "generate-sources": "node scripts/generate-sources-command.mjs",
     "turbo-run": "node scripts/turbo-run.mjs",
     "lint": "npx eslint",
@@ -17,7 +17,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,vue,json}\""
   },
   "devDependencies": {
-    "@cypress/mount-utils": "^4.1.2",
+    "@cypress/mount-utils": "^5.0.0",
     "@eslint/compat": "^2.0.2",
     "@eslint/js": "^10.0.1",
     "@eslint/json": "^1.0.1",
@@ -34,7 +34,7 @@
     "@vitejs/plugin-vue": "^6.0.5",
     "@vue/language-core": "^3.0.10",
     "@vue/tsconfig": "^0.8.1",
-    "cypress": "^15.11.0",
+    "cypress": "^16.3.0",
     "escape-html": "^1.0.3",
     "eslint": "^10.0.2",
     "eslint-config-prettier": "10.1.8",
@@ -43,7 +43,7 @@
     "eslint-plugin-vue": "^10.8.0",
     "globals": "^17.4.0",
     "npm-run-all2": "^6.1.1",
-    "playwright-webkit": "^1.58.2",
+    "playwright-webkit": "^1.65.1",
     "prettier": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -55,9 +55,9 @@
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.56.1",
     "unplugin-dts": "^1.0.0-beta.6",
-    "vite": "^7.3.1",
-    "vue": "^3.5.13",
-    "vue-tsc": "^3.2.1"
+    "vite": "^8.3.8",
+    "vue": "^3.5.45",
+    "vue-tsc": "^3.3.14"
   },
   "name": "vite-awesome-svg-loader",
   "packageManager": "npm@8.19.3",

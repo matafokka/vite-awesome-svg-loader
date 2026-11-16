@@ -8,7 +8,7 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
-    "tests#test": {
+    "test": {
       "dependsOn": ["^build"]
     },
     "dev": {
