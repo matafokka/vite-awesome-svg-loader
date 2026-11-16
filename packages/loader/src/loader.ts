@@ -1,5 +1,5 @@
 import type { ConfigEnv, Plugin, UserConfig } from "vite";
-import { readFile, rm, writeFile } from "node:fs/promises";
+import { readFile, rm, mkdir, writeFile } from "node:fs/promises";
 import path from "path";
 import { optimize } from "svgo";
 import { XastChild } from "svgo/lib/types";
@@ -129,14 +129,16 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
       isLibraryMode = !!config.build.lib;
       root = normalizeBaseDir(config.root);
       base = normalizeBaseDir(config.base);
-    },
 
-    configureServer(server) {
-      server.httpServer?.on("close", async () => {
+      const cleanup = async () => {
         if (!isBuildMode) {
           await rm(root + tempDir, { force: true, recursive: true });
         }
-      });
+
+        process.exit(0);
+      };
+
+      ["SIGINT", "SIGTERM", "SIGHUP"].forEach((signal) => process.on(signal, cleanup));
     },
 
     async load(id: string) {
@@ -373,7 +375,11 @@ export function viteAwesomeSvgLoader(options: SvgLoaderOptions = {}): Plugin {
 
       if (!isBuildMode) {
         const assetUrl = tempDir + assetRelPath;
-        await writeFile(root + assetUrl, code);
+        const filePath = root + assetUrl;
+        const fileDirParts = filePath.split("/");
+        fileDirParts.pop();
+        await mkdir(fileDirParts.join("/"), { recursive: true });
+        await writeFile(filePath, code);
         return getExports(`"${base + assetUrl}"`);
       }
 
